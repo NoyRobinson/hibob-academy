@@ -53,6 +53,7 @@ infix fun Double.toPowerOf(exponent: Int): Double {
 }
 
 fun main(args: Array<String>) {
+
     // exercise 1
     val list = listOf(1,2,3)
     val sum = list.sum()
