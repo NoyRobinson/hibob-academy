@@ -57,4 +57,5 @@ fun main() {
 
     println(max(1,2)) // expected: 2
     println(max(2,1)) // expected: 2
+
 }
