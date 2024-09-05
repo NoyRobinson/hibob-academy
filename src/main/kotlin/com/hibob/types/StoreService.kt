@@ -6,39 +6,40 @@ import java.time.LocalDate
 @Component
 class StoreService {
 
-    fun checkProductCustom(custom: Any): Boolean{
-        (custom as? Boolean)?.let{
-            when(custom){
-                true -> return true
-                else -> return false
-            }
-        } ?: return false
-    }
+    private fun checkProductCustom(custom: Any): Boolean =
+        (custom as? Boolean) ?: false
 
-    fun fail(message: String): Nothing {
+    private fun fail(message: String): Nothing {
         throw IllegalStateException(message)
     }
 
-    fun calculateTotal(products: List<Product>): Double {
-        return products.map {it.price}.sum()
+    private fun calculateTotal(products: List<Product>): Double =
+        products.map { it.price }.sum()
+
+    private fun isCreditCardValid(payment: Payment.CreditCard, price: Double): Statuses  {
+        if (isSupportedType(payment.type) && isCardDetailsValid(payment) && isNotOverTheLimit(payment, price))
+            return Statuses.SUCCESS
+        return Statuses.FAILURE
     }
 
-    fun findStatus(payment: Payment, total: Double): Statuses {
-        return when(payment){
+    private fun isSupportedType(cardType: CreditCardType): Boolean =
+         cardType == CreditCardType.VISA || cardType == CreditCardType.MASTERCARD
+
+    private fun isCardDetailsValid(payment: Payment.CreditCard): Boolean =
+        payment.expiryDate.isAfter(LocalDate.now()) && payment.number.length == 10
+
+    private fun isNotOverTheLimit(payment: Payment.CreditCard, price: Double): Boolean =
+        payment.limit > price
+
+
+    private fun checkPayment(payment: Payment, price: Double): Statuses {
+        return when (payment) {
             is Payment.Cash -> fail("Can't pay with cash")
 
-            is Payment.CreditCard -> {
-                if(payment.number.length == 10 &&
-                    payment.expiryDate.isAfter(LocalDate.now()) &&
-                    payment.limit > total &&
-                    (payment.type == CreditCardType.VISA || payment.type == CreditCardType.MASTERCARD))
-                    Statuses.SUCCESS
-                else
-                    Statuses.FAILURE
-            }
+            is Payment.CreditCard -> isCreditCardValid(payment, price)
 
             is Payment.PayPal -> {
-                if(payment.email.contains('@'))
+                if (payment.email.contains('@'))
                     Statuses.SUCCESS
                 else
                     Statuses.FAILURE
@@ -46,20 +47,20 @@ class StoreService {
         }
     }
 
-    fun checkout(cart: Cart, payment: Payment): Check {
+    private fun checkout(cart: Cart, payment: Payment): Check {
         val productsWithCustomTrue = cart.products.filter { checkProductCustom(it.custom) }
         val total = calculateTotal(productsWithCustomTrue)
-        val status = findStatus(payment, total)
+        val paymentValid = checkPayment(payment, total)
 
-        if(status == Statuses.FAILURE)
-            return Check(cart.clientId, status, 0.0)
+        if (paymentValid == Statuses.FAILURE)
+            return Check(cart.clientId, paymentValid, 0.0)
 
-        return Check(cart.clientId, status, total)
+        return Check(cart.clientId, paymentValid, total)
     }
 
     fun pay(cart: List<Cart>, payment: Payment): Map<String, Check> {
         return cart.associate { it ->
-                it.clientId to checkout(it, payment)
+            it.clientId to checkout(it, payment)
         }
     }
 }

@@ -6,7 +6,7 @@ import java.time.DayOfWeek
 class Store (val day: DayOfWeek, val products: List<Product>) {
 
     // task 2
-    val open: Boolean
+    val isStoreOpen: Boolean
         get() = day != DayOfWeek.SATURDAY
 
     // task 3
@@ -20,11 +20,11 @@ class Store (val day: DayOfWeek, val products: List<Product>) {
 //    }
 
     // task 5
-    var count: Int = 0
+    var countGetReceipts: Int = 0
 
     val getReceipts: List<String>
         get() {
-            count++
+            countGetReceipts++
             return listOf("receipt1", "receipt2", "receipt3", "receipt4")
         }
 
