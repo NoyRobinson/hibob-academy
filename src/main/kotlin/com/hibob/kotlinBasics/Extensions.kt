@@ -18,9 +18,7 @@ package com.hibob.kotlinBasics
 
 fun List<Int>.sum(): Int {
     var result = 0
-    for(i in this){
-        result += i
-    }
+    this.map( { result += it } )
     return result
 }
 
@@ -32,34 +30,6 @@ fun List<Int>.sum(): Int {
 //      return 0
 // }
 
-infix fun Double.toPowerOf(exponent: Int): Double {
-    var result = 1.0
-    var negative = false
-    var exponentToPower = exponent
-
-    if(exponent < 0){
-        negative = true
-        exponentToPower = exponent * (-1)
-    }
-
-    for(e in 1 .. exponentToPower) {
-        result *= this
-    }
-
-    if(negative)
-        return 1 / result
-
-    return result
-}
-
-fun main(args: Array<String>) {
-
-    // exercise 1
-    val list = listOf(1,2,3)
-    val sum = list.sum()
-    println(sum) // expected 6
-
-    // exercise 2
-    val powerOf = 2.0.toPowerOf(3)
-    println(powerOf) // expected 8
+infix fun Number.toPowerOf(exponent: Number): Double {
+    return Math.pow(this.toDouble(), exponent.toDouble())
 }
