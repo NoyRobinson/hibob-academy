@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody
 import java.util.*
 
 @Controller
-@Path("api/noy/pets")
+@Path("/api/noy/pets")
+@Produces(MediaType.APPLICATION_JSON)
 class PetsResource {
 
 // create
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/newPet")
     fun addPet(@RequestBody pet: Pet): Response {
         Response.status(Response.Status.CREATED).build()
@@ -23,17 +24,15 @@ class PetsResource {
 
 // update
     @PUT
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/updatePetName")
-    fun updateName(@RequestBody pet: Pet, name: String): Response {
-        pet.name = name
+    fun updateName(@RequestBody name: String): Response {
         Response.status(Response.Status.ACCEPTED).build()
         return Response.ok(name).build()
     }
 
 // retrieve
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{petId}/type")
     fun getPetType(@PathParam("petId") petId: UUID): Response {
         Response.status(Response.Status.OK).build()
@@ -42,11 +41,9 @@ class PetsResource {
 
 // delete
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{petId}")
     fun deletePet(@PathParam("petId") petId: UUID): Response {
         Response.status(Response.Status.OK).build()
         return Response.ok("Deleted").build()
     }
 }
-
