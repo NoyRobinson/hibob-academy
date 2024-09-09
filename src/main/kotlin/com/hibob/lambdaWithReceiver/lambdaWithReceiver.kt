@@ -114,3 +114,19 @@ class Runner(private val movieProducer: SpidermanMovieProduceActions?){
         } ?: return false
     }
 }
+
+// Another implementation suggested by Yael
+//class Runner(private val movieProducer: SpidermanMovieProduceActions?) {
+//    fun init(): Boolean {
+//        movieProducer?.run {
+//            return if (!isThereLockdown()) {
+//                signTobeyMaguire()
+//                signAndrew()
+//                signTom()
+//                getVillains()
+//                publish()
+//            } else false
+//        }
+//        return false
+//    }
+//}
