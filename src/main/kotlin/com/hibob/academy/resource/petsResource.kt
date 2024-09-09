@@ -16,7 +16,6 @@ class PetsResource {
 // create
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/newPet")
     fun addPet(@RequestBody pet: Pet): Response {
         Response.status(Response.Status.CREATED).build()
         return Response.ok(pet).build()
@@ -25,8 +24,8 @@ class PetsResource {
 // update
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/updatePetName")
-    fun updateName(@RequestBody name: String): Response {
+    @Path("/updatePetName/{petId}")
+    fun updateName(@PathParam("petId") petId: UUID, @RequestBody name: String): Response {
         Response.status(Response.Status.ACCEPTED).build()
         return Response.ok(name).build()
     }
@@ -35,6 +34,13 @@ class PetsResource {
     @GET
     @Path("/{petId}/type")
     fun getPetType(@PathParam("petId") petId: UUID): Response {
+        val pets = listOf(
+            Pet(petId = UUID.randomUUID(), name = "Angie", type = "dog", companyId = UUID.randomUUID(), dateOfArrival = Date()),
+            Pet(petId = UUID.randomUUID(), name = "Nessy", type = "dog", companyId = UUID.randomUUID(), dateOfArrival = Date()))
+        if(pets.filter{ pet ->
+            pet.petId == petId
+            }.isEmpty())
+            return Response.status(Response.Status.BAD_REQUEST).build()
         Response.status(Response.Status.OK).build()
         return Response.ok("dog").build()
     }
