@@ -16,7 +16,6 @@ fun main() {
 
     printSuccessMessage(success)
     println("Pretty print: ${movie.prettyPrint()}")
-//    println("Json: ${movie.toJson()}")
 }
 
 fun createGoodMovie() : SpidermanNoWayHome{
@@ -58,19 +57,19 @@ class SpidermanNoWayHome() : SpidermanMovieProduceActions {
     }
 
     override fun signTobeyMaguire() {
-        //  Tobey signed!
+        println("Tobey signed!")
     }
 
     override fun signAndrew() {
-        //    Andrew signed
+        println("Andrew signed!")
     }
 
     override fun signTom() {
-        //    Tom signed
+        println("Tom signed!")
     }
 
     override fun getVillains() {
-        //   Got villains
+        println("Got villains")
     }
 
     override fun isThereLockdown(): Boolean = false
