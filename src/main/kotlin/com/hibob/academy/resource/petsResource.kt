@@ -25,18 +25,25 @@ class PetsResource {
 // update
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/updatePetName")
-    fun updateName(@RequestBody name: String): Response {
+    @Path("/updatePetName/{petId}")
+    fun updateName(@PathParam("petId") petId: UUID , @QueryParam("newName") newName: String?): Response {
+        val pet = Pet(petId = petId, name = "Angie", type = "dog", companyId = UUID.randomUUID(), dateOfArrival = Date())
+        pet.name = newName ?: pet.name
         Response.status(Response.Status.ACCEPTED).build()
-        return Response.ok(name).build()
+        return Response.ok(pet).build()
     }
+
+    // http://localhost:8080/api/noy/pets/updatePetName/3983f705-e3c4-4515-b46e-b8c74936ffd9?newName=Nessy
+
 
 // retrieve
     @GET
-    @Path("/{petId}/type")
-    fun getPetType(@PathParam("petId") petId: UUID): Response {
+    @Path("/allPets")
+    fun getAllPets(): Response {
         Response.status(Response.Status.OK).build()
-        return Response.ok("dog").build()
+        return Response.ok(
+            listOf(Pet(petId = UUID.randomUUID(), name = "Angie", type = "dog", companyId = UUID.randomUUID(), dateOfArrival = Date()))
+        ).build()
     }
 
 // delete
