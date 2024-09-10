@@ -4,7 +4,7 @@ CREATE TABLE pets
     name varchar(255),
     type varchar(255),
     company_id UUID,
-    date_of_arrival DATE
+    date_of_arrival DATE DEFAULT current_date
 );
 
 CREATE INDEX idx_pets_company_id ON pets(company_id);
@@ -24,8 +24,8 @@ CREATE INDEX idx_pets_company_id ON pets(company_id);
 -- INSERT INTO pets (name, type, company_id, date_of_arrival)
 -- VALUES ('Charlie', 'bird', '8ba5f6aa-b0d8-45b8-93a3-78429bcb1ee5', '2024-09-08');
 
--- SELECT * FROM pets WHERE type = 'dog'
+-- SELECT DISTINCT * FROM pets WHERE type = 'dog'
 
 -- DELETE FROM pets WHERE id = '98d200c4-fad5-4980-b72a-23f08f27bf63';
 
--- SELECT * FROM pets WHERE date_of_arrival < '2023-09-08';
+-- SELECT * FROM pets WHERE arrival_date < CURRENT_DATE - INTERVAL '1 year';

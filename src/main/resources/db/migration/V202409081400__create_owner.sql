@@ -6,5 +6,4 @@ CREATE TABLE owner
     employee_id UUID
 );
 
-CREATE INDEX idx_owner_company_id ON owner(company_id);
-CREATE INDEX idx_owner_employee_id ON owner(employee_id);
+CREATE INDEX idx_owner ON owner(company_id, employee_id);
