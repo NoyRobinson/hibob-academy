@@ -1,9 +1,9 @@
 CREATE TABLE pet
 (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name varchar(255),
-    type varchar(255),
-    company_id BIGINT,
+    name varchar(255) NOT NULL ,
+    type varchar(255) NOT NULL ,
+    company_id BIGINT NOT NULL ,
     date_of_arrival DATE DEFAULT current_date
 );
 
