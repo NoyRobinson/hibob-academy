@@ -3,7 +3,7 @@ CREATE TABLE pets
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name varchar(255),
     type varchar(255),
-    company_id UUID,
+    company_id BIGINT,
     date_of_arrival DATE DEFAULT current_date
 );
 
