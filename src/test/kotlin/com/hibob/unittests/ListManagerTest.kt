@@ -28,6 +28,9 @@ import org.junit.jupiter.api.Test
  * Test with multiple people to ensure they are sorted first by age, then by name.
  * Test with edge cases like people with the same name but different ages and vice versa.
  *
+ *
+ * Write tests for calculateStatistics method
+ *
  */
 
 class ListManagerTest{
@@ -125,5 +128,21 @@ class ListManagerTest{
         listManager.addPerson(person2)
         listManager.addPerson(person3)
         assertEquals(listOf(person2, person1, person3), listManager.getPeopleSortedByAgeAndName())
+    }
+
+    @Test
+    fun `people list is empty`(){
+        assertEquals(null, listManager.calculateStatistics())
+    }
+
+    @Test
+    fun `people statistics`(){
+        val person1 = Person("Noy", 28)
+        val person2 = Person("Tom", 32)
+        val person3 = Person("Tal", 36)
+        listManager.addPerson(person1)
+        listManager.addPerson(person2)
+        listManager.addPerson(person3)
+        assertEquals(PeopleStatistics(32.0, Person("Noy", 28), Person("Tal", 36), mapOf<Int, Int>(28 to 1, 32 to 1, 36 to 1)), listManager.calculateStatistics())
     }
 }
