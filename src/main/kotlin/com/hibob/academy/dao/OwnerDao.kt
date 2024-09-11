@@ -4,6 +4,7 @@ import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
+import java.math.BigInteger
 
 class OwnerDao @Inject constructor(private val sql: DSLContext) {
 
@@ -21,4 +22,13 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
         sql.select(owner.name, owner.companyId, owner.employeeId)
             .from(owner)
             .fetch(ownerMapper)
+
+    fun createOwner(ownerName: String, companyId: Long, employeeId: String) =
+        sql.insertInto(owner)
+            .set(owner.name, ownerName)
+            .set(owner.companyId, companyId)
+            .set(owner.employeeId, employeeId)
+            .onConflict(owner.companyId, owner.employeeId)
+            .doNothing()
+            .execute()
 }
