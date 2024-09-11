@@ -1,4 +1,4 @@
-package com.hibob.kotlinBasics
+package com.hibob.nullability
 
 /**
  * Write an extension function nullSafeToUpper() for String? that converts the string

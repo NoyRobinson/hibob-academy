@@ -1,4 +1,4 @@
-package com.hibob.kotlinBasics
+package com.hibob.nullability
 
 /**
  * Iterate through the list of products.

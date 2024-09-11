@@ -1,4 +1,4 @@
-package com.hibob.kotlinBasics
+package com.hibob.nullability
 
 /**
  * Modify the main function to calculate and print the sum of all non-null integers in the list numbers.

@@ -1,4 +1,4 @@
-package com.hibob.kotlinBasics
+package com.hibob.nullability
 
 /**
  * Filter Departments: Identify departments that have either no manager assigned or where the manager's

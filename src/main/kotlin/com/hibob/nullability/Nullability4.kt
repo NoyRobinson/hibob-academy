@@ -1,4 +1,4 @@
-package com.hibob.kotlinBasics
+package com.hibob.nullability
 
 /**
  * Modify the main function to iterate over the employees list and print each employee's city.
