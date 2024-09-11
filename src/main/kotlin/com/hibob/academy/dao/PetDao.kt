@@ -56,7 +56,12 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .doNothing()
             .execute()
 
-    fun updatePetOwner(ownerId: ) =
+    fun updatePetOwner(petData: PetData, ownerId: Long) =
+        sql.update(pet)
+            .set(petData.ownerId)
+            .onConflict(petData.ownerId)
+            .doUpdate
+
 
 
 
