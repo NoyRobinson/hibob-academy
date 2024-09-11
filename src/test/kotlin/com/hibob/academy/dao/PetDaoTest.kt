@@ -29,14 +29,13 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
 
         petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival)
         val expected = listOf(PetData(petName, petType, petCompanyId, dateOfArrival))
-        assertEquals(expected, petDao.getPets(petType))
+        assertEquals(expected, petDao.getAllPets())
     }
 
     @Test
     fun `create a new pet that exists in the database`() {
         val petName1 = "Angie"
         val petTypeString1 = "Dog"
-        val petType1 = petDao.convertStringToPetType(petTypeString1)
         val petCompanyId1 = companyId
         val dateOfArrival1 = Date.valueOf("2010-05-20")
         petDao.createPet(petName1, petTypeString1, petCompanyId1, dateOfArrival1)
@@ -44,8 +43,21 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val petName2 = "Nessy"
         petDao.createPet(petName2, petTypeString1, petCompanyId1, dateOfArrival1)
 
-        val actual = petDao.getPets(petType1).size
+        val actual = petDao.getAllPets().size
         assertEquals(1, actual)
+    }
+
+    @Test
+    fun `get pets by type`() {
+        val petName = "Angie"
+        val petTypeString = "Dog"
+        val petCompanyId = companyId
+        val dateOfArrival = Date.valueOf("2010-05-20")
+
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival)
+
+        val actual = petDao.getPetsByType(petDao.convertStringToPetType("Cat")).size
+        assertEquals(0, actual)
     }
 
     @BeforeEach

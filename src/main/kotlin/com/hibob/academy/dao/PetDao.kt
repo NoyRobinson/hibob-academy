@@ -22,10 +22,23 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
-    fun getPets(petType: PetType): List<PetData> =
+    private val petMapperWithoutType = RecordMapper<Record, PetDataWithoutType> { record ->
+        PetDataWithoutType(
+            record[pet.name],
+            record[pet.companyId],
+            Date(record[pet.dateOfArrival].time)
+        )
+    }
+
+    fun getPetsByType(petType: PetType): List<PetDataWithoutType> =
         sql.select(pet.name, pet.companyId, pet.dateOfArrival)
             .from(pet)
             .where(pet.type.eq(convertPetTypeToPetString(petType)))
+            .fetch(petMapperWithoutType)
+
+    fun getAllPets(): List<PetData> =
+        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival)
+            .from(pet)
             .fetch(petMapper)
 
 

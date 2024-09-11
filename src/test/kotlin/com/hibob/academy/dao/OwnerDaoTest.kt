@@ -30,13 +30,13 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `create a new owner that exists in the database`() {
-        val ownerName_1 = "Noy"
-        val ownerCompanyId_1 = companyId
-        val ownerEmployeeId_1 = "123"
-        ownerDao.createOwner(ownerName_1, ownerCompanyId_1, ownerEmployeeId_1)
+        val ownerName1 = "Noy"
+        val ownerCompanyId1 = companyId
+        val ownerEmployeeId1 = "123"
+        ownerDao.createOwner(ownerName1, ownerCompanyId1, ownerEmployeeId1)
 
-        val ownerName_2 = "Tom"
-        ownerDao.createOwner(ownerName_2, ownerCompanyId_1, ownerEmployeeId_1)
+        val ownerName2 = "Tom"
+        ownerDao.createOwner(ownerName2, ownerCompanyId1, ownerEmployeeId1)
 
         val actual = ownerDao.getOwner().size
         assertEquals(1, actual)
