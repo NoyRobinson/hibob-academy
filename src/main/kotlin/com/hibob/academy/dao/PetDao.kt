@@ -16,14 +16,15 @@ import kotlin.random.Random
 class PetDao @Inject constructor(private val sql: DSLContext) {
 
     private val pet = PetTable.instance
-    private val companyId = Random.nextLong()
+    private val companyId = 12L
 
     private val petMapper = RecordMapper<Record, PetData> { record ->
         PetData(
             record[pet.name],
             convertStringToPetType(record[pet.type]),
             record[pet.companyId],
-            Date(record[pet.dateOfArrival].time)
+            Date(record[pet.dateOfArrival].time),
+            record[pet.ownerId]
         )
     }
 
@@ -31,33 +32,40 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
         PetDataWithoutType(
             record[pet.name],
             record[pet.companyId],
-            Date(record[pet.dateOfArrival].time)
+            Date(record[pet.dateOfArrival].time),
+            record[pet.ownerId]
         )
     }
 
     fun getPetsByType(petType: PetType): List<PetDataWithoutType> =
-        sql.select(pet.name, pet.companyId, pet.dateOfArrival)
+        sql.select(pet.name, pet.companyId, pet.dateOfArrival, pet.ownerId)
             .from(pet)
             .where(pet.type.eq(convertPetTypeToPetString(petType))
             .and(pet.companyId.eq(companyId)))
             .fetch(petMapperWithoutType)
 
     fun getAllPets(): List<PetData> =
-        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival)
+        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
             .from(pet)
             .where(pet.companyId.eq(companyId))
             .fetch(petMapper)
 
-
-    fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date) =
+    fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long) =
         sql.insertInto(pet)
             .set(pet.name, name)
             .set(pet.type, type)
             .set(pet.companyId, companyId)
             .set(pet.dateOfArrival, dateOfArrival)
-            .onConflict(pet.companyId)
-            .doNothing()
+            .set(pet.ownerId, ownerId)
+
             .execute()
+
+    fun getPetsByOwner(ownerId: Long) =
+        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
+            .from(pet)
+            .where(pet.ownerId.eq(ownerId))
+            .and(pet.companyId.eq(companyId))
+            .fetch()
 
     fun convertPetTypeToPetString(petType: PetType) =
         when (petType) {
