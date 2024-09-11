@@ -11,17 +11,20 @@ import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestBody
 
-
 @Controller
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/session")
 class SessionResource(private val sessionService: SessionService) {
 
+    companion object {
+        const val COOKIE_NAME = "JWT"
+    }
+
     @POST
     @Path("/login")
     fun login(@RequestBody user: User): Response {
         Response.ok().build()
-        val cookie = NewCookie.Builder("JWT").value(sessionService.createJwtToken(user)).build()
+        val cookie = NewCookie.Builder(COOKIE_NAME).value(sessionService.createJwtToken(user)).build()
         return Response.ok().cookie(cookie).build()
     }
 
