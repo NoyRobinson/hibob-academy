@@ -59,22 +59,22 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .set(pet.companyId, companyId)
             .set(pet.dateOfArrival, dateOfArrival)
             .set(pet.ownerId, ownerId)
-
             .execute()
 
-    fun getPetsByOwner(ownerId: Long) =
+    fun getPetsByOwner(ownerId: Long): List<PetData> =
         sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
             .from(pet)
             .where(pet.ownerId.eq(ownerId))
             .and(pet.companyId.eq(companyId))
-            .fetch()
+            .fetch(petMapper)
 
-    fun countPetsByType() =
+    fun countPetsByType(): Map<String, Int> =
         sql.select(pet.type, count)
             .from(pet)
             .where(pet.companyId.eq(companyId))
             .groupBy(pet.type)
             .fetch()
+            .associate { it[pet.type] to it[count] as Int }
 
     fun convertPetTypeToPetString(petType: PetType) =
         when (petType) {
