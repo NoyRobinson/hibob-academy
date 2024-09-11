@@ -4,6 +4,7 @@ import com.hibob.academy.service.SessionService.Companion.SECRET_KEY
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
+import jakarta.ws.rs.WebApplicationException
 import jakarta.ws.rs.container.ContainerRequestContext
 import jakarta.ws.rs.container.ContainerRequestFilter
 import jakarta.ws.rs.core.Response
@@ -14,18 +15,19 @@ import org.springframework.stereotype.Component
 @Provider
 class AuthenticationFilter: ContainerRequestFilter {
 
+    companion object {
+        const val LOGIN_PATH: String = "session/login"
+        const val COOKIE: String = "JWT"
+    }
+
     override fun filter(requestContext: ContainerRequestContext) {
 
-        if(requestContext.uriInfo.path == "session/login") return
+        if(requestContext.uriInfo.path == LOGIN_PATH) return
 
         val cookies = requestContext.cookies
-        val jwtCookie = cookies["JWT"]?.value
+        val jwtCookie = cookies[COOKIE]?.value
 
-        val claims = verify(jwtCookie)
-
-        if(claims == null) {
-            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build())
-        }
+        verify(jwtCookie)
     }
 
     fun verify(cookie: String?): Jws<Claims>? =
@@ -33,7 +35,8 @@ class AuthenticationFilter: ContainerRequestFilter {
             try{
                 Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(it)
             } catch (e: Exception) {
-                null
+                throw WebApplicationException(
+                    Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Cookie").build())
             }
         }
 }

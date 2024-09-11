@@ -27,8 +27,8 @@ class SessionResource(private val sessionService: SessionService) {
 
     @GET
     @Path("/getUserName")
-    fun getUserName(): String {
-        return "ok"
+    fun getUserName(): Response {
+        return Response.ok("ok").build()
     }
 }
 
