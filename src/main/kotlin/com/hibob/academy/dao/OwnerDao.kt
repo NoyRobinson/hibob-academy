@@ -12,7 +12,7 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
     private val ownerMapper = RecordMapper<Record, OwnerData> { record ->
         OwnerData(
             record[owner.name],
-            record[owner.companyId].toBigInteger(),
+            record[owner.companyId],
             record[owner.employeeId]
         )
     }
@@ -21,7 +21,6 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
         sql.select(owner.name, owner.companyId, owner.employeeId)
             .from(owner)
             .fetch(ownerMapper)
-
 
     fun createOwner(ownerName: String, companyId: Long, employeeId: String) =
         sql.insertInto(owner)
