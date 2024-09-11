@@ -22,6 +22,7 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
             .from(owner)
             .fetch(ownerMapper)
 
+
     fun createOwner(ownerName: String, companyId: Long, employeeId: String) =
         sql.insertInto(owner)
             .set(owner.name, ownerName)
