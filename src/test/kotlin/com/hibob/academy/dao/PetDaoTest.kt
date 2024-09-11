@@ -61,6 +61,34 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         assertEquals(0, actual)
     }
 
+    @Test
+    fun `update an owner for a pet`(){
+        val petName = "Angie"
+        val petTypeString = "Dog"
+        val petCompanyId = companyId
+        val dateOfArrival = Date.valueOf("2010-05-20")
+        val petData = PetData(petName, petDao.convertStringToPetType(petTypeString), petCompanyId, dateOfArrival)
+        val newOwnerId = Random.nextLong()
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival)
+
+        assertEquals(1, petDao.updatePetOwner(petData, newOwnerId))
+    }
+
+    @Test
+    fun `pet has an owner so don't update`(){
+        val petName = "Angie"
+        val petTypeString = "Dog"
+        val petCompanyId = companyId
+        val dateOfArrival = Date.valueOf("2010-05-20")
+        val ownerId = 11L
+        val petData = PetData(petName, petDao.convertStringToPetType(petTypeString), petCompanyId, dateOfArrival, ownerId)
+
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, ownerId)
+
+        val newOwnerId = 12L
+        assertEquals(0, petDao.updatePetOwner(petData, newOwnerId))
+    }
+
 
     @BeforeEach
     @AfterEach

@@ -58,16 +58,10 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
 
     fun updatePetOwner(petData: PetData, ownerId: Long) =
         sql.update(pet)
-            .set(petData.ownerId)
-            .onConflict(petData.ownerId)
-            .doUpdate
-
-
-
-
-//    Update the pet with the ownerID
-//    What should you do if the pet already have an owner Id?
-
+            .set(pet.ownerId, ownerId)
+            .where(pet.companyId.eq(petData.companyId))
+            .and(pet.ownerId.isNull())
+            .execute()
 
     fun convertPetTypeToPetString(petType: PetType) =
         when (petType) {
