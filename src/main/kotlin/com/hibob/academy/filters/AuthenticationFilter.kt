@@ -17,7 +17,7 @@ class AuthenticationFilter: ContainerRequestFilter {
 
     companion object {
         const val LOGIN_PATH: String = "session/login"
-        const val COOKIE: String = "JWT"
+        const val COOKIE_NAME = "JWT"
     }
 
     override fun filter(requestContext: ContainerRequestContext) {
@@ -25,7 +25,7 @@ class AuthenticationFilter: ContainerRequestFilter {
         if(requestContext.uriInfo.path == LOGIN_PATH) return
 
         val cookies = requestContext.cookies
-        val jwtCookie = cookies[COOKIE]?.value
+        val jwtCookie = cookies[COOKIE_NAME]?.value
 
         verify(jwtCookie)
     }
