@@ -4,10 +4,12 @@ import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
+import kotlin.random.Random
 
 class OwnerDao @Inject constructor(private val sql: DSLContext) {
 
     private val owner = OwnerTable.instance
+    private val companyId = Random.nextLong()
 
     private val ownerMapper = RecordMapper<Record, OwnerData> { record ->
         OwnerData(
@@ -20,6 +22,7 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
     fun getOwner(): List<OwnerData> =
         sql.select(owner.name, owner.companyId, owner.employeeId)
             .from(owner)
+            .where(owner.companyId.eq(companyId))
             .fetch(ownerMapper)
 
     fun createOwner(ownerName: String, companyId: Long, employeeId: String) =

@@ -9,10 +9,15 @@ import org.jooq.Record
 import org.jooq.RecordMapper
 import org.springframework.stereotype.Component
 import java.sql.Date
+import kotlin.random.Random
+
 @Component
 
 class PetDao @Inject constructor(private val sql: DSLContext) {
+
     private val pet = PetTable.instance
+    private val companyId = Random.nextLong()
+
     private val petMapper = RecordMapper<Record, PetData> { record ->
         PetData(
             record[pet.name],
@@ -33,12 +38,14 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
     fun getPetsByType(petType: PetType): List<PetDataWithoutType> =
         sql.select(pet.name, pet.companyId, pet.dateOfArrival)
             .from(pet)
-            .where(pet.type.eq(convertPetTypeToPetString(petType)))
+            .where(pet.type.eq(convertPetTypeToPetString(petType))
+            .and(pet.companyId.eq(companyId)))
             .fetch(petMapperWithoutType)
 
     fun getAllPets(): List<PetData> =
         sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival)
             .from(pet)
+            .where(pet.companyId.eq(companyId))
             .fetch(petMapper)
 
 
