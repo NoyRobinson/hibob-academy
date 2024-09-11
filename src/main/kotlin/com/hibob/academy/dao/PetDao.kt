@@ -1,8 +1,5 @@
 
-import com.hibob.academy.dao.PetData
-import com.hibob.academy.dao.PetDataWithoutType
-import com.hibob.academy.dao.PetTable
-import com.hibob.academy.dao.PetType
+import com.hibob.academy.dao.*
 import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
@@ -58,6 +55,14 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .onConflict(pet.companyId)
             .doNothing()
             .execute()
+
+    fun updatePetOwner(ownerId: ) =
+
+
+
+//    Update the pet with the ownerID
+//    What should you do if the pet already have an owner Id?
+
 
     fun convertPetTypeToPetString(petType: PetType) =
         when (petType) {
