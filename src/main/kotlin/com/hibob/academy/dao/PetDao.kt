@@ -7,6 +7,7 @@ import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
+import org.jooq.impl.DSL
 import org.springframework.stereotype.Component
 import java.sql.Date
 import kotlin.random.Random
@@ -17,6 +18,7 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
 
     private val pet = PetTable.instance
     private val companyId = 12L
+    val count = DSL.count(pet.type)
 
     private val petMapper = RecordMapper<Record, PetData> { record ->
         PetData(
@@ -65,6 +67,13 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .from(pet)
             .where(pet.ownerId.eq(ownerId))
             .and(pet.companyId.eq(companyId))
+            .fetch()
+
+    fun countPetsByType() =
+        sql.select(pet.type, count)
+            .from(pet)
+            .where(pet.companyId.eq(companyId))
+            .groupBy(pet.type)
             .fetch()
 
     fun convertPetTypeToPetString(petType: PetType) =

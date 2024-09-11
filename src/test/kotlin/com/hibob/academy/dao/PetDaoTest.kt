@@ -46,6 +46,11 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         assertEquals(0, actual)
     }
 
+    @Test
+    fun `get pets by owner`(){
+
+    }
+
 
     @BeforeEach
     @AfterEach
