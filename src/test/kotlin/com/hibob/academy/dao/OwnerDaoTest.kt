@@ -19,7 +19,8 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
 
     private val ownerDao = OwnerDao(sql)
     private val petDao = PetDao(sql)
-    private val table = OwnerTable.instance
+    private val ownerTable = OwnerTable.instance
+    private val petTable = PetTable.instance
 
     val companyId = Random.nextLong()
     val id = 1L
@@ -60,7 +61,6 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         val petId = 2L
         val petName = "Angie"
         val petTypeString = "Dog"
-        val petType = PetType.convertStringToPetType(petTypeString)
         val petCompanyId = companyId
         val dateOfArrival = Date.valueOf("2010-05-20")
         petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, id)
@@ -87,6 +87,7 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
+        sql.deleteFrom(ownerTable).where(ownerTable.companyId.eq(companyId)).execute()
+        sql.deleteFrom(petTable).where(petTable.companyId.eq(companyId)).execute()
     }
 }
