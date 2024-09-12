@@ -4,6 +4,7 @@ import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
+import org.jooq.impl.DSL
 import org.springframework.stereotype.Component
 import java.sql.Date
 import java.util.*
@@ -13,47 +14,69 @@ import kotlin.random.Random
 
 class PetDao @Inject constructor(private val sql: DSLContext) {
 
-    private val pet = PetTable.instance
+    private val petTable = PetTable.instance
 
     private val petMapper = RecordMapper<Record, PetData> { record ->
         PetData(
-            record[pet.id],
-            record[pet.name],
-            PetType.convertStringToPetType(record[pet.type]),
-            record[pet.companyId],
-            record[pet.dateOfArrival],
-            record[pet.ownerId]
+            record[petTable.id],
+            record[petTable.name],
+            PetType.convertStringToPetType(record[petTable.type]),
+            record[petTable.companyId],
+            record[petTable.dateOfArrival],
+            record[petTable.ownerId]
         )
     }
 
 
     fun getPetsByType(petType: PetType, companyId: Long): List<PetData> =
-        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
-            .from(pet)
-            .where(pet.type.eq(PetType.convertPetTypeToPetString(petType))
-            .and(pet.companyId.eq(companyId)))
+        sql.select(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .from(petTable)
+            .where(petTable.type.eq(PetType.convertPetTypeToPetString(petType))
+            .and(petTable.companyId.eq(companyId)))
             .fetch(petMapper)
 
     fun getAllPets(companyId: Long): List<PetData> =
-        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
-            .from(pet)
-            .where(pet.companyId.eq(companyId))
+        sql.select(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .from(petTable)
+            .where(petTable.companyId.eq(companyId))
             .fetch(petMapper)
 
     fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long?) =
-        sql.insertInto(pet)
-            .set(pet.name, name)
-            .set(pet.type, type)
-            .set(pet.companyId, companyId)
-            .set(pet.dateOfArrival, dateOfArrival)
-            .set(pet.ownerId, ownerId)
+        sql.insertInto(petTable)
+            .set(petTable.name, name)
+            .set(petTable.type, type)
+            .set(petTable.companyId, companyId)
+            .set(petTable.dateOfArrival, dateOfArrival)
+            .set(petTable.ownerId, ownerId)
             .execute()
 
+    fun getPetsByOwner(ownerId: Long, companyId: Long): List<PetData> =
+        sql.select(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .from(petTable)
+            .where(petTable.ownerId.eq(ownerId))
+            .and(petTable.companyId.eq(companyId))
+            .fetch(petMapper)
+
+
+    val count = DSL.count(petTable.type)
+
+    fun countPetsByType(companyId: Long): Map<PetType, Int> =
+        sql.select(petTable.type, count)
+            .from(petTable)
+            .where(petTable.companyId.eq(companyId))
+            .groupBy(petTable.type)
+            .fetch()
+            .associate {
+                val petType = PetType.convertStringToPetType(it[petTable.type])
+                val count = it[count] as Int
+                petType to count
+            }
+
     fun updatePetOwner(petData: PetData, ownerId: Long, companyId: Long) =
-        sql.update(pet)
-            .set(pet.ownerId, ownerId)
-            .where(pet.id.eq(petData.id))
-            .and(pet.companyId.eq(companyId))
-            .and(pet.ownerId.isNull())
+        sql.update(petTable)
+            .set(petTable.ownerId, ownerId)
+            .where(petTable.id.eq(petData.id))
+            .and(petTable.companyId.eq(companyId))
+            .and(petTable.ownerId.isNull())
             .execute()
 }
