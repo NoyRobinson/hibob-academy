@@ -80,7 +80,6 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         val petId = 2L
         val petName = "Angie"
         val petTypeString = "Dog"
-        val petType = PetType.convertStringToPetType(petTypeString)
         val petCompanyId = companyId
         val dateOfArrival = Date.valueOf("2010-05-20")
         petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, null)
