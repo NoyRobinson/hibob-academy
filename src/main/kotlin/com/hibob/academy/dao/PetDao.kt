@@ -27,31 +27,35 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
+    fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long?): Long {
+        val id = sql.insertInto(petTable)
+            .set(petTable.name, name)
+            .set(petTable.type, type)
+            .set(petTable.companyId, companyId)
+            .set(petTable.dateOfArrival, dateOfArrival)
+            .set(petTable.ownerId, ownerId)
+            .returning(petTable.id)
+            .fetchOne()
+
+        return id?.get(petTable.id)
+            ?: throw RuntimeException("Failed to insert pet and retrieve ID")
+    }
 
     fun getPetsByType(petType: PetType, companyId: Long): List<PetData> =
-        sql.select(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+        sql.select(petTable.id, petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
             .from(petTable)
             .where(petTable.type.eq(PetType.convertPetTypeToPetString(petType))
             .and(petTable.companyId.eq(companyId)))
             .fetch(petMapper)
 
     fun getAllPets(companyId: Long): List<PetData> =
-        sql.select(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+        sql.select(petTable.id, petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
             .from(petTable)
             .where(petTable.companyId.eq(companyId))
             .fetch(petMapper)
 
-    fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long?) =
-        sql.insertInto(petTable)
-            .set(petTable.name, name)
-            .set(petTable.type, type)
-            .set(petTable.companyId, companyId)
-            .set(petTable.dateOfArrival, dateOfArrival)
-            .set(petTable.ownerId, ownerId)
-            .execute()
-
     fun getPetsByOwner(ownerId: Long, companyId: Long): List<PetData> =
-        sql.select(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+        sql.select(petTable.id, petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
             .from(petTable)
             .where(petTable.ownerId.eq(ownerId))
             .and(petTable.companyId.eq(companyId))

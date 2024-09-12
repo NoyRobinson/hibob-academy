@@ -21,20 +21,25 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
-    fun getOwner(companyId: Long): List<OwnerData> =
-        sql.select(owner.name, owner.companyId, owner.employeeId)
-            .from(owner)
-            .where(owner.companyId.eq(companyId))
-            .fetch(ownerMapper)
-
-    fun createOwner(ownerName: String, companyId: Long, employeeId: String) =
-        sql.insertInto(owner)
+    fun createOwner(ownerName: String, companyId: Long, employeeId: String): Long {
+        val id = sql.insertInto(owner)
             .set(owner.name, ownerName)
             .set(owner.companyId, companyId)
             .set(owner.employeeId, employeeId)
             .onConflict(owner.companyId, owner.employeeId)
             .doNothing()
-            .execute()
+            .returning(owner.id)
+            .fetchOne()
+
+        return id?.get(owner.id)
+            ?: throw RuntimeException("Failed to insert owner and retrieve ID")
+    }
+
+    fun getOwner(companyId: Long): List<OwnerData> =
+        sql.select(owner.id, owner.name, owner.companyId, owner.employeeId)
+            .from(owner)
+            .where(owner.companyId.eq(companyId))
+            .fetch(ownerMapper)
 
     fun getOwnerByPetId(petId: Long): OwnerData? =
         sql.select(owner.id, owner.name, owner.companyId, owner.employeeId)
