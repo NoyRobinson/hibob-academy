@@ -16,65 +16,70 @@ import kotlin.random.Random
 
 class PetDao @Inject constructor(private val sql: DSLContext) {
 
-    private val pet = PetTable.instance
-    private val companyId = 12L
-    val count = DSL.count(pet.type)
+    private val petTable = PetTable.instance
 
     private val petMapper = RecordMapper<Record, PetData> { record ->
         PetData(
-            record[pet.name],
-            convertStringToPetType(record[pet.type]),
-            record[pet.companyId],
-            Date(record[pet.dateOfArrival].time),
-            record[pet.ownerId]
+            record[petTable.name],
+            convertStringToPetType(record[petTable.type]),
+            record[petTable.companyId],
+            record[petTable.dateOfArrival],
+            record[petTable.ownerId]
         )
     }
 
     private val petMapperWithoutType = RecordMapper<Record, PetDataWithoutType> { record ->
         PetDataWithoutType(
-            record[pet.name],
-            record[pet.companyId],
-            Date(record[pet.dateOfArrival].time),
-            record[pet.ownerId]
+            record[petTable.name],
+            record[petTable.companyId],
+            record[petTable.dateOfArrival],
+            record[petTable.ownerId]
         )
     }
 
-    fun getPetsByType(petType: PetType): List<PetDataWithoutType> =
-        sql.select(pet.name, pet.companyId, pet.dateOfArrival, pet.ownerId)
-            .from(pet)
-            .where(pet.type.eq(convertPetTypeToPetString(petType))
-            .and(pet.companyId.eq(companyId)))
+    fun getPetsByType(petType: PetType, companyId: Long): List<PetDataWithoutType> =
+        sql.select(petTable.name, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .from(petTable)
+            .where(petTable.type.eq(convertPetTypeToPetString(petType))
+            .and(petTable.companyId.eq(companyId)))
             .fetch(petMapperWithoutType)
 
-    fun getAllPets(): List<PetData> =
-        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
-            .from(pet)
-            .where(pet.companyId.eq(companyId))
+    fun getAllPets(companyId: Long): List<PetData> =
+        sql.select(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .from(petTable)
+            .where(petTable.companyId.eq(companyId))
             .fetch(petMapper)
 
     fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long) =
-        sql.insertInto(pet)
-            .set(pet.name, name)
-            .set(pet.type, type)
-            .set(pet.companyId, companyId)
-            .set(pet.dateOfArrival, dateOfArrival)
-            .set(pet.ownerId, ownerId)
+        sql.insertInto(petTable)
+            .set(petTable.name, name)
+            .set(petTable.type, type)
+            .set(petTable.companyId, companyId)
+            .set(petTable.dateOfArrival, dateOfArrival)
+            .set(petTable.ownerId, ownerId)
             .execute()
 
-    fun getPetsByOwner(ownerId: Long): List<PetData> =
-        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
-            .from(pet)
-            .where(pet.ownerId.eq(ownerId))
-            .and(pet.companyId.eq(companyId))
+    fun getPetsByOwner(ownerId: Long, companyId: Long): List<PetData> =
+        sql.select(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .from(petTable)
+            .where(petTable.ownerId.eq(ownerId))
+            .and(petTable.companyId.eq(companyId))
             .fetch(petMapper)
 
-    fun countPetsByType(): Map<String, Int> =
-        sql.select(pet.type, count)
-            .from(pet)
-            .where(pet.companyId.eq(companyId))
-            .groupBy(pet.type)
+
+    val count = DSL.count(petTable.type)
+
+    fun countPetsByType(companyId: Long): Map<PetType, Int> =
+        sql.select(petTable.type, count)
+            .from(petTable)
+            .where(petTable.companyId.eq(companyId))
+            .groupBy(petTable.type)
             .fetch()
-            .associate { it[pet.type] to it[count] as Int }
+            .associate {
+                val petType = convertStringToPetType(it[petTable.type])
+                val count = it[count] as Int
+                petType to count
+            }
 
     fun convertPetTypeToPetString(petType: PetType) =
         when (petType) {
