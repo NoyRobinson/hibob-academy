@@ -14,18 +14,10 @@ enum class PetType {
     DOG, CAT, BIRD;
 
     companion object {
-        fun convertPetTypeToPetString(petType: PetType) =
-            when (petType) {
-                PetType.DOG -> "Dog"
-                PetType.CAT -> "Cat"
-                PetType.BIRD -> "Bird"
-            }
+        fun convertPetTypeToPetString(petType: PetType): String =
+            petType.toString()
 
-        fun convertStringToPetType(petType: String) =
-            when (petType) {
-                "Dog" -> PetType.DOG
-                "Cat" -> PetType.CAT
-                else -> PetType.BIRD
-            }
+        fun convertStringToPetType(petType: String): PetType =
+            valueOf(petType.uppercase())
     }
 }
