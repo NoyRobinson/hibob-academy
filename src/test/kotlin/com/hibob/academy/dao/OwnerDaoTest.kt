@@ -1,5 +1,6 @@
 package com.hibob.academy.dao
 
+import PetDao
 import com.hibob.academy.utils.BobDbTest
 
 import org.jooq.DSLContext
@@ -51,10 +52,13 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
     @Test
     fun `get owner information by pet id`(){
 
+        val petDao = PetDao(sql)
+        val petTable = PetTable.instance
+
         val ownerName = "Noy"
         val ownerCompanyId = companyId
         val ownerEmployeeId = "123"
-        ownerDao.createOwner(id, ownerName, ownerCompanyId, ownerEmployeeId)
+        ownerDao.createOwner(ownerName, ownerCompanyId, ownerEmployeeId)
 
         val petId = 2L
         val petName = "Angie"
@@ -62,22 +66,24 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         val petType = PetType.convertStringToPetType(petTypeString)
         val petCompanyId = companyId
         val dateOfArrival = Date.valueOf("2010-05-20")
-        createPet(petId, petName, petTypeString, petCompanyId, dateOfArrival, id)
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, id)
 
         val expected = OwnerData(id, ownerName, ownerCompanyId, ownerEmployeeId)
         val actual = ownerDao.getOwnerByPetId(petId)
         assertEquals(expected, actual)
     }
 
+    @Test
     fun `try get information of owner by pet id for a pet that doesnt have an owner`(){
 
+        val petDao = PetDao(sql)
         val petId = 2L
         val petName = "Angie"
         val petTypeString = "Dog"
         val petType = PetType.convertStringToPetType(petTypeString)
         val petCompanyId = companyId
         val dateOfArrival = Date.valueOf("2010-05-20")
-        createPet(petId, petName, petTypeString, petCompanyId, dateOfArrival, OL)
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, null)
 
         val actual = ownerDao.getOwnerByPetId(petId)
         assertEquals(null, actual)
