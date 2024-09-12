@@ -1,6 +1,5 @@
 package com.hibob.academy.resource
 
-import com.hibob.academy.types.Pet
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
@@ -16,7 +15,7 @@ class PetsResource {
 // create
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    fun addPet(@RequestBody pet: Pet): Response {
+    fun addPet(@RequestBody pet: PetData): Response {
         Response.status(Response.Status.CREATED).build()
         return Response.ok(pet).build()
     }
@@ -35,8 +34,8 @@ class PetsResource {
     @Path("/{petId}/type")
     fun getPetType(@PathParam("petId") petId: UUID): Response {
         val pets = listOf(
-            Pet(petId = UUID.randomUUID(), name = "Angie", type = "dog", companyId = UUID.randomUUID(), dateOfArrival = Date()),
-            Pet(petId = UUID.randomUUID(), name = "Nessy", type = "dog", companyId = UUID.randomUUID(), dateOfArrival = Date()))
+            PetData(petId = UUID.randomUUID(), name = "Angie", type = "dog", companyId = UUID.randomUUID(), dateOfArrival = Date()),
+            PetData(petId = UUID.randomUUID(), name = "Nessy", type = "dog", companyId = UUID.randomUUID(), dateOfArrival = Date()))
         if(pets.filter{ pet ->
             pet.petId == petId
             }.isEmpty())
