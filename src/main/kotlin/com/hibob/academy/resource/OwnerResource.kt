@@ -1,7 +1,6 @@
 package com.hibob.academy.resource
 
 import com.hibob.academy.types.Owner
-import com.hibob.academy.types.Pet
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
@@ -14,20 +13,19 @@ import java.util.*
 @Produces(MediaType.APPLICATION_JSON)
 class OwnerResource {
 
-        // create v1
+        // create
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
-        @Path("/newOwner/v1")
-        fun addOwnerV1(@RequestBody owner: Owner): Response {
-            Response.status(Response.Status.CREATED).build()
-            return Response.ok(owner).build()
-        }
+        @Path("/newOwner")
+        fun addOwner(@RequestBody owner: Owner): Response {
 
-        // create v2
-        @POST
-        @Consumes(MediaType.APPLICATION_JSON)
-        @Path("/newOwner/v2")
-        fun addOwnerV2(@RequestBody owner: Owner): Response {
+            if(owner.name.isNullOrEmpty())
+                owner.name = owner.firstName + " " + owner.lastName
+
+            if(owner.firstName.isNullOrEmpty() || owner.lastName.isNullOrEmpty()) {
+                owner.firstName = owner.name!!.split(" ")[0]
+                owner.lastName = owner.name!!.split(" ")[1]
+            }
             Response.status(Response.Status.CREATED).build()
             return Response.ok(owner).build()
         }
@@ -36,8 +34,8 @@ class OwnerResource {
         @PUT
         @Consumes(MediaType.APPLICATION_JSON)
         @Path("/updateOwnerType/{ownerId}/v1")
-        fun updateOwnerTypeV1(@PathParam("ownerId") ownerId: UUID, @QueryParam("newType") newType: String?): Response {
-            val owner = Owner(id = ownerId, companyId = UUID.randomUUID(), employeeId = UUID.randomUUID(), name = "Noy Robinson", firstName = null, lastName = null, type = "dog", dateOfArrival = Date())
+        fun updateOwnerTypeV1(@PathParam("ownerId") ownerId: Long, @QueryParam("newType") newType: String?): Response {
+            val owner = Owner(id = ownerId, companyId = 12L, employeeId = "123", name = "Noy Robinson", firstName = null, lastName = null, type = "dog", dateOfArrival = Date())
             owner.type = newType ?: owner.type
             Response.status(Response.Status.ACCEPTED).build()
             return Response.ok(owner).build()
@@ -47,30 +45,21 @@ class OwnerResource {
         @PUT
         @Consumes(MediaType.APPLICATION_JSON)
         @Path("/updateOwnerType/{ownerId}/v2")
-        fun updateOwnerTypeV2(@PathParam("ownerId") ownerId: UUID, @QueryParam("newType") newType: String?): Response {
-            val owner = Owner(id = ownerId, companyId = UUID.randomUUID(), employeeId = UUID.randomUUID(), name = null, firstName = "Noy", lastName = "Robinson", type = "dog", dateOfArrival = Date())
+        fun updateOwnerTypeV2(@PathParam("ownerId") ownerId: Long, @QueryParam("newType") newType: String?): Response {
+            val owner = Owner(id = ownerId, companyId = 12L, employeeId = "123", name = null, firstName = "Noy", lastName = "Robinson", type = "dog", dateOfArrival = Date())
             owner.type = newType ?: owner.type
             Response.status(Response.Status.ACCEPTED).build()
             return Response.ok(owner).build()
         }
 
-        // retrieve v1
+        // retrieve
         @GET
-        @Path("/allOwners/v1")
+        @Path("/allOwners")
         fun getAllOwnersV1(): Response {
             Response.status(Response.Status.OK).build()
             return Response.ok(
-                listOf(Owner(id = UUID.randomUUID(), companyId = UUID.randomUUID(), employeeId = UUID.randomUUID(), name = "Noy Robinson", firstName = null, lastName = null, type = "dog", dateOfArrival = Date()))
-            ).build()
-        }
-
-        // retrieve v2
-        @GET
-        @Path("/allOwners/v2")
-        fun getAllOwnersV2(): Response {
-            Response.status(Response.Status.OK).build()
-            return Response.ok(
-                listOf(Owner(id = UUID.randomUUID(), companyId = UUID.randomUUID(), employeeId = UUID.randomUUID(), name = null, firstName = "Noy", lastName = "Robinson", type = "dog", dateOfArrival = Date()))
+                listOf(Owner(id= 1L, companyId = 12L, employeeId = "123", name = "Noy Robinson", firstName = null, lastName = null, type = "dog", dateOfArrival = Date()),
+                        Owner(id = 2L, companyId = 12L, employeeId = "234", name = null, firstName = "Ohad", lastName = "Akler", type = "dog", dateOfArrival = Date()),)
             ).build()
         }
 
@@ -81,6 +70,4 @@ class OwnerResource {
             Response.status(Response.Status.OK).build()
             return Response.ok("Deleted").build()
         }
-    }
-
 }
