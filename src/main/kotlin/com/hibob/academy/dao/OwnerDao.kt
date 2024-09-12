@@ -10,6 +10,7 @@ import kotlin.random.Random
 class OwnerDao @Inject constructor(private val sql: DSLContext) {
 
     private val owner = OwnerTable.instance
+    private val pet = PetTable.instance
 
     private val ownerMapper = RecordMapper<Record, OwnerData> { record ->
         OwnerData(
@@ -35,4 +36,13 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
             .onConflict(owner.companyId, owner.employeeId)
             .doNothing()
             .execute()
+
+    fun getOwnerByPetId(petId: UUID): OwnerData =
+        sql.select(owner.id, owner.name, owner.companyId, owner.employeeId)
+            .from(owner)
+            .rightJoin(pet)
+            .on(pet.ownerId.eq(owner.id))
+            .where(pet.id.eq(petId))
+            .and(pet.companyId.eq(owner.companyId))
+            .fetchOne(ownerMapper)
 }
