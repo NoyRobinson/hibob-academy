@@ -18,6 +18,7 @@ import kotlin.random.Random
 class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
 
     private val ownerDao = OwnerDao(sql)
+    private val petDao = PetDao(sql)
     private val table = OwnerTable.instance
 
     val companyId = Random.nextLong()
@@ -48,12 +49,8 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         assertEquals(expected, actual)
     }
 
-    // fix 2 tests under
     @Test
     fun `get owner information by pet id`(){
-
-        val petDao = PetDao(sql)
-        val petTable = PetTable.instance
 
         val ownerName = "Noy"
         val ownerCompanyId = companyId
@@ -76,7 +73,6 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
     @Test
     fun `try get information of owner by pet id for a pet that doesnt have an owner`(){
 
-        val petDao = PetDao(sql)
         val petId = 2L
         val petName = "Angie"
         val petTypeString = "Dog"

@@ -39,7 +39,7 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
     fun getOwnerByPetId(petId: Long): OwnerData? =
         sql.select(owner.id, owner.name, owner.companyId, owner.employeeId)
             .from(owner)
-            .rightJoin(pet)
+            .leftJoin(pet)
             .on(pet.ownerId.eq(owner.id))
             .where(pet.id.eq(petId))
             .and(pet.companyId.eq(owner.companyId))

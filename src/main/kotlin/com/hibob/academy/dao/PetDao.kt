@@ -26,29 +26,19 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
-    private val petMapperWithoutType = RecordMapper<Record, PetDataWithoutType> { record ->
-        PetDataWithoutType(
-            record[pet.id],
-            record[pet.name],
-            record[pet.companyId],
-            record[pet.dateOfArrival],
-            record[pet.ownerId]
-        )
-    }
 
-    fun getPetsByType(petType: PetType, companyId: Long): List<PetDataWithoutType> =
-        sql.select(pet.name, pet.companyId, pet.dateOfArrival, pet.ownerId)
+    fun getPetsByType(petType: PetType, companyId: Long): List<PetData> =
+        sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
             .from(pet)
             .where(pet.type.eq(PetType.convertPetTypeToPetString(petType))
             .and(pet.companyId.eq(companyId)))
-            .fetch(petMapperWithoutType)
+            .fetch(petMapper)
 
     fun getAllPets(companyId: Long): List<PetData> =
         sql.select(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
             .from(pet)
             .where(pet.companyId.eq(companyId))
             .fetch(petMapper)
-
 
     fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long?) =
         sql.insertInto(pet)
@@ -57,8 +47,6 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .set(pet.companyId, companyId)
             .set(pet.dateOfArrival, dateOfArrival)
             .set(pet.ownerId, ownerId)
-            .onConflict(pet.companyId)
-            .doNothing()
             .execute()
 
     fun updatePetOwner(petData: PetData, ownerId: Long, companyId: Long) =
