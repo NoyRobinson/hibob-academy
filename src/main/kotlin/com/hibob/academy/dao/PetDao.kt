@@ -50,7 +50,7 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .fetch(petMapper)
 
 
-    fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long) =
+    fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long?) =
         sql.insertInto(pet)
             .set(pet.name, name)
             .set(pet.type, type)

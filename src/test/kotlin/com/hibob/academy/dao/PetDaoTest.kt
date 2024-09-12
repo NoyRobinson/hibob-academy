@@ -21,7 +21,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
     private val table = PetTable.instance
     val companyId = Random.nextLong()
     val id = 1L
-    val ownerId =  0L  // no owner
+    val ownerId = null
 
     @Test
     fun `create a new pet that doesn't exist in the database`() {
@@ -31,7 +31,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val petCompanyId = companyId
         val dateOfArrival = Date.valueOf("2010-05-20")
 
-        petDao.createPet(id, petName, petTypeString, petCompanyId, dateOfArrival, ownerId)
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, ownerId)
         val expected = listOf(PetData(id, petName, petType, petCompanyId, dateOfArrival, ownerId))
         assertEquals(expected, petDao.getAllPets(companyId))
     }
@@ -43,10 +43,10 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val petType1 = PetType.convertStringToPetType(petTypeString1)
         val petCompanyId1 = companyId
         val dateOfArrival1 = Date.valueOf("2010-05-20")
-        petDao.createPet(id, petName1, petTypeString1, petCompanyId1, dateOfArrival1, ownerId)
+        petDao.createPet(petName1, petTypeString1, petCompanyId1, dateOfArrival1, ownerId)
 
         val petName2 = "Nessy"
-        petDao.createPet(id, petName2, petTypeString1, petCompanyId1, dateOfArrival1, ownerId)
+        petDao.createPet(petName2, petTypeString1, petCompanyId1, dateOfArrival1, ownerId)
 
         val expected = listOf(PetData(id, petName1, petType1, petCompanyId1, dateOfArrival1, ownerId))
         val actual = petDao.getAllPets(companyId)
@@ -60,7 +60,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val petCompanyId = companyId
         val dateOfArrival = Date.valueOf("2010-05-20")
 
-        petDao.createPet(id, petName, petTypeString, petCompanyId, dateOfArrival, ownerId)
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, ownerId)
 
         val expected = emptyList<PetData>()
         val actual = petDao.getPetsByType(PetType.convertStringToPetType("Cat"), companyId)
@@ -75,9 +75,9 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val dateOfArrival = Date.valueOf("2010-05-20")
         val petData = PetData(id, petName, PetType.convertStringToPetType(petTypeString), petCompanyId, dateOfArrival, ownerId)
         val newOwnerId = 4L
-        petDao.createPet(id, petName, petTypeString, petCompanyId, dateOfArrival, ownerId)
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, ownerId)
 
-        assertEquals(1, petDao.updatePetOwner(petData, newOwnerId))
+        assertEquals(1, petDao.updatePetOwner(petData, newOwnerId, companyId))
     }
 
     @Test
@@ -89,10 +89,10 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val originOwnerId = 11L
         val petData = PetData(id, petName, PetType.convertStringToPetType(petTypeString), petCompanyId, dateOfArrival, originOwnerId)
 
-        petDao.createPet(id, petName, petTypeString, petCompanyId, dateOfArrival, originOwnerId)
+        petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, originOwnerId)
 
         val newOwnerId = 12L
-        assertEquals(0, petDao.updatePetOwner(petData, newOwnerId))
+        assertEquals(0, petDao.updatePetOwner(petData, newOwnerId, companyId))
     }
 
 
