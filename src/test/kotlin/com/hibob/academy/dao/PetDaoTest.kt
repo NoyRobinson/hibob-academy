@@ -101,12 +101,12 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val petName1 = "Angie"
         val petTypeString = "Dog"
         val dateOfArrival = Date.valueOf("2010-05-20")
-        petDao.createPet(petName1, petTypeString, companyId, dateOfArrival, ownerId)
+        petDao.createPet(petName1, petTypeString, companyId, dateOfArrival, 123L)
 
-        val petName2 = "Angie"
-        petDao.createPet(petName2, petTypeString, companyId, dateOfArrival, ownerId)
+        val petName2 = "Nessy"
+        petDao.createPet(petName2, petTypeString, companyId, dateOfArrival, 123L)
 
-        val actual = petDao.getPetsByOwner(ownerId).size
+        val actual = petDao.getPetsByOwner(123L, companyId).size
         assertEquals(2, actual)
     }
 
@@ -124,8 +124,8 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val petTypeString2 = "Cat"
         petDao.createPet(petName3, petTypeString2, companyId, dateOfArrival, ownerId)
 
-        val expectedCount = mapOf("Dog" to 2, "Cat" to 1)
-        val actualCount = petDao.countPetsByType()
+        val expectedCount = mapOf("CAT" to 1, "DOG" to 2)
+        val actualCount = petDao.countPetsByType(companyId)
         assertEquals(expectedCount, actualCount)
     }
 
