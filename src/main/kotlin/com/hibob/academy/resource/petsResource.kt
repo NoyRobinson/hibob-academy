@@ -24,7 +24,7 @@ class PetsResource {
 // update
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/updatePetName/{petId}")
+    @Path("/{petId}/updatePetName")
     fun updateName(@PathParam("petId") petId: UUID, @RequestBody name: String): Response {
         Response.status(Response.Status.ACCEPTED).build()
         return Response.ok(name).build()
@@ -40,7 +40,7 @@ class PetsResource {
         if(pets.filter{ pet ->
             pet.petId == petId
             }.isEmpty())
-            return Response.status(Response.Status.BAD_REQUEST).build()
+            return Response.status(Response.Status.NOT_FOUND).build()
         Response.status(Response.Status.OK).build()
         return Response.ok("dog").build()
     }
