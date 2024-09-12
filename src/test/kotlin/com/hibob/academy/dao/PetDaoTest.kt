@@ -20,7 +20,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
     private val petDao = PetDao(sql)
     private val table = PetTable.instance
     val companyId = Random.nextLong()
-    val id = UUID.randomUUID()
+    val id = 1L
     val ownerId =  0L  // no owner
 
     @Test
