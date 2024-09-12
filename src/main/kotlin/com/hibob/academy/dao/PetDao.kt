@@ -21,7 +21,7 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             record[pet.name],
             PetType.convertStringToPetType(record[pet.type]),
             record[pet.companyId],
-            Date(record[pet.dateOfArrival].time),
+            record[pet.dateOfArrival],
             record[pet.ownerId]
         )
     }
@@ -31,7 +31,7 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             record[pet.id],
             record[pet.name],
             record[pet.companyId],
-            Date(record[pet.dateOfArrival].time),
+            record[pet.dateOfArrival],
             record[pet.ownerId]
         )
     }
@@ -50,9 +50,8 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .fetch(petMapper)
 
 
-    fun createPet(id: Long, name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long) =
+    fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long) =
         sql.insertInto(pet)
-            .set(pet.id, id)
             .set(pet.name, name)
             .set(pet.type, type)
             .set(pet.companyId, companyId)
