@@ -1,6 +1,5 @@
 package com.hibob.academy.resource
 
-import com.hibob.academy.dao.PetData
 import com.hibob.academy.dao.PetrCreationRequest
 import com.hibob.academy.dao.PetType
 import com.hibob.academy.service.PetService
@@ -9,7 +8,6 @@ import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestBody
-import java.sql.Date
 
 @Controller
     @Path("/api/pets")
@@ -58,7 +56,6 @@ import java.sql.Date
             return Response.ok().entity(pet).build()
         }
 
-        // delete
         @DELETE
         @Path("{companyId}/{petId}")
         fun deletePet(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
