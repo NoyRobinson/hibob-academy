@@ -1,18 +1,14 @@
 
 import com.hibob.academy.dao.*
-import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
 import org.jooq.impl.DSL
 import org.springframework.stereotype.Component
 import java.sql.Date
-import java.util.*
-import kotlin.random.Random
 
 @Component
-
-class PetDao @Inject constructor(private val sql: DSLContext) {
+class PetDao(private val sql: DSLContext) {
 
     private val petTable = PetTable.instance
 
@@ -48,6 +44,13 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .and(petTable.companyId.eq(companyId)))
             .fetch(petMapper)
 
+    fun getPetById(petId: Long, companyId: Long): PetData? =
+        sql.select(petTable.id, petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .from(petTable)
+            .where(petTable.id.eq(petId))
+            .and(petTable.companyId.eq(companyId))
+            .fetchOne(petMapper)
+
     fun getAllPets(companyId: Long): List<PetData> =
         sql.select(petTable.id, petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
             .from(petTable)
@@ -60,7 +63,6 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .where(petTable.ownerId.eq(ownerId))
             .and(petTable.companyId.eq(companyId))
             .fetch(petMapper)
-
 
     val count = DSL.count(petTable.type)
 
@@ -82,5 +84,18 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .where(petTable.id.eq(petData.id))
             .and(petTable.companyId.eq(companyId))
             .and(petTable.ownerId.isNull())
+            .execute()
+
+    fun updatePetName(petId: Long, newName: String, companyId: Long) =
+        sql.update(petTable)
+            .set(petTable.name, newName)
+            .where(petTable.id.eq(petId))
+            .and(petTable.companyId.eq(companyId))
+            .execute()
+
+    fun deletePet(petId: Long, companyId: Long) =
+        sql.deleteFrom(petTable)
+            .where(petTable.id.eq(petId))
+            .and(petTable.companyId.eq(companyId))
             .execute()
 }
