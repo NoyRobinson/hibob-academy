@@ -2,29 +2,24 @@ package com.hibob.academy.resource
 
 import com.hibob.academy.dao.PetData
 import com.hibob.academy.dao.PetType
+import com.hibob.academy.service.PetService
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestBody
-import java.util.*
 
-class PetResource {
-
-
-    // Get pets by owner: Given an owner ID, return all the information of the pets this owner adopted.
-    // Count pets by type: This API does not receive any information but return a map of the type to how many pets of that type we have in the DB
-
-    @Controller
+@Controller
     @Path("/api/noy/pets")
     @Produces(MediaType.APPLICATION_JSON)
-    class PetsResource {
+    class PetsResource(private val petService: PetService) {
 
         // create
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
         fun addPet(@RequestBody pet: PetData): Response {
-            Response.status(Response.Status.CREATED).build()
+            val petId = petService.createPet(pet.name, pet.type.toString(), pet.companyId, pet.dateOfArrival, pet.ownerId)
+            Response.status(Response.Status.CREATED).entity("new pet created with id $petId").build()
             return Response.ok(pet).build()
         }
 
@@ -32,47 +27,43 @@ class PetResource {
         @PUT
         @Consumes(MediaType.APPLICATION_JSON)
         @Path("/{petId}/updatePetName")
-        fun updateName(@PathParam("petId") petId: Long, @QueryParam("newName") newName: String?): Response {
-            val pet = PetData(id = petId, name = "Angie", type = PetType.DOG, companyId = 12L, dateOfArrival = Date(), ownerId = null)
-            pet.name = newName ?: pet.name
-            Response.status(Response.Status.ACCEPTED).build()
-            return Response.ok(pet).build()
+        fun updateName(@PathParam("petId") petId: Long, @QueryParam("newName") newName: String, @QueryParam("companyId") companyId: Long): Response {
+            petService.updatePetName(petId, newName, companyId)
+            return Response.status(Response.Status.ACCEPTED).entity("Pets name changed successfully").build()
         }
 
-        // http://localhost:8080/api/noy/pets/updatePetName/3983f705-e3c4-4515-b46e-b8c74936ffd9?newName=Nessy
-
-
-        // retrieve
-        @GET
-        @Path("/{petId}/type")
-        fun getPetType(@PathParam("petId") petId: Long): Response {
-            val pets = listOf(
-                PetData(id = petId, name = "Angie", type = PetType.DOG, companyId = 12L, dateOfArrival = Date(), null),
-                PetData(id = petId, name = "Nessy", type = PetType.DOG, companyId = 11L, dateOfArrival = Date(), null))
-            if(pets.filter{ pet ->
-                    pet.id == petId
-                }.isEmpty())
-                return Response.status(Response.Status.NOT_FOUND).build()
-            Response.status(Response.Status.OK).build()
-            return Response.ok("dog").build()
+        @PUT
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Path("/{petId}/{ownerId}/updatePetsOwner")
+        fun updateOwnerForPet(@PathParam("petId") petId: Long, @PathParam("ownerId") ownerId: Long, @QueryParam("companyId") companyId: Long): Response {
+            val pet = petService.getPetById(petId, companyId)
+            val success = pet?.let { petService.updatePetOwner(it, petId, ownerId) }
+            if (success == 1)
+                return Response.ok().build()
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Pet already has an owner").build()
         }
 
         // retrieve
         @GET
-        @Path("/allPets")
-        fun getAllPets(): Response {
-            Response.status(Response.Status.OK).build()
-            return Response.ok(
-                listOf(PetData(id = 1L, name = "Angie", type = PetType.DOG, companyId = 12L, dateOfArrival = Date(), null))
-            ).build()
+        @Path("/{petType}")
+        fun getPetType(@PathParam("petType") petType: PetType, @QueryParam("companyId") companyId: Long): Response {
+            val petsByType = petService.getPetsByType(petType, companyId)
+            return Response.status(Response.Status.OK).entity(petsByType).build()
+        }
+
+        // retrieve
+        @GET
+        @Path("{companyId}/allPets")
+        fun getAllPets(@PathParam("companyId") companyId: Long): Response {
+            val listOfPets = petService.getAllPets(companyId)
+            return Response.status(Response.Status.OK).entity(listOfPets).build()
         }
 
         // delete
         @DELETE
         @Path("/{petId}")
-        fun deletePet(@PathParam("petId") petId: UUID): Response {
-            Response.status(Response.Status.OK).build()
-            return Response.ok("Deleted").build()
+        fun deletePet(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {
+            petService.deletePet(petId, companyId)
+            return Response.status(Response.Status.OK).entity("Deleted").build()
         }
     }
-}
