@@ -11,7 +11,7 @@ import java.sql.Date
 import org.springframework.stereotype.Repository
 
 @Repository
-class PetDao(private val sql: DSLContext) {
+class PetDao @Inject constructor(private val sql: DSLContext) {
 
     private val petTable = PetTable.instance
 

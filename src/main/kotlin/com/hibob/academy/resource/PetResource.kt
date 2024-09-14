@@ -78,3 +78,4 @@ import org.springframework.web.bind.annotation.RequestBody
             return Response.ok(typeCounter).build()
         }
     }
+    }
