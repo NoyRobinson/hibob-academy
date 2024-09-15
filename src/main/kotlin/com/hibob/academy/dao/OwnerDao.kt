@@ -4,9 +4,9 @@ import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
-import java.util.*
-import kotlin.random.Random
+import org.springframework.stereotype.Repository
 
+@Repository
 class OwnerDao @Inject constructor(private val sql: DSLContext) {
 
     private val owner = OwnerTable.instance
