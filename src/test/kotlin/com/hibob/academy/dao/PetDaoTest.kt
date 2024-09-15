@@ -40,7 +40,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val petId = petDao.createPet(pet)
         val petData = PetData(petId, pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
         val newOwnerId = 4L
-        assertEquals(1, petDao.updatePetOwner(petData, newOwnerId, companyId))
+        assertEquals(1, petDao.updatePetOwner(petData, petId, newOwnerId, companyId))
     }
 
     @Test
@@ -50,7 +50,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val petId = petDao.createPet(pet)
         val petData = PetData(petId, pet.name, pet.type, pet.companyId, pet.dateOfArrival, originOwnerId)
         val newOwnerId = 12L
-        assertEquals(0, petDao.updatePetOwner(petData, newOwnerId, companyId))
+        assertEquals(0, petDao.updatePetOwner(petData, petId, newOwnerId, companyId))
     }
 
     @Test
