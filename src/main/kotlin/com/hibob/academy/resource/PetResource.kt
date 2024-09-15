@@ -62,4 +62,18 @@ import org.springframework.web.bind.annotation.RequestBody
             petService.deletePet(petId, companyId)
             return Response.ok().entity("Deleted").build()
         }
+
+        @GET
+        @Path("owner/{ownerId}")
+        fun getAllPets(@PathParam("ownerId") ownerId: Long, @QueryParam("companyId") companyId: Long): Response {
+            val listOfPets = petService.getPetsByOwner(ownerId, companyId)
+            return Response.ok(listOfPets).build()
+        }
+
+        @GET
+        @Path("types/count/{companyId}")
+        fun countPetsByType(@PathParam("companyId") companyId: Long): Response {
+            val typeCounter = petService.countPetsByType(companyId)
+            return Response.ok(typeCounter).build()
+        }
     }
