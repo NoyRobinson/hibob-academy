@@ -14,7 +14,14 @@ class PetService @Inject constructor(private val petDao: PetDao) {
     fun getPetsByType(petType: PetType, companyId: Long) = petDao.getPetsByType(petType, companyId)
     fun getPetById(petId: Long, companyId: Long): PetData? = petDao.getPetById(petId, companyId)
     fun getAllPets(companyId: Long) = petDao.getAllPets(companyId)
-    fun updatePetOwner(pet: PetData, petId: Long, ownerId: Long) = petDao.updatePetOwner(pet, petId, ownerId)
+
+    fun updatePetOwner(pet: PetData, petId: Long, ownerId: Long, companyId: Long): Int {
+        if(pet.ownerId == null)
+            return petDao.updatePetOwner(pet, petId, ownerId, companyId)
+        return 0
+    }
+
+
     fun updatePetName(petId: Long, newName: String, companyId: Long) = petDao.updatePetName(petId, newName, companyId)
     fun deletePet(petId: Long, companyId: Long) = petDao.deletePet(petId, companyId)
 }
