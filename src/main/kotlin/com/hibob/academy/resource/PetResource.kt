@@ -1,6 +1,6 @@
 package com.hibob.academy.resource
 
-import com.hibob.academy.dao.PetData
+import com.hibob.academy.dao.Pet
 import com.hibob.academy.dao.PetType
 import com.hibob.academy.service.PetService
 import jakarta.ws.rs.*
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody
 
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
-        fun addPet(@RequestBody pet: PetData): Response {
-            val petId = petService.createPet(pet.name, pet.type.toString(), pet.companyId, pet.dateOfArrival, pet.ownerId)
+        fun addPet(@RequestBody pet: Pet): Response {
+            val petId = petService.createPet(pet)
             Response.status(Response.Status.CREATED).entity("new pet created with id $petId").build()
             return Response.ok(pet).build()
         }

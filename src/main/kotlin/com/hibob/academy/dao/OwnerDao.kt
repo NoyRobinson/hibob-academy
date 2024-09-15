@@ -21,11 +21,11 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
-    fun createOwner(ownerName: String, companyId: Long, employeeId: String): Long {
+    fun createOwner(ownerInfo: Owner): Long {
         val id = sql.insertInto(owner)
-            .set(owner.name, ownerName)
-            .set(owner.companyId, companyId)
-            .set(owner.employeeId, employeeId)
+            .set(owner.name, ownerInfo.name)
+            .set(owner.companyId, ownerInfo.companyId)
+            .set(owner.employeeId, ownerInfo.employeeId)
             .onConflict(owner.companyId, owner.employeeId)
             .doNothing()
             .returning(owner.id)
