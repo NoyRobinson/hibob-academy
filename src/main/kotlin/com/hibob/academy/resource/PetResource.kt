@@ -84,4 +84,18 @@ import org.springframework.web.bind.annotation.RequestBody
             val typeCounter = petService.countPetsByType(companyId)
             return Response.ok(typeCounter).build()
         }
+
+        @GET
+        @Path("{ownerId}/petsOfOwner")
+        fun getAllPets(@PathParam("ownerId") ownerId: Long, @QueryParam("companyId") companyId: Long): Response {
+            val listOfPets = petService.getPetsByOwner(ownerId, companyId)
+            return Response.status(Response.Status.OK).entity(listOfPets).build()
+        }
+
+        @GET
+        @Path("CountPetsByType")
+        fun countPetsByType(@QueryParam("companyId") companyId: Long): Response {
+            val typeCounter = petService.countPetsByType(companyId)
+            return Response.status(Response.Status.OK).entity(typeCounter).build()
+        }
     }
