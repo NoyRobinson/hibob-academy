@@ -1,5 +1,5 @@
+package com.hibob.academy.dao
 
-import com.hibob.academy.dao.*
 import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
@@ -24,13 +24,13 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
-    fun createPet(name: String, type: String, companyId: Long, dateOfArrival: Date, ownerId: Long?): Long {
+    fun createPet(pet: Pet): Long {
         val id = sql.insertInto(petTable)
-            .set(petTable.name, name)
-            .set(petTable.type, type)
-            .set(petTable.companyId, companyId)
-            .set(petTable.dateOfArrival, dateOfArrival)
-            .set(petTable.ownerId, ownerId)
+            .set(petTable.name, pet.name)
+            .set(petTable.type, pet.type.toString())
+            .set(petTable.companyId, pet.companyId)
+            .set(petTable.dateOfArrival, pet.dateOfArrival)
+            .set(petTable.ownerId, pet.ownerId)
             .returning(petTable.id)
             .fetchOne()
 

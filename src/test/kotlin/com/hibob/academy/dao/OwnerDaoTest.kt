@@ -1,8 +1,7 @@
 package com.hibob.academy.dao
 
-import PetDao
+import com.hibob.academy.dao.PetType.Companion.convertStringToPetType
 import com.hibob.academy.utils.BobDbTest
-
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
@@ -26,52 +25,35 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `create a new owner that doesn't exist in the database`() {
-        val ownerName = "Noy"
-        val ownerCompanyId = companyId
-        val ownerEmployeeId = "123"
-        val ownerId = ownerDao.createOwner(ownerName, ownerCompanyId, ownerEmployeeId)
-        val expected = listOf(OwnerData(ownerId, ownerName, ownerCompanyId, ownerEmployeeId))
-        assertEquals(expected, ownerDao.getOwner(ownerCompanyId))
+        val owner = Owner("Noy", companyId, "123")
+        val ownerId = ownerDao.createOwner(owner)
+        val expected = listOf(OwnerData(ownerId, owner.name, owner.companyId, owner.employeeId))
+        assertEquals(expected, ownerDao.getOwner(companyId))
     }
 
     @Test
     fun `create a new owner that exists in the database`() {
-        val ownerName1 = "Noy"
-        val ownerCompanyId1 = companyId
-        val ownerEmployeeId1 = "123"
-
-        ownerDao.createOwner(ownerName1, ownerCompanyId1, ownerEmployeeId1)
-        val ownerName2 = "Tom"
-        assertThrows<RuntimeException> { ownerDao.createOwner(ownerName2, ownerCompanyId1, ownerEmployeeId1) }
+        val owner = Owner("Noy", companyId, "123")
+        ownerDao.createOwner(owner)
+        val owner2 = Owner("Tom", companyId, "123")
+        assertThrows<RuntimeException> { ownerDao.createOwner(owner2) }
     }
 
     @Test
     fun `get owner information by pet id`(){
-        val ownerName = "Noy"
-        val ownerCompanyId = companyId
-        val ownerEmployeeId = "123"
-        val ownerId1 = ownerDao.createOwner(ownerName, ownerCompanyId, ownerEmployeeId)
-
-        val petName = "Angie"
-        val petTypeString = "Dog"
-        val petCompanyId = companyId
-        val dateOfArrival = Date.valueOf("2010-05-20")
-        val petId = petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, ownerId1)
-
-        val expected = OwnerData(ownerId1, ownerName, ownerCompanyId, ownerEmployeeId)
+        val owner = Owner("Noy", companyId, "123")
+        val ownerId = ownerDao.createOwner(owner)
+        val pet = Pet("Angie", convertStringToPetType("Dog"), companyId, Date.valueOf("2010-05-20"), ownerId)
+        val petId = petDao.createPet(pet)
+        val expected = OwnerData(ownerId, owner.name, owner.companyId, owner.employeeId)
         val actual = ownerDao.getOwnerByPetId(petId)
         assertEquals(expected, actual)
     }
 
     @Test
     fun `try get information of owner by pet id for a pet that doesnt have an owner`(){
-
-        val petName = "Angie"
-        val petTypeString = "Dog"
-        val petCompanyId = companyId
-        val dateOfArrival = Date.valueOf("2010-05-20")
-        val petId = petDao.createPet(petName, petTypeString, petCompanyId, dateOfArrival, null)
-
+        val pet = Pet("Angie", convertStringToPetType("Dog"), companyId, Date.valueOf("2010-05-20"), null)
+        val petId = petDao.createPet(pet)
         val actual = ownerDao.getOwnerByPetId(petId)
         assertEquals(null, actual)
     }

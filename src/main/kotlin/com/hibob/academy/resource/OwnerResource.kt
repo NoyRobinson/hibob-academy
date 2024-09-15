@@ -1,5 +1,6 @@
 package com.hibob.academy.resource
 
+import com.hibob.academy.dao.Owner
 import com.hibob.academy.service.OwnerService
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
@@ -14,8 +15,8 @@ class OwnerResource(private val ownerService: OwnerService) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    fun addOwner(@RequestBody ownerName: String, companyId: Long, employeeId: String): Response {
-        val ownerId = ownerService.createOwner(ownerName, companyId, employeeId)
+    fun addOwner(@RequestBody owner: Owner): Response {
+        val ownerId = ownerService.createOwner(owner)
         return Response.status(Response.Status.CREATED).entity("new owner created with id $ownerId").build()
     }
 
