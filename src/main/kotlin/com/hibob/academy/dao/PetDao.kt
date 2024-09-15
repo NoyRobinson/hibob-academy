@@ -1,6 +1,5 @@
 package com.hibob.academy.dao
 
-import com.hibob.academy.dao.*
 import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
@@ -8,7 +7,6 @@ import org.jooq.RecordMapper
 import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
 import java.sql.Date
-import org.springframework.stereotype.Repository
 
 @Repository
 class PetDao @Inject constructor(private val sql: DSLContext) {
