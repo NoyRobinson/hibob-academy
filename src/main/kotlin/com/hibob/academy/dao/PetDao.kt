@@ -6,7 +6,6 @@ import org.jooq.Record
 import org.jooq.RecordMapper
 import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
-import java.sql.Date
 
 @Repository
 class PetDao @Inject constructor(private val sql: DSLContext) {
