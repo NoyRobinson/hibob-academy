@@ -6,7 +6,7 @@ import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
 import org.jooq.impl.DSL
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import java.sql.Date
 import org.springframework.stereotype.Repository
 
