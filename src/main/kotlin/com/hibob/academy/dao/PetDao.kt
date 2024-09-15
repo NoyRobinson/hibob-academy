@@ -6,7 +6,6 @@ import org.jooq.Record
 import org.jooq.RecordMapper
 import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
-import java.sql.Date
 
 @Repository
 class PetDao @Inject constructor(private val sql: DSLContext) {
@@ -79,12 +78,11 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
                 petType to count
             }
 
-    fun updatePetOwner(petData: PetData, ownerId: Long, companyId: Long) =
+    fun updatePetOwner(petData: PetData, petId: Long, ownerId: Long, companyId: Long) =
         sql.update(petTable)
             .set(petTable.ownerId, ownerId)
             .where(petTable.id.eq(petData.id))
             .and(petTable.companyId.eq(companyId))
-            .and(petTable.ownerId.isNull())
             .execute()
 
     fun updatePetName(petId: Long, newName: String, companyId: Long) =
