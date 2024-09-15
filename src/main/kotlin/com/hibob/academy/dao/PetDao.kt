@@ -64,6 +64,7 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .and(petTable.companyId.eq(companyId))
             .fetch(petMapper)
 
+
     val count = DSL.count(petTable.type)
 
     fun countPetsByType(companyId: Long): Map<PetType, Int> =

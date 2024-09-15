@@ -114,6 +114,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         assertEquals(null, petDao.getPetById(petId, companyId))
     }
 
+
     @BeforeEach
     @AfterEach
     fun cleanup() {
