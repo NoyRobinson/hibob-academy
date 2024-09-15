@@ -3,11 +3,11 @@ package com.hibob.academy.service
 import PetDao
 import com.hibob.academy.dao.PetData
 import com.hibob.academy.dao.PetType
-import org.springframework.stereotype.Component
+import jakarta.inject.Inject
+import org.springframework.stereotype.Service
 
-
-@Component
-class PetService(private val petDao: PetDao) {
+@Service
+class PetService @Inject constructor(private val petDao: PetDao) {
 
     fun createPet(name: String, type: String, companyId: Long, dateOfArrival: java.util.Date, ownerId: Long?): Long = petDao.createPet(name, type, companyId, dateOfArrival, ownerId)
     fun getPetsByType(petType: PetType, companyId: Long) = petDao.getPetsByType(petType, companyId)

@@ -1,14 +1,15 @@
 
 import com.hibob.academy.dao.*
+import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
 import org.jooq.impl.DSL
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import java.sql.Date
 
-@Component
-class PetDao(private val sql: DSLContext) {
+@Repository
+class PetDao @Inject constructor(private val sql: DSLContext) {
 
     private val petTable = PetTable.instance
 

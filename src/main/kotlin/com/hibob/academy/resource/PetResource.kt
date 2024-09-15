@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody
     @Produces(MediaType.APPLICATION_JSON)
     class PetsResource(private val petService: PetService) {
 
-        // create
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
         fun addPet(@RequestBody pet: PetData): Response {
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody
             return Response.ok(pet).build()
         }
 
-        // update
         @PUT
         @Consumes(MediaType.APPLICATION_JSON)
         @Path("/{petId}/updatePetName")
@@ -43,7 +41,6 @@ import org.springframework.web.bind.annotation.RequestBody
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Pet already has an owner").build()
         }
 
-        // retrieve
         @GET
         @Path("/{petType}")
         fun getPetType(@PathParam("petType") petType: PetType, @QueryParam("companyId") companyId: Long): Response {
@@ -51,7 +48,6 @@ import org.springframework.web.bind.annotation.RequestBody
             return Response.status(Response.Status.OK).entity(petsByType).build()
         }
 
-        // retrieve
         @GET
         @Path("{companyId}/allPets")
         fun getAllPets(@PathParam("companyId") companyId: Long): Response {
@@ -59,7 +55,6 @@ import org.springframework.web.bind.annotation.RequestBody
             return Response.status(Response.Status.OK).entity(listOfPets).build()
         }
 
-        // delete
         @DELETE
         @Path("/{petId}")
         fun deletePet(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {

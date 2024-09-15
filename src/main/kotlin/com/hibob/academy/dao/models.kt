@@ -1,6 +1,6 @@
 package com.hibob.academy.dao
 
-import java.util.*
+import java.sql.Date
 
 data class Example(val id: Long, val companyId: Long, val data: String)
 
