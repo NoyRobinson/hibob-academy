@@ -16,31 +16,34 @@ class UserServiceTest{
     private val userService = UserService(userDao, notificationService, emailVerificationService)
 
     @Test
-    fun `Registering a user who is registered already`() {
+    fun `registerUser should throw an exception if user already exists`() {
         val user = User(1L, "Noy", "noy.robinson@hibob.io", "123456", true)
         whenever(userDao.findById(1L)).thenReturn(user)
-        assertThrows<IllegalArgumentException> { userService.registerUser(user) }
+        val exception = assertThrows<IllegalArgumentException> { userService.registerUser(user) }
+        assertEquals("User already exists", exception.message)
     }
 
     @Test
-    fun `User registration fails`() {
+    fun `registerUser should throw an exception when user registration fails`() {
         val user = User(1L, "Noy", "noy.robinson@hibob.io", "123456", false)
         whenever(userDao.findById(1L)).thenReturn(null)
         whenever(userDao.save(user)).thenReturn(false)
-        assertThrows<IllegalStateException> { userService.registerUser(user) }
+        val exception = assertThrows<IllegalStateException> { userService.registerUser(user) }
+        assertEquals("User registration failed", exception.message)
     }
 
     @Test
-    fun `Verification email not sent`(){
+    fun `registerUser should throw an exception when failed to send a verification email`(){
         val user = User(1L, "Noy", "noy.robinson@hibob.io", "123456", false)
         whenever(userDao.findById(1L)).thenReturn(null)
         whenever(userDao.save(user.copy(isEmailVerified = false))).thenReturn(true)
         whenever(emailVerificationService.sendVerificationEmail(user.email)).thenReturn(false)
-        assertThrows<IllegalStateException> { userService.registerUser(user) }
+        val exception = assertThrows<IllegalStateException> { userService.registerUser(user) }
+        assertEquals("Failed to send verification email", exception.message)
     }
 
     @Test
-    fun `Registering a new user`(){
+    fun `registerUser should register a new user`(){
         val user = User(1L, "Noy", "noy.robinson@hibob.io", "123456", true)
         whenever(userDao.findById(user.id)).thenReturn(null)
         whenever(userDao.save(user.copy(isEmailVerified = false))).thenReturn(true)
@@ -49,21 +52,23 @@ class UserServiceTest{
     }
 
     @Test
-    fun `Verify user email when user not found`(){
+    fun `verifyUserEmail should throw an exception if user not found`(){
         whenever(userDao.findById(1L)).thenReturn(null)
-        assertThrows<IllegalArgumentException>{ userService.verifyUserEmail(1L, "token") }
+        val exception = assertThrows<IllegalArgumentException>{ userService.verifyUserEmail(1L, "token") }
+        assertEquals("User not found", exception.message)
     }
 
     @Test
-    fun `Verify user email fails`() {
+    fun `verifyUserEmail should throw an exception if email verification failed`() {
         val user = User(1L, "Noy", "noy.robinson@hibob.io", "123456", true)
         whenever(userDao.findById(1L)).thenReturn(user)
         whenever(emailVerificationService.verifyEmail(user.email, "token")).thenReturn(false)
-        assertThrows<IllegalArgumentException> { userService.verifyUserEmail(1L, "token") }
+        val exception = assertThrows<IllegalArgumentException> { userService.verifyUserEmail(1L, "token") }
+        assertEquals("Email verification failed", exception.message)
     }
 
     @Test
-    fun `User is not updated so email not sent`(){
+    fun `verifyUserEmail should return false and not send an email if user isn't updated`(){
         val user = User(1L, "Noy", "noy.robinson@hibob.io", "123456", true)
         whenever(userDao.findById(1L)).thenReturn(user)
         whenever(emailVerificationService.verifyEmail(user.email, "token")).thenReturn(true)
@@ -74,7 +79,7 @@ class UserServiceTest{
     }
 
     @Test
-    fun `Verify user email successful`(){
+    fun `verifyUserEmail should send an email if user is updated`(){
         val user = User(1L, "Noy", "noy.robinson@hibob.io", "123456", true)
         whenever(userDao.findById(1L)).thenReturn(user)
         whenever(emailVerificationService.verifyEmail(user.email, "token")).thenReturn(true)
