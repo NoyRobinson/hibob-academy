@@ -22,22 +22,22 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @PUT
-        @Path("/{petId}/updatePetName")
-        fun updateName(@PathParam("petId") petId: Long, @QueryParam("newName") newName: String, @QueryParam("companyId") companyId: Long): Response {
+        @Path("{companyId}/{petId}/updatePetName")
+        fun updateName(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long, @QueryParam("newName") newName: String): Response {
             petService.updatePetName(petId, newName, companyId)
             return Response.ok().entity("Pets name changed successfully").build()
         }
 
         @PUT
-        @Path("/{petId}/{ownerId}/updatePetsOwner")
-        fun updateOwnerForPet(@PathParam("petId") petId: Long, @PathParam("ownerId") ownerId: Long, @QueryParam("companyId") companyId: Long): Response {
+        @Path("{companyId}/{petId}/{ownerId}/updatePetsOwner")
+        fun updateOwnerForPet(@PathParam("petId") petId: Long, @PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long): Response {
             petService.updatePetOwner(petId, ownerId, companyId)
             return Response.ok().entity("Pet $petId got a new owner!").build()
         }
 
         @GET
-        @Path("/{petType}")
-        fun getPetType(@PathParam("petType") petType: PetType, @QueryParam("companyId") companyId: Long): Response {
+        @Path("{companyId}/{petType}")
+        fun getPetType(@PathParam("petType") petType: PetType, @PathParam("companyId") companyId: Long): Response {
             val petsByType = petService.getPetsByType(petType, companyId)
             return Response.ok().entity(petsByType).build()
         }
@@ -50,15 +50,15 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @GET
-        @Path("/{petId}")
-        fun getPetById(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {
+        @Path("/{companyId}{petId}")
+        fun getPetById(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
             val pet = petService.getPetById(petId, companyId)
             return Response.ok().entity(pet).build()
         }
 
         @DELETE
-        @Path("/{petId}")
-        fun deletePet(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {
+        @Path("{companyId}/{petId}")
+        fun deletePet(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
             petService.deletePet(petId, companyId)
             return Response.ok().entity("Deleted").build()
         }

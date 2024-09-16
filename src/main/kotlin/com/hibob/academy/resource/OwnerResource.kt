@@ -28,8 +28,8 @@ class OwnerResource(private val ownerService: OwnerService) {
     }
 
     @GET
-    @Path("/{petId}/ownerInformation")
-    fun getOwnerForPet(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {
+    @Path("{companyId}/{petId}/ownerInformation")
+    fun getOwnerForPet(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
         val ownerInfo = ownerService.getOwnerByPetId(petId, companyId)
         return Response.ok(ownerInfo).build()
     }
