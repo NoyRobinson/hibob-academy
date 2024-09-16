@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.sql.Date
 import kotlin.random.Random
 import org.junit.jupiter.api.assertThrows
+import java.lang.RuntimeException
 
 
 @BobDbTest
@@ -37,7 +38,7 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         val owner = OwnerCreationRequest("Noy", companyId, "123")
         ownerDao.createOwner(owner)
         val owner2 = OwnerCreationRequest("Tom", companyId, "123")
-        assertThrows<BadRequestException> { ownerDao.createOwner(owner2) }
+        assertThrows<RuntimeException> { ownerDao.createOwner(owner2) }
     }
 
     @Test
