@@ -9,29 +9,29 @@ fun ex1() {
 
     fun isEven(elementFromList: Int): Boolean = elementFromList % 2 == 0
 
-    val maxOddSquare = list
-        .map {
-            println("mapping $it")
-            it * it
-        }
-        .filter {
-            println("filtering $it")
-            isEven(it)
-        }
-        .find { it == 4 }
-
-    println()
-
-    val maxOddSquare2 = list.asSequence()
-        .map {
-            println("mapping $it")
-            it * it
-        }
-        .filter {
-            println("filtering $it")
-            isEven(it)
-        }
-        .find { it == 4 }
+//    val maxOddSquare = list
+//        .map {
+//            println("mapping $it")
+//            it * it
+//        }
+//        .filter {
+//            println("filtering $it")
+//            isEven(it)
+//        }
+//        .find { it == 4 }
+//
+//    println()
+//
+//    val maxOddSquare2 = list.asSequence()
+//        .map {
+//            println("mapping $it")
+//            it * it
+//        }
+//        .filter {
+//            println("filtering $it")
+//            isEven(it)
+//        }
+//        .find { it == 4 }
 }
 
 

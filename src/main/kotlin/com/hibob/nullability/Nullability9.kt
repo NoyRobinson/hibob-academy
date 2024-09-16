@@ -36,16 +36,16 @@ private fun generateReport(department: DepartmentData) {
     println("Department Name: $departmentName")
 
     department.manager?.let{
-        val departmentManagersName = department.manager?.name ?: "Managers name missing"
+        val departmentManagersName = department.manager.name ?: "Managers name missing"
 
-        val departmentManagersEmail = department.manager?.contactInfo?.email?.let{
+        val departmentManagersEmail = department.manager.contactInfo?.email?.let{
             if(department.manager.contactInfo.email == "")
                 "Email missing"
             else
                 department.manager.contactInfo.email
         } ?: "Email missing"
 
-        val departmentManagersPhone = department.manager?.contactInfo?.phone ?: "Phone missing"
+        val departmentManagersPhone = department.manager.contactInfo?.phone ?: "Phone missing"
 
         println("Department managers name: $departmentManagersName")
         println("Department managers email: $departmentManagersEmail")
@@ -59,7 +59,7 @@ private fun generateReport(department: DepartmentData) {
 
 private fun filterEmailsNullOrEmpty(departments: List<DepartmentData>): List<DepartmentData> {
     return departments.filter { department ->
-        department?.manager?.let {
+        department.manager?.let {
             department.manager.contactInfo?.let {
                 department.manager.contactInfo.email?.let{
                     department.manager.contactInfo.email != ""
@@ -78,7 +78,7 @@ private fun filterUniqueEmails(departments: List<DepartmentData>): List<String> 
 
 private fun managerDataAndContactInfoExists(departments: List<DepartmentData>): List<DepartmentData> {
     return departments.filter{ department ->
-        department?.manager?.let{
+        department.manager?.let{
             department.manager.contactInfo?.let{
                 true
             } ?: false
@@ -90,18 +90,18 @@ private fun createFilteredList(departments: List<DepartmentData>): List<String?>
     return departments.map{ department -> department.name ?: "unknown" }.toList()
 }
 
-fun main() {
-    val departments = listOf(
-        DepartmentData("Engineering", EmployeeData("Alice", Contact("alice@example.com", "123-456-7890"))),
-        DepartmentData("Human Resources", null),
-        DepartmentData("Operations", EmployeeData("Bob", Contact(null, "234-567-8901"))),
-        DepartmentData("Marketing", EmployeeData(null, Contact("marketing@example.com", "345-678-9012"))),
-        DepartmentData("Finance", EmployeeData("Carol", Contact("", "456-789-0123")))
-    )
-
-    // Implement the features here.
-    println(filterDepartments(departments))
-    println(generateEmailList(departments))
-    println()
-    generateReportForAllDepartments(departments)
-}
+//fun main() {
+//    val departments = listOf(
+//        DepartmentData("Engineering", EmployeeData("Alice", Contact("alice@example.com", "123-456-7890"))),
+//        DepartmentData("Human Resources", null),
+//        DepartmentData("Operations", EmployeeData("Bob", Contact(null, "234-567-8901"))),
+//        DepartmentData("Marketing", EmployeeData(null, Contact("marketing@example.com", "345-678-9012"))),
+//        DepartmentData("Finance", EmployeeData("Carol", Contact("", "456-789-0123")))
+//    )
+//
+//    // Implement the features here.
+//    println(filterDepartments(departments))
+//    println(generateEmailList(departments))
+//    println()
+//    generateReportForAllDepartments(departments)
+//}
