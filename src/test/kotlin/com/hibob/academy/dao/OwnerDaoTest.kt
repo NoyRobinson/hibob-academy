@@ -2,6 +2,7 @@ package com.hibob.academy.dao
 
 import com.hibob.academy.dao.PetType.Companion.convertStringToPetType
 import com.hibob.academy.utils.BobDbTest
+import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
@@ -37,7 +38,7 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         val owner = OwnerCreationRequest("Noy", companyId, "123")
         ownerDao.createOwner(owner)
         val owner2 = OwnerCreationRequest("Tom", companyId, "123")
-        assertThrows<RuntimeException> { ownerDao.createOwner(owner2) }
+        assertThrows<BadRequestException> { ownerDao.createOwner(owner2) }
     }
 
     @Test
