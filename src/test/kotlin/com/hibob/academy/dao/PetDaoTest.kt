@@ -13,7 +13,8 @@ import java.sql.Date
 class PetDaoTest @Autowired constructor(private val sql: DSLContext){
 
     private val petDao = PetDao(sql)
-    private val table = PetTable.instance
+    private val petTable = PetTable.instance
+    private val ownerTable = OwnerTable.instance
     val companyId = 12L
     val ownerId = null
 
@@ -117,9 +118,36 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         assertEquals(null, petDao.getPetById(petId, companyId))
     }
 
+    @Test
+    fun `adopt multiple tests`(){
+        val listOfPetsIds = mutableListOf<Long>()
+        val ownerIdThatAdopts = 20L
+
+        val pet1 = PetrCreationRequest("Angie", PetType.convertStringToPetType("DOG"), companyId, Date.valueOf("2010-05-20"), 18L)
+        val id1 = petDao.createPet(pet1)
+
+        val pet2 = PetrCreationRequest("Nessy", PetType.convertStringToPetType("DOG"), companyId, Date.valueOf("2010-05-20"), null)
+        val id2 = petDao.createPet(pet2)
+
+        val pet3 = PetrCreationRequest("Max", PetType.convertStringToPetType("CAT"), companyId, Date.valueOf("2010-05-20"), null )
+        val id3 = petDao.createPet(pet3)
+
+        listOfPetsIds.add(id1)
+        listOfPetsIds.add(id2)
+        listOfPetsIds.add(id3)
+
+        val actual = listOfPetsIds.associate { petId ->
+            val success = petDao.updatePetOwner(petId, ownerIdThatAdopts, companyId)
+            petId to (success == 1)
+        }
+        val expected = mapOf(id1 to false, id2 to true, id3 to true)
+        assertEquals(expected, actual)
+    }
+
     @BeforeEach
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(table).where(table.companyId.eq(companyId)).execute()
+        sql.deleteFrom(petTable).where(petTable.companyId.eq(companyId)).execute()
+        sql.deleteFrom(ownerTable).where(ownerTable.companyId.eq(companyId)).execute()
     }
 }

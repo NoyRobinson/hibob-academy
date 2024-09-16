@@ -57,13 +57,6 @@ import org.springframework.web.bind.annotation.RequestBody
             return Response.ok(pet).build()
         }
 
-        @GET
-        @Path("/{companyId}{petId}")
-        fun getPetById(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
-            val pet = petService.getPetById(petId, companyId)
-            return Response.ok().entity(pet).build()
-        }
-
         @DELETE
         @Path("company/{companyId}/{petId}")
         fun deletePet(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
@@ -85,17 +78,11 @@ import org.springframework.web.bind.annotation.RequestBody
             return Response.ok(typeCounter).build()
         }
 
-        @GET
-        @Path("{ownerId}/petsOfOwner")
-        fun getAllPets(@PathParam("ownerId") ownerId: Long, @QueryParam("companyId") companyId: Long): Response {
-            val listOfPets = petService.getPetsByOwner(ownerId, companyId)
-            return Response.status(Response.Status.OK).entity(listOfPets).build()
-        }
-
-        @GET
-        @Path("CountPetsByType")
-        fun countPetsByType(@QueryParam("companyId") companyId: Long): Response {
-            val typeCounter = petService.countPetsByType(companyId)
-            return Response.status(Response.Status.OK).entity(typeCounter).build()
+        @PUT
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Path("{companyId}/{ownerId}/adoptPets")
+        fun adoptMultiplePets(@PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long, @RequestBody petsIds: List<Long>): Response {
+            val petsAdopted = petService.adoptPets(ownerId, companyId, petsIds)
+            return Response.ok(petsAdopted).build()
         }
     }

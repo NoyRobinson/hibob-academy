@@ -2,7 +2,6 @@ package com.hibob.academy.dao
 
 import com.hibob.academy.dao.PetType.Companion.convertStringToPetType
 import com.hibob.academy.utils.BobDbTest
-import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
