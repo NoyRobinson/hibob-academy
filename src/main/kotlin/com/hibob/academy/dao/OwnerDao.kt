@@ -32,7 +32,7 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
             .fetchOne()
 
         return id?.get(owner.id)
-            ?: throw RuntimeException("Failed to insert owner and retrieve ID")
+            ?: throw IllegalArgumentException("Failed to insert owner and retrieve ID")
     }
 
     fun getAllOwners(companyId: Long): List<OwnerData> =

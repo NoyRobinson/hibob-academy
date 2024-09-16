@@ -36,7 +36,7 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         val owner = OwnerCreationRequest("Noy", companyId, "123")
         ownerDao.createOwner(owner)
         val owner2 = OwnerCreationRequest("Tom", companyId, "123")
-        assertThrows<RuntimeException> { ownerDao.createOwner(owner2) }
+        assertThrows<IllegalStateException> { ownerDao.createOwner(owner2) }
     }
 
     @Test
