@@ -23,7 +23,7 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
-    fun createPet(pet: Pet): Long {
+    fun createPet(pet: PetrCreationRequest): Long {
         val id = sql.insertInto(petTable)
             .set(petTable.name, pet.name)
             .set(petTable.type, pet.type.toString())

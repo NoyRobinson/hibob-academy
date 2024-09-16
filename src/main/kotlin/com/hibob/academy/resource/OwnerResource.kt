@@ -1,6 +1,6 @@
 package com.hibob.academy.resource
 
-import com.hibob.academy.dao.Owner
+import com.hibob.academy.dao.OwnerCreationRequest
 import com.hibob.academy.service.OwnerService
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
@@ -15,23 +15,22 @@ class OwnerResource(private val ownerService: OwnerService) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    fun addOwner(@RequestBody owner: Owner): Response {
+    fun addOwner(@RequestBody owner: OwnerCreationRequest): Response {
         val ownerId = ownerService.createOwner(owner)
-        return Response.status(Response.Status.CREATED).entity("new owner created with id $ownerId").build()
+        return Response.ok().entity("new owner created with id $ownerId").build()
     }
 
     @GET
     @Path("/{companyId}/getOwner")
-    fun getOwner(@PathParam("companyId") companyId: Long): Response {
-        val owner = ownerService.getOwner(companyId)
-        return Response.status(Response.Status.OK).entity(owner).build()
+    fun getAllOwners(@PathParam("companyId") companyId: Long): Response {
+        val owner = ownerService.getAllOwners(companyId)
+        return Response.ok().entity(owner).build()
     }
 
     @GET
     @Path("/{petId}/ownerInformation")
-    fun getOwnerForPet(@PathParam("petId") petId: Long): Response {
-        val ownerInfo = ownerService.getOwnerByPetId(petId)
-            ?: return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Pet doesn't have an owner").build()
+    fun getOwnerForPet(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {
+        val ownerInfo = ownerService.getOwnerByPetId(petId, companyId)
         return Response.ok(ownerInfo).build()
     }
 }
