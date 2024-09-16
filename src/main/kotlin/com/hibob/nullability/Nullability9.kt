@@ -36,16 +36,16 @@ private fun generateReport(department: DepartmentData) {
     println("Department Name: $departmentName")
 
     department.manager?.let{
-        val departmentManagersName = department.manager?.name ?: "Managers name missing"
+        val departmentManagersName = department.manager.name ?: "Managers name missing"
 
-        val departmentManagersEmail = department.manager?.contactInfo?.email?.let{
+        val departmentManagersEmail = department.manager.contactInfo?.email?.let{
             if(department.manager.contactInfo.email == "")
                 "Email missing"
             else
                 department.manager.contactInfo.email
         } ?: "Email missing"
 
-        val departmentManagersPhone = department.manager?.contactInfo?.phone ?: "Phone missing"
+        val departmentManagersPhone = department.manager.contactInfo?.phone ?: "Phone missing"
 
         println("Department managers name: $departmentManagersName")
         println("Department managers email: $departmentManagersEmail")
@@ -59,7 +59,7 @@ private fun generateReport(department: DepartmentData) {
 
 private fun filterEmailsNullOrEmpty(departments: List<DepartmentData>): List<DepartmentData> {
     return departments.filter { department ->
-        department?.manager?.let {
+        department.manager?.let {
             department.manager.contactInfo?.let {
                 department.manager.contactInfo.email?.let{
                     department.manager.contactInfo.email != ""
@@ -78,7 +78,7 @@ private fun filterUniqueEmails(departments: List<DepartmentData>): List<String> 
 
 private fun managerDataAndContactInfoExists(departments: List<DepartmentData>): List<DepartmentData> {
     return departments.filter{ department ->
-        department?.manager?.let{
+        department.manager?.let{
             department.manager.contactInfo?.let{
                 true
             } ?: false
