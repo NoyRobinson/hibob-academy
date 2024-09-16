@@ -101,4 +101,5 @@ class PetDao(private val sql: DSLContext) {
             .where(petTable.id.eq(petId))
             .and(petTable.companyId.eq(companyId))
             .execute()
+
 }
