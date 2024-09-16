@@ -78,11 +78,12 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
                 petType to count
             }
 
-    fun updatePetOwner(petData: PetData, petId: Long, ownerId: Long, companyId: Long) =
+    fun updatePetOwner(petId: Long, ownerId: Long, companyId: Long) =
         sql.update(petTable)
             .set(petTable.ownerId, ownerId)
-            .where(petTable.id.eq(petData.id))
+            .where(petTable.id.eq(petId))
             .and(petTable.companyId.eq(companyId))
+            .and(petTable.ownerId.isNull())
             .execute()
 
     fun updatePetName(petId: Long, newName: String, companyId: Long) =
