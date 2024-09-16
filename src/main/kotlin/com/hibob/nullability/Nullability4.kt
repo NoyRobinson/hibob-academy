@@ -10,18 +10,18 @@ package com.hibob.nullability
 data class Address(val city: String?, val street: String?)
 data class Employee(val name: String?, val address: Address?)
 
-fun main() {
-    val employees = listOf(
-        Employee("John", Address("New York", "Fifth Ave")),
-        Employee("Jane", null),
-        Employee(null, Address(null, "Unknown Street")),
-        Employee("Alice", Address("Los Angeles", null))
-    )
-
-    // Task: Print each employee's city safely. If the city is not available, print "City Unknown".
-    for(employee in employees) {
-        employee?.address?.city?.let {
-            println(employee.address.city)
-        } ?: println("City Unknown")
-    }
-}
+//fun main() {
+//    val employees = listOf(
+//        Employee("John", Address("New York", "Fifth Ave")),
+//        Employee("Jane", null),
+//        Employee(null, Address(null, "Unknown Street")),
+//        Employee("Alice", Address("Los Angeles", null))
+//    )
+//
+//    // Task: Print each employee's city safely. If the city is not available, print "City Unknown".
+//    for(employee in employees) {
+//        employee?.address?.city?.let {
+//            println(employee.address.city)
+//        } ?: println("City Unknown")
+//    }
+//}

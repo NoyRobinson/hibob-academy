@@ -8,15 +8,15 @@ package com.hibob.nullability
  */
 data class User(val name: String?, val email: String?)
 
-fun main() {
-    val user1: User = User("Alice", null)
-    val user2: User = User(null, "alice@example.com")
-
-    // Task: Print user email or "Email not provided" if null
-
-    val user1Email: String = user1.email ?: "Email not provided"
-    println(user1Email)
-
-    val user2Email: String = user2.email ?: "Email not provided"
-    println(user2Email)
-}
+//fun main() {
+//    val user1: User = User("Alice", null)
+//    val user2: User = User(null, "alice@example.com")
+//
+//    // Task: Print user email or "Email not provided" if null
+//
+//    val user1Email: String = user1.email ?: "Email not provided"
+//    println(user1Email)
+//
+//    val user2Email: String = user2.email ?: "Email not provided"
+//    println(user2Email)
+//}

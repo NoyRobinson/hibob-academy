@@ -90,18 +90,18 @@ private fun createFilteredList(departments: List<DepartmentData>): List<String?>
     return departments.map{ department -> department.name ?: "unknown" }.toList()
 }
 
-fun main() {
-    val departments = listOf(
-        DepartmentData("Engineering", EmployeeData("Alice", Contact("alice@example.com", "123-456-7890"))),
-        DepartmentData("Human Resources", null),
-        DepartmentData("Operations", EmployeeData("Bob", Contact(null, "234-567-8901"))),
-        DepartmentData("Marketing", EmployeeData(null, Contact("marketing@example.com", "345-678-9012"))),
-        DepartmentData("Finance", EmployeeData("Carol", Contact("", "456-789-0123")))
-    )
-
-    // Implement the features here.
-    println(filterDepartments(departments))
-    println(generateEmailList(departments))
-    println()
-    generateReportForAllDepartments(departments)
-}
+//fun main() {
+//    val departments = listOf(
+//        DepartmentData("Engineering", EmployeeData("Alice", Contact("alice@example.com", "123-456-7890"))),
+//        DepartmentData("Human Resources", null),
+//        DepartmentData("Operations", EmployeeData("Bob", Contact(null, "234-567-8901"))),
+//        DepartmentData("Marketing", EmployeeData(null, Contact("marketing@example.com", "345-678-9012"))),
+//        DepartmentData("Finance", EmployeeData("Carol", Contact("", "456-789-0123")))
+//    )
+//
+//    // Implement the features here.
+//    println(filterDepartments(departments))
+//    println(generateEmailList(departments))
+//    println()
+//    generateReportForAllDepartments(departments)
+//}

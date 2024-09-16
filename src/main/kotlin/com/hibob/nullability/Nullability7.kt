@@ -24,26 +24,26 @@ fun initializeNullableCustomers(): List<Customer?> {
     )
 }
 
-fun main() {
-    val customers = initializeNullableCustomers()
-
-    // Task: Print each customer's name, account ID, and account balance. Handle all null cases appropriately.
-
-    for(customer in customers) {
-        customer?.let{
-            val customerName: String = customer.name ?: "Name Unknown"
-            val accountId: String = customer.account?.id ?: "Account ID Unknown"
-            val accountBalance: String = customer.account?.details?.balance?.toString() ?: "Balance Not Available"
-
-            println("customerName: $customerName")
-            println("accountId: $accountId")
-            println("accountBalance: $accountBalance")
-
-        } ?: println("Customer data is not available.")
-
-        println()
-        println("-----------------")
-        println()
-    }
-}
+//fun main() {
+//    val customers = initializeNullableCustomers()
+//
+//    // Task: Print each customer's name, account ID, and account balance. Handle all null cases appropriately.
+//
+//    for(customer in customers) {
+//        customer?.let{
+//            val customerName: String = customer.name ?: "Name Unknown"
+//            val accountId: String = customer.account?.id ?: "Account ID Unknown"
+//            val accountBalance: String = customer.account?.details?.balance?.toString() ?: "Balance Not Available"
+//
+//            println("customerName: $customerName")
+//            println("accountId: $accountId")
+//            println("accountBalance: $accountBalance")
+//
+//        } ?: println("Customer data is not available.")
+//
+//        println()
+//        println("-----------------")
+//        println()
+//    }
+//}
 

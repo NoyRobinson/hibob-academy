@@ -32,58 +32,58 @@ fun initializeCompany(): Company {
     )
 }
 
-fun main() {
-    val company = initializeCompany()
-
-    // Task: Print detailed information about each department, team, and team members, handling all null values appropriately.
-
-    val companyName = company.name ?: "Company name not found"
-    println("company name: $companyName")
-
-    println()
-
-    company.departments?.let{
-
-        for(department in company.departments){
-
-            department?.let{
-                val departmentName: String = department.name ?: "Department name not found"
-                println("Department name: $departmentName")
-
-                department.teams?.let{
-                    for(team in department.teams){
-                        println("Team details:")
-
-                        team?.let {
-                            val teamName: String = team.name ?: "Team name not found"
-                            println("   name: $teamName")
-                            println("   Team leader details:")
-
-                            team.leader?.let{
-                                val teamLeaderName: String = team.leader.name ?: "Leader name not found"
-                                val teamLeaderTitle: String = team.leader.title ?: "Leader title not found"
-                                print("      name: $teamLeaderName  ")
-                                println("title: $teamLeaderTitle")
-                            } ?: println("     Team leader not found")
-
-                            println("   Team members details:")
-
-                            team.members?.let{
-                                for(member in team.members){
-                                    member?.let {
-                                        val teamMemberName: String = member.name ?: "Member name not found"
-                                        val teamMemberRole: String = member.role ?: "Member role not found"
-                                        print("      name: $teamMemberName  ")
-                                        println("role: $teamMemberRole")
-                                    } ?: println("      Member not found")
-                                }
-                            } ?: println("   Team members not found")
-                        } ?: println("   Team not found")
-
-                        println()
-                    }
-                } ?: print("Department teams not found")
-            } ?: println("Department not found")
-        }
-    } ?: println("Company departments information not found")
-}
+//fun main() {
+//    val company = initializeCompany()
+//
+//    // Task: Print detailed information about each department, team, and team members, handling all null values appropriately.
+//
+//    val companyName = company.name ?: "Company name not found"
+//    println("company name: $companyName")
+//
+//    println()
+//
+//    company.departments?.let{
+//
+//        for(department in company.departments){
+//
+//            department?.let{
+//                val departmentName: String = department.name ?: "Department name not found"
+//                println("Department name: $departmentName")
+//
+//                department.teams?.let{
+//                    for(team in department.teams){
+//                        println("Team details:")
+//
+//                        team?.let {
+//                            val teamName: String = team.name ?: "Team name not found"
+//                            println("   name: $teamName")
+//                            println("   Team leader details:")
+//
+//                            team.leader?.let{
+//                                val teamLeaderName: String = team.leader.name ?: "Leader name not found"
+//                                val teamLeaderTitle: String = team.leader.title ?: "Leader title not found"
+//                                print("      name: $teamLeaderName  ")
+//                                println("title: $teamLeaderTitle")
+//                            } ?: println("     Team leader not found")
+//
+//                            println("   Team members details:")
+//
+//                            team.members?.let{
+//                                for(member in team.members){
+//                                    member?.let {
+//                                        val teamMemberName: String = member.name ?: "Member name not found"
+//                                        val teamMemberRole: String = member.role ?: "Member role not found"
+//                                        print("      name: $teamMemberName  ")
+//                                        println("role: $teamMemberRole")
+//                                    } ?: println("      Member not found")
+//                                }
+//                            } ?: println("   Team members not found")
+//                        } ?: println("   Team not found")
+//
+//                        println()
+//                    }
+//                } ?: print("Department teams not found")
+//            } ?: println("Department not found")
+//        }
+//    } ?: println("Company departments information not found")
+//}

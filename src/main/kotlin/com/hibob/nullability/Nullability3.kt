@@ -10,11 +10,11 @@ package com.hibob.nullability
 fun String?.nullSafeToUpper(): String = this?.uppercase() ?: "NO TEXT PROVIDED"
 
 
-fun main() {
-    val text: String? = "Learn Kotlin"
-    val text1: String? = null
-    // Task: Create and use an extension function to print text in uppercase if it's not null, or "NO TEXT PROVIDED" if it is null.
-
-    println(text.nullSafeToUpper())
-    println(text1.nullSafeToUpper())
-}
+//fun main() {
+//    val text: String? = "Learn Kotlin"
+//    val text1: String? = null
+//    // Task: Create and use an extension function to print text in uppercase if it's not null, or "NO TEXT PROVIDED" if it is null.
+//
+//    println(text.nullSafeToUpper())
+//    println(text1.nullSafeToUpper())
+//}
