@@ -85,19 +85,4 @@ import org.springframework.web.bind.annotation.RequestBody
             val petsAdopted = petService.adoptPets(ownerId, companyId, petsIds)
             return Response.ok(petsAdopted).build()
         }
-
-        @PUT
-        @Consumes(MediaType.APPLICATION_JSON)
-        @Path("{ownerId}/adoptPets")
-        fun adoptMultiplePets(@PathParam("ownerId") ownerId: Long, @QueryParam("companyId") companyId: Long, @RequestBody petsIds: List<Long>): Response {
-            petService.adoptPets(ownerId, companyId, petsIds)
-            return Response.ok(Response.Status.OK).entity("All pets with no owners from the list were adopted!").build()
-        }
-
-//        @POST
-//        @Consumes(MediaType.APPLICATION_JSON)
-//        fun addMultiplePets(@RequestBody pets: List<Pet>): Response {
-//            val petIds = petService.createMultiplePets(pets)
-//            return Response.status(Response.Status.CREATED).entity("new pets were created with id's: $petId").build()
-
     }
