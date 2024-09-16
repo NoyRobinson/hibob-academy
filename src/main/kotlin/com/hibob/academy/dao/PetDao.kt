@@ -98,4 +98,5 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .where(petTable.id.eq(petId))
             .and(petTable.companyId.eq(companyId))
             .execute()
+
 }
