@@ -102,13 +102,13 @@ class PetDao(private val sql: DSLContext) {
             .and(petTable.companyId.eq(companyId))
             .execute()
 
-    fun adoptPets(ownerId: Long, companyId: Long, petsIds: List<Long>) =
-        petsIds.forEach { petId ->
-            sql.update(petTable)
-                .set(petTable.ownerId, ownerId)
-                .where(petTable.id.eq(petId))
-                .and(petTable.companyId.eq(companyId))
-                .and(petTable.ownerId.isNull())
-                .execute()
-        }
+//    fun adoptPets(ownerId: Long, companyId: Long, petsIds: List<Long>) =
+//        petsIds.forEach { petId ->
+//            sql.update(petTable)
+//                .set(petTable.ownerId, ownerId)
+//                .where(petTable.id.eq(petId))
+//                .and(petTable.companyId.eq(companyId))
+//                .and(petTable.ownerId.isNull())
+//                .execute()
+//        }
 }
