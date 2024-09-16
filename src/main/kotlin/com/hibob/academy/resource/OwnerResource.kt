@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestBody
 
 @Controller
-@Path("/api/noy/owners")
+@Path("/api/owners")
 @Produces(MediaType.APPLICATION_JSON)
 class OwnerResource(private val ownerService: OwnerService) {
 

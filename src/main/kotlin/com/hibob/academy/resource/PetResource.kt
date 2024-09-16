@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestBody
 
 @Controller
-    @Path("/api/noy/pets")
+    @Path("/api/pets")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     class PetsResource(private val petService: PetService) {
