@@ -49,6 +49,13 @@ import org.springframework.web.bind.annotation.RequestBody
             return Response.ok().entity(listOfPets).build()
         }
 
+        @GET
+        @Path("/{petId}")
+        fun getPetById(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {
+            val pet = petService.getPetById(petId, companyId)
+            return Response.ok().entity(pet).build()
+        }
+
         @DELETE
         @Path("/{petId}")
         fun deletePet(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {
