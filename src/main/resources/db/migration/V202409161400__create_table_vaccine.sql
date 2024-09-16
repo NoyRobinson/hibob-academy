@@ -1,0 +1,5 @@
+CREATE TABLE vaccine
+(
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    name varchar(255) NOT NULL
+);
