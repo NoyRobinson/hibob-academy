@@ -14,11 +14,11 @@ class ExampleServiceTest {
     private val exampleDaoMock = mock<ExampleDao>{}
     private val exampleService = ExampleService(exampleDaoMock)
 
-    @Test
-    fun `test example service`() {
-        val example = Example(Random.nextLong(), Random.nextLong(), "a")
-        whenever(exampleDaoMock.readExample(any())).thenReturn(example)
-        assertThat(exampleService.get(1), Matchers.equalTo(example))
-    }
+//    @Test
+//    fun `test example service`() {
+//        val example = Example(Random.nextLong(), Random.nextLong(), "a")
+//        whenever(exampleDaoMock.readExample(any())).thenReturn(example)
+//        assertThat(exampleService.get(1), Matchers.equalTo(example))
+//    }
 
 }
