@@ -58,8 +58,8 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @GET
-        @Path("/{petId}")
-        fun getPetById(@PathParam("petId") petId: Long, @QueryParam("companyId") companyId: Long): Response {
+        @Path("/{companyId}{petId}")
+        fun getPetById(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
             val pet = petService.getPetById(petId, companyId)
             return Response.ok().entity(pet).build()
         }
