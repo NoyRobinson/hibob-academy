@@ -85,4 +85,11 @@ import org.springframework.web.bind.annotation.RequestBody
             val petsAdopted = petService.adoptPets(ownerId, companyId, petsIds)
             return Response.ok(petsAdopted).build()
         }
+
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        fun addMultiplePets(@RequestBody pets: List<PetrCreationRequest>): Response {
+            val petIds = petService.createMultiplePets(pets)
+            return Response.ok(petIds).build()
+        }
     }

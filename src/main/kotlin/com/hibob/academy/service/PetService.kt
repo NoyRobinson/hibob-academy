@@ -50,4 +50,6 @@ class PetService @Inject constructor(private val petDao: PetDao) {
             petId to (success == 1)
         }
     }
+
+    fun createMultiplePets(pets: List<PetrCreationRequest>) = petDao.createMultiplePets(pets)
 }

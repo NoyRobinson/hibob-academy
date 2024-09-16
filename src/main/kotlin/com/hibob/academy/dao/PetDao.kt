@@ -101,4 +101,15 @@ class PetDao(private val sql: DSLContext) {
             .where(petTable.id.eq(petId))
             .and(petTable.companyId.eq(companyId))
             .execute()
+
+    fun createMultiplePets(pets: List<PetrCreationRequest>) {
+        val insert = sql.insertInto(petTable)
+           .columns(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .values(DSL.param(petTable.name), DSL.param(petTable.type), DSL.param(petTable.companyId), DSL.param(petTable.dateOfArrival), DSL.param(petTable.ownerId))
+            .set(petTable.name, DSL.param(petTable.name))
+            .set(petTable.type, DSL.param(petTable.type))
+            .set(petTable.companyId, DSL.param(petTable.companyId))
+            .set(petTable.dateOfArrival, DSL.param(petTable.dateOfArrival))
+            .set(petTable.ownerId, DSL.param(petTable.ownerId))
+   }
 }
