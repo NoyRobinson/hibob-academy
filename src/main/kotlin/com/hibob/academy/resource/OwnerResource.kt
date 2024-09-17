@@ -2,6 +2,7 @@ package com.hibob.academy.resource
 
 import com.hibob.academy.dao.OwnerCreationRequest
 import com.hibob.academy.service.OwnerService
+import jakarta.inject.Inject
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 @Controller
 @Path("/api/owners")
 @Produces(MediaType.APPLICATION_JSON)
-class OwnerResource(private val ownerService: OwnerService) {
+class OwnerResource @Inject constructor(private val ownerService: OwnerService) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

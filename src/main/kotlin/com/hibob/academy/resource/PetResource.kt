@@ -3,6 +3,7 @@ package com.hibob.academy.resource
 import com.hibob.academy.dao.PetrCreationRequest
 import com.hibob.academy.dao.PetType
 import com.hibob.academy.service.PetService
+import jakarta.inject.Inject
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
     @Path("/api/pets")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    class PetsResource(private val petService: PetService) {
+    class PetsResource @Inject constructor(private val petService: PetService) {
 
         @POST
         fun addPet(@RequestBody pet: PetrCreationRequest): Response {
