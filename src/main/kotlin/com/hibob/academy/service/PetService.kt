@@ -13,8 +13,12 @@ class PetService @Inject constructor(private val petDao: PetDao) {
     fun getPetsByType(petType: PetType, companyId: Long) =
         petDao.getPetsByType(petType, companyId)
 
-    fun getPetById(petId: Long, companyId: Long): PetData? =
-        petDao.getPetById(petId, companyId)
+    fun getPetById(petId: Long, companyId: Long): PetData {
+        val pet = petDao.getPetById(petId, companyId)
+        pet?.let{
+            return pet
+        } ?: throw Exception("Pet not found")
+    }
 
     fun getAllPets(companyId: Long) =
         petDao.getAllPets(companyId)
