@@ -2,7 +2,10 @@ package com.hibob.academy.service
 
 import com.hibob.academy.dao.PetDao
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers.eq
+import org.mockito.Mockito.anyString
 import org.mockito.Mockito.never
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
@@ -19,6 +22,6 @@ class PetServiceTest{
     @Test
     fun `updatePetName should not call the dao function when no new name is provided`(){
         petService.updatePetName(1L, null, 12L)
-        verify(petDao, never()).updatePetName(1L, null, 12L)
+        verify(petDao, never()).updatePetName(eq(1L), anyString(), eq(12L))
     }
 }
