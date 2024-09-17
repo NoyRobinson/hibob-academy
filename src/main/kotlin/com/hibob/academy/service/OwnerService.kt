@@ -19,6 +19,6 @@ class OwnerService @Inject constructor(private val ownerDao: OwnerDao) {
         val ownerInfo = ownerDao.getOwnerByPetId(petId, companyId)
         ownerInfo?.let{
             return ownerInfo
-        } ?: throw IllegalArgumentException("Pet doesn't have an owner")
+        } ?: return null
     }
 }
