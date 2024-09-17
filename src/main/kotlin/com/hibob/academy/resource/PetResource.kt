@@ -34,11 +34,8 @@ import java.util.*
         @Consumes(MediaType.APPLICATION_JSON)
         @Path("/{petId}/updatePetName")
         fun updateName(@PathParam("petId") petId: Long, @QueryParam("newName") newName: String?): Response {
-            val pet = PetData(id = petId, name = "Angie", type = PetType.DOG, companyId = 12L, dateOfArrival = Date(), ownerId = null)
-            newName?.let{
-                pet.copy(id = petId, name = newName, type = PetType.DOG, companyId = 12L, dateOfArrival = Date(), ownerId = null)
-            }
-            Response.status(Response.Status.ACCEPTED).build()
+            val petName = newName?. let{ it } ?: "Angie"
+            val pet = PetData(id = petId, name = petName, type = PetType.DOG, companyId = 12L, dateOfArrival = Date(), ownerId = null)
             return Response.ok(pet).build()
         }
 
