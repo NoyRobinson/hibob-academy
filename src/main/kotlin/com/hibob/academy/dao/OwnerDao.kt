@@ -4,9 +4,9 @@ import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
-import java.util.*
-import kotlin.random.Random
+import org.springframework.stereotype.Repository
 
+@Repository
 class OwnerDao @Inject constructor(private val sql: DSLContext) {
 
     private val owner = OwnerTable.instance
@@ -21,11 +21,11 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
-    fun createOwner(ownerName: String, companyId: Long, employeeId: String): Long {
+    fun createOwner(ownerInfo: OwnerCreationRequest): Long {
         val id = sql.insertInto(owner)
-            .set(owner.name, ownerName)
-            .set(owner.companyId, companyId)
-            .set(owner.employeeId, employeeId)
+            .set(owner.name, ownerInfo.name)
+            .set(owner.companyId, ownerInfo.companyId)
+            .set(owner.employeeId, ownerInfo.employeeId)
             .onConflict(owner.companyId, owner.employeeId)
             .doNothing()
             .returning(owner.id)
@@ -35,18 +35,19 @@ class OwnerDao @Inject constructor(private val sql: DSLContext) {
             ?: throw RuntimeException("Failed to insert owner and retrieve ID")
     }
 
-    fun getOwner(companyId: Long): List<OwnerData> =
+    fun getAllOwners(companyId: Long): List<OwnerData> =
         sql.select(owner.id, owner.name, owner.companyId, owner.employeeId)
             .from(owner)
             .where(owner.companyId.eq(companyId))
             .fetch(ownerMapper)
 
-    fun getOwnerByPetId(petId: Long): OwnerData? =
+    fun getOwnerByPetId(petId: Long, companyId: Long): OwnerData? =
         sql.select(owner.id, owner.name, owner.companyId, owner.employeeId)
             .from(owner)
             .leftJoin(pet)
             .on(pet.ownerId.eq(owner.id))
             .where(pet.id.eq(petId))
             .and(pet.companyId.eq(owner.companyId))
+            .and(pet.companyId.eq(companyId))
             .fetchOne(ownerMapper)
 }
