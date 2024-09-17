@@ -29,8 +29,11 @@ class PetService @Inject constructor(private val petDao: PetDao) {
         throw IllegalStateException("Pet doesn't exist or pet already has an owner")
     }
 
-    fun updatePetName(petId: Long, newName: String, companyId: Long) =
-        petDao.updatePetName(petId, newName, companyId)
+    fun updatePetName(petId: Long, newName: String?, companyId: Long) {
+        newName?.let {
+            petDao.updatePetName(petId, newName, companyId)
+        } ?: return
+    }
 
     fun deletePet(petId: Long, companyId: Long) =
         petDao.deletePet(petId, companyId)
