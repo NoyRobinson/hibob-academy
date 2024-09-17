@@ -86,7 +86,7 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .and(petTable.ownerId.isNull())
             .execute()
 
-    fun updatePetName(petId: Long, newName: String, companyId: Long) =
+    fun updatePetName(petId: Long, newName: String?, companyId: Long) =
         sql.update(petTable)
             .set(petTable.name, newName)
             .where(petTable.id.eq(petId))
