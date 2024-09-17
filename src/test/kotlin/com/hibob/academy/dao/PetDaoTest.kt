@@ -152,7 +152,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
     @Test
     fun `create multiple pets`(){
         val listOfPets= mutableListOf<PetCreationRequest>()
-        val listOfPetsWithNoIds = listOf<PetData>()
+        val listOfPetsWithNoIds = mutableListOf<PetCreationRequest>()
         val companyIdForCreationOfPets = 14L
 
         val pet1ToCreate = PetCreationRequest("Angie", PetType.convertStringToPetType("DOG"), companyIdForCreationOfPets, Date.valueOf("2010-05-20"), 18L)
@@ -165,13 +165,11 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         petDao.createMultiplePets(listOfPets)
 
         val petsCreated = petDao.getAllPets(companyIdForCreationOfPets)
-
-
-//        petsCreated.forEach { pet ->
-//            val newPet = PetData(pet.name)
-//
-//        }
-        assertEquals(3 ,petsCreated)
+        petsCreated.forEach { pet ->
+            val newPet = PetCreationRequest(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
+            listOfPetsWithNoIds.add(newPet)
+        }
+        assertEquals(listOfPets ,listOfPetsWithNoIds)
     }
 
     @BeforeEach
