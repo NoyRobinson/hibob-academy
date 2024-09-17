@@ -14,7 +14,6 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
 
     private val petDao = PetDao(sql)
     private val petTable = PetTable.instance
-    private val ownerTable = OwnerTable.instance
     val companyId = 12L
     val ownerId = null
 
@@ -119,7 +118,7 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
     }
 
     @Test
-    fun `adopt multiple tests`(){
+    fun `adopt multiple pets`(){
         val listOfPetsIds = mutableListOf<Long>()
         val ownerIdThatAdopts = 20L
 
@@ -148,6 +147,5 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
     @AfterEach
     fun cleanup() {
         sql.deleteFrom(petTable).where(petTable.companyId.eq(companyId)).execute()
-        sql.deleteFrom(ownerTable).where(ownerTable.companyId.eq(companyId)).execute()
     }
 }
