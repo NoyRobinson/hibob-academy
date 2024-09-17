@@ -9,45 +9,45 @@ import org.springframework.stereotype.Repository
 @Repository
 class OwnerDao @Inject constructor(private val sql: DSLContext) {
 
-    private val owner = OwnerTable.instance
+    private val ownerTable = OwnerTable.instance
     private val pet = PetTable.instance
 
     private val ownerMapper = RecordMapper<Record, OwnerData> { record ->
         OwnerData(
-            record[owner.id],
-            record[owner.name],
-            record[owner.companyId],
-            record[owner.employeeId]
+            record[ownerTable.id],
+            record[ownerTable.name],
+            record[ownerTable.companyId],
+            record[ownerTable.employeeId]
         )
     }
 
     fun createOwner(ownerInfo: OwnerCreationRequest): Long {
-        val id = sql.insertInto(owner)
-            .set(owner.name, ownerInfo.name)
-            .set(owner.companyId, ownerInfo.companyId)
-            .set(owner.employeeId, ownerInfo.employeeId)
-            .onConflict(owner.companyId, owner.employeeId)
+        val id = sql.insertInto(ownerTable)
+            .set(ownerTable.name, ownerInfo.name)
+            .set(ownerTable.companyId, ownerInfo.companyId)
+            .set(ownerTable.employeeId, ownerInfo.employeeId)
+            .onConflict(ownerTable.companyId, ownerTable.employeeId)
             .doNothing()
-            .returning(owner.id)
+            .returning(ownerTable.id)
             .fetchOne()
 
-        return id?.get(owner.id)
+        return id?.get(ownerTable.id)
             ?: throw RuntimeException("Failed to insert owner and retrieve ID")
     }
 
     fun getAllOwners(companyId: Long): List<OwnerData> =
-        sql.select(owner.id, owner.name, owner.companyId, owner.employeeId)
-            .from(owner)
-            .where(owner.companyId.eq(companyId))
+        sql.select(ownerTable.id, ownerTable.name, ownerTable.companyId, ownerTable.employeeId)
+            .from(ownerTable)
+            .where(ownerTable.companyId.eq(companyId))
             .fetch(ownerMapper)
 
     fun getOwnerByPetId(petId: Long, companyId: Long): OwnerData? =
-        sql.select(owner.id, owner.name, owner.companyId, owner.employeeId)
-            .from(owner)
+        sql.select(ownerTable.id, ownerTable.name, ownerTable.companyId, ownerTable.employeeId)
+            .from(ownerTable)
             .leftJoin(pet)
-            .on(pet.ownerId.eq(owner.id))
+            .on(pet.ownerId.eq(ownerTable.id))
             .where(pet.id.eq(petId))
-            .and(pet.companyId.eq(owner.companyId))
+            .and(pet.companyId.eq(ownerTable.companyId))
             .and(pet.companyId.eq(companyId))
             .fetchOne(ownerMapper)
 }
