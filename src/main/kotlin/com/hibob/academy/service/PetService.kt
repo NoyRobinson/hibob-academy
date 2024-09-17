@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class PetService @Inject constructor(private val petDao: PetDao) {
 
-    fun createPet(pet: PetrCreationRequest): Long =
+    fun createPet(pet: PetCreationRequest): Long =
         petDao.createPet(pet)
 
     fun getPetsByType(petType: PetType, companyId: Long) =
@@ -51,5 +51,7 @@ class PetService @Inject constructor(private val petDao: PetDao) {
         }
     }
 
-    fun createMultiplePets(pets: List<PetrCreationRequest>) = petDao.createMultiplePets(pets)
+    fun createMultiplePets(pets: List<PetCreationRequest>) {
+        petDao.createMultiplePets(pets)
+    }
 }

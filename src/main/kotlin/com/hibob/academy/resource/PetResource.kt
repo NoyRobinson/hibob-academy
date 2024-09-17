@@ -1,6 +1,6 @@
 package com.hibob.academy.resource
 
-import com.hibob.academy.dao.PetrCreationRequest
+import com.hibob.academy.dao.PetCreationRequest
 import com.hibob.academy.dao.PetType
 import com.hibob.academy.service.PetService
 import jakarta.inject.Inject
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody
     class PetsResource @Inject constructor(private val petService: PetService) {
 
         @POST
-        fun addPet(@RequestBody pet: PetrCreationRequest): Response {
+        fun addPet(@RequestBody pet: PetCreationRequest): Response {
             val petId = petService.createPet(pet)
             return Response.ok().entity("new pet created with id $petId").build()
         }
@@ -79,7 +79,6 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @PUT
-        @Consumes(MediaType.APPLICATION_JSON)
         @Path("{companyId}/{ownerId}/adoptPets")
         fun adoptMultiplePets(@PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long, @RequestBody petsIds: List<Long>): Response {
             val petsAdopted = petService.adoptPets(ownerId, companyId, petsIds)
@@ -87,9 +86,9 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @POST
-        @Consumes(MediaType.APPLICATION_JSON)
-        fun createMultiplePets(@RequestBody pets: List<PetrCreationRequest>): Response {
-            val petIds = petService.createMultiplePets(pets)
-            return Response.ok(petIds).build()
+        @Path("multiplePets")
+        fun createMultiplePets(@RequestBody pets: List<PetCreationRequest>): Response {
+            petService.createMultiplePets(pets)
+            return Response.ok().entity("multiple pets were created").build()
         }
     }

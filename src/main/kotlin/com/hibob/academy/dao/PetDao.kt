@@ -26,7 +26,7 @@ class PetDao(private val sql: DSLContext) {
         )
     }
 
-    fun createPet(pet: PetrCreationRequest): Long {
+    fun createPet(pet: PetCreationRequest): Long {
         val id = sql.insertInto(petTable)
             .set(petTable.name, pet.name)
             .set(petTable.type, pet.type.toString())
@@ -102,7 +102,7 @@ class PetDao(private val sql: DSLContext) {
             .and(petTable.companyId.eq(companyId))
             .execute()
 
-    fun createMultiplePets(pets: List<PetrCreationRequest>) {
+    fun createMultiplePets(pets: List<PetCreationRequest>) {
         val insert = sql.insertInto(petTable)
            .columns(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
             .values(
@@ -110,21 +110,12 @@ class PetDao(private val sql: DSLContext) {
                 DSL.param(petTable.type),
                 DSL.param(petTable.companyId),
                 DSL.param(petTable.dateOfArrival),
-                DSL.param(petTable.ownerId))
-            .onDuplicateKeyIgnore()
-
-        val batch = sql.batch(insert)
-
-        pets.forEach { pet ->
-            batch.bind(
-                pet.name,
-                pet.type,
-                pet.companyId,
-                pet.dateOfArrival,
-                pet.ownerId
+                DSL.param(petTable.ownerId)
             )
+        val batch = sql.batch(insert)
+        pets.forEach { pet ->
+            batch.bind(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
         }
-
         batch.execute()
    }
 }
