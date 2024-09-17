@@ -53,12 +53,17 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `get pets by owner`(){
-        val pet1 = PetrCreationRequest("Angie", PetType.convertStringToPetType("Dog"), companyId, Date.valueOf("2010-05-20"), 123L)
-        petDao.createPet(pet1)
-        val pet2 = PetrCreationRequest("Nessy", pet1.type, pet1.companyId, pet1.dateOfArrival, pet1.ownerId)
-        petDao.createPet(pet2)
-        val actual = petDao.getPetsByOwner(123L, companyId).size
-        assertEquals(2, actual)
+        val pet1Creation = PetrCreationRequest("Angie", PetType.convertStringToPetType("Dog"), companyId, Date.valueOf("2010-05-20"), 123L)
+        val id1 = petDao.createPet(pet1Creation)
+        val pet1 = PetData(id1, pet1Creation.name, pet1Creation.type, pet1Creation.companyId, pet1Creation.dateOfArrival, pet1Creation.ownerId)
+
+        val pet2Creation = PetrCreationRequest("Nessy", pet1Creation.type, pet1Creation.companyId, pet1Creation.dateOfArrival, pet1Creation.ownerId)
+        val id2 = petDao.createPet(pet2Creation)
+        val pet2 = PetData(id2, pet2Creation.name, pet2Creation.type, pet2Creation.companyId, pet2Creation.dateOfArrival, pet2Creation.ownerId)
+
+        val expected = listOf(pet1, pet2)
+        val actual = petDao.getPetsByOwner(123L, companyId)
+        assertEquals(expected, actual)
     }
 
     @Test

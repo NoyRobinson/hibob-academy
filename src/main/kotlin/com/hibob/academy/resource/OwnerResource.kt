@@ -21,7 +21,7 @@ class OwnerResource(private val ownerService: OwnerService) {
     }
 
     @GET
-    @Path("/{companyId}/getOwner")
+    @Path("/{companyId}/getOwners")
     fun getAllOwners(@PathParam("companyId") companyId: Long): Response {
         val owner = ownerService.getAllOwners(companyId)
         return Response.ok().entity(owner).build()
