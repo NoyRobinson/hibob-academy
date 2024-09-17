@@ -2,6 +2,7 @@ package com.hibob.academy.dao
 
 import com.hibob.academy.dao.PetType.Companion.convertStringToPetType
 import com.hibob.academy.utils.BobDbTest
+import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
@@ -33,9 +34,9 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
     }
 
     @Test
-    fun `create a new owner that exists in the database`() {
-        val owner = OwnerCreationRequest("Noy", companyId, "123")
-        ownerDao.createOwner(owner)
+    fun `create a new owner with an existing employee id`() {
+        val owner1 = OwnerCreationRequest("Noy", companyId, "123")
+        ownerDao.createOwner(owner1)
         val owner2 = OwnerCreationRequest("Tom", companyId, "123")
         assertThrows<RuntimeException> { ownerDao.createOwner(owner2) }
     }
@@ -56,7 +57,7 @@ class OwnerDaoTest @Autowired constructor(private val sql: DSLContext){
         val pet = PetCreationRequest("Angie", convertStringToPetType("Dog"), companyId, Date.valueOf("2010-05-20"), null)
         val petId = petDao.createPet(pet)
         val actual = ownerDao.getOwnerByPetId(petId, companyId)
-        assertEquals(null, actual)
+        assertNull(actual)
     }
 
     @BeforeEach

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody
         @POST
         fun addPet(@RequestBody pet: PetCreationRequest): Response {
             val petId = petService.createPet(pet)
-            return Response.ok().entity("new pet created with id $petId").build()
+            return Response.ok(petId).build()
         }
 
         @PUT
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @GET
-        @Path("company/{companyId}/{petType}")
+        @Path("company/{companyId}/{petType}/petsByType")
         fun getPetType(@PathParam("petType") petType: PetType, @PathParam("companyId") companyId: Long): Response {
             val petsByType = petService.getPetsByType(petType, companyId)
             return Response.ok(petsByType).build()
@@ -79,7 +79,7 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @PUT
-        @Path("{companyId}/{ownerId}/adoptPets")
+        @Path("{companyId}/adoptPets/{ownerId}")
         fun adoptMultiplePets(@PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long, @RequestBody petsIds: List<Long>): Response {
             val petsAdopted = petService.adoptPets(ownerId, companyId, petsIds)
             return Response.ok(petsAdopted).build()
