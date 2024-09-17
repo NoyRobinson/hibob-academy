@@ -37,4 +37,17 @@ class PetService @Inject constructor(private val petDao: PetDao) {
 
     fun deletePet(petId: Long, companyId: Long) =
         petDao.deletePet(petId, companyId)
+
+    fun getPetsByOwner(ownerId: Long, companyId: Long) =
+        petDao.getPetsByOwner(ownerId, companyId)
+
+    fun countPetsByType(companyId: Long) =
+        petDao.countPetsByType(companyId)
+
+    fun adoptPets(ownerId: Long, companyId: Long, petsIds: List<Long>): Map<Long, Boolean> {
+        return petsIds.associate { petId ->
+            val success = petDao.updatePetOwner(petId, ownerId, companyId)
+            petId to (success == 1)
+        }
+    }
 }
