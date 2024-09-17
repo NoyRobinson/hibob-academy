@@ -105,11 +105,26 @@ class PetDao(private val sql: DSLContext) {
     fun createMultiplePets(pets: List<PetrCreationRequest>) {
         val insert = sql.insertInto(petTable)
            .columns(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
-            .values(DSL.param(petTable.name), DSL.param(petTable.type), DSL.param(petTable.companyId), DSL.param(petTable.dateOfArrival), DSL.param(petTable.ownerId))
-            .set(petTable.name, DSL.param(petTable.name))
-            .set(petTable.type, DSL.param(petTable.type))
-            .set(petTable.companyId, DSL.param(petTable.companyId))
-            .set(petTable.dateOfArrival, DSL.param(petTable.dateOfArrival))
-            .set(petTable.ownerId, DSL.param(petTable.ownerId))
+            .values(
+                DSL.param(petTable.name),
+                DSL.param(petTable.type),
+                DSL.param(petTable.companyId),
+                DSL.param(petTable.dateOfArrival),
+                DSL.param(petTable.ownerId))
+            .onDuplicateKeyIgnore()
+
+        val batch = sql.batch(insert)
+
+        pets.forEach { pet ->
+            batch.bind(
+                pet.name,
+                pet.type,
+                pet.companyId,
+                pet.dateOfArrival,
+                pet.ownerId
+            )
+        }
+
+        batch.execute()
    }
 }

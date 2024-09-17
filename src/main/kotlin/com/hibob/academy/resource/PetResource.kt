@@ -88,7 +88,7 @@ import org.springframework.web.bind.annotation.RequestBody
 
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
-        fun addMultiplePets(@RequestBody pets: List<PetrCreationRequest>): Response {
+        fun createMultiplePets(@RequestBody pets: List<PetrCreationRequest>): Response {
             val petIds = petService.createMultiplePets(pets)
             return Response.ok(petIds).build()
         }
