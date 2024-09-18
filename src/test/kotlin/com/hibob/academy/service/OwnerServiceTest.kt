@@ -54,7 +54,8 @@ class OwnerServiceTest{
     fun `getOwnerByPetId should return information about the owner of the pet`(){
         val expectedOwner = OwnerData(1L, "Noy", 14L, "123")
         whenever(ownerDao.getOwnerByPetId(1L, 14L)).thenReturn(expectedOwner)
-        ownerService.getOwnerByPetId(1L, 14L)
+        val actualOwner = ownerService.getOwnerByPetId(1L, 14L)
+        assertEquals(expectedOwner, actualOwner)
         verify(ownerDao).getOwnerByPetId(1L, 14L)
     }
 
