@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody
         @Path("company/{companyId}/{petId}/updatePetName")
         fun updateName(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long, @QueryParam("newName") newName: String?): Response {
             petService.updatePetName(petId, newName, companyId)
-            return Response.ok().entity("Pets name changed successfully").build()
+            return Response.ok("Pets name changed successfully").build()
         }
 
         @PUT
@@ -60,7 +60,7 @@ import org.springframework.web.bind.annotation.RequestBody
         @Path("company/{companyId}/{petId}")
         fun deletePet(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
             petService.deletePet(petId, companyId)
-            return Response.ok().entity("Deleted").build()
+            return Response.ok("Deleted").build()
         }
 
         @GET
@@ -88,6 +88,6 @@ import org.springframework.web.bind.annotation.RequestBody
         @Path("multiplePets")
         fun createMultiplePets(@RequestBody pets: List<PetCreationRequest>): Response {
             petService.createMultiplePets(pets)
-            return Response.ok().entity("multiple pets were created").build()
+            return Response.ok("multiple pets were created").build()
         }
     }
