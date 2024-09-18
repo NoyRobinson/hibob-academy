@@ -37,4 +37,10 @@ class PetService @Inject constructor(private val petDao: PetDao) {
 
     fun deletePet(petId: Long, companyId: Long) =
         petDao.deletePet(petId, companyId)
+
+    fun getPetsByOwner(ownerId: Long, companyId: Long) =
+        petDao.getPetsByOwner(ownerId, companyId)
+
+    fun countPetsByType(companyId: Long) =
+        petDao.countPetsByType(companyId)
 }
