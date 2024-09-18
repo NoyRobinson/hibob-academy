@@ -66,7 +66,7 @@ import org.springframework.web.bind.annotation.RequestBody
 
         @GET
         @Path("owner/{ownerId}/company/{companyId}")
-        fun getAllPets(@PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long): Response {
+        fun getAllPetsByOwner(@PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long): Response {
             val listOfPets = petService.getPetsByOwner(ownerId, companyId)
             return Response.ok(listOfPets).build()
         }
