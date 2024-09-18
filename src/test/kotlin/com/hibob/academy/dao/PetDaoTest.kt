@@ -154,25 +154,20 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `create multiple pets`(){
-        val listOfPets= mutableListOf<PetCreationRequest>()
         val listOfPetsWithNoIds = mutableListOf<PetCreationRequest>()
-        val companyIdForCreationOfPets = 14L
 
-        val pet1ToCreate = PetCreationRequest("Angie", PetType.convertStringToPetType("DOG"), companyIdForCreationOfPets, Date.valueOf("2010-05-20"), 18L)
-        val pet2ToCreate = PetCreationRequest("Nessy", PetType.convertStringToPetType("DOG"), companyIdForCreationOfPets, Date.valueOf("2010-05-20"), null)
-        val pet3ToCreate = PetCreationRequest("Max", PetType.convertStringToPetType("CAT"), companyIdForCreationOfPets, Date.valueOf("2010-05-20"), null )
+        val pet1ToCreate = PetCreationRequest("Angie", PetType.convertStringToPetType("DOG"), companyId, Date.valueOf("2010-05-20"), 18L)
+        val pet2ToCreate = PetCreationRequest("Nessy", PetType.convertStringToPetType("DOG"), companyId, Date.valueOf("2010-05-20"), null)
+        val pet3ToCreate = PetCreationRequest("Max", PetType.convertStringToPetType("CAT"), companyId, Date.valueOf("2010-05-20"), null )
 
-        listOfPets.add(pet1ToCreate)
-        listOfPets.add(pet2ToCreate)
-        listOfPets.add(pet3ToCreate)
-        petDao.createMultiplePets(listOfPets)
+        petDao.createMultiplePets(listOf(pet1ToCreate, pet2ToCreate, pet3ToCreate))
 
-        val petsCreated = petDao.getAllPets(companyIdForCreationOfPets)
+        val petsCreated = petDao.getAllPets(companyId)
         petsCreated.forEach { pet ->
             val newPet = PetCreationRequest(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
             listOfPetsWithNoIds.add(newPet)
         }
-        assertEquals(listOfPets ,listOfPetsWithNoIds)
+        assertEquals(listOf(pet1ToCreate, pet2ToCreate, pet3ToCreate) ,listOfPetsWithNoIds)
     }
 
     @BeforeEach
