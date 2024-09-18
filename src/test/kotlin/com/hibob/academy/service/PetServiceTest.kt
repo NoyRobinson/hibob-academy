@@ -4,11 +4,9 @@ import com.hibob.academy.dao.PetCreationRequest
 import com.hibob.academy.dao.PetDao
 import com.hibob.academy.dao.PetData
 import com.hibob.academy.dao.PetType
-import com.hibob.unittests.User
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.anyString
 import org.mockito.Mockito.never
@@ -22,7 +20,7 @@ class PetServiceTest{
     private val petService = PetService(petDao)
 
     @Test
-    fun `createPet should call petDao createPet and return the pet ID`(){
+    fun `createPet should return the pet ID`(){
         val petToCreate = PetCreationRequest("Angie", PetType.convertStringToPetType("DOG"), 14L, Date.valueOf("2010-05-20"), null)
         whenever(petDao.createPet(petToCreate)).thenReturn(1L)
         val petId = petService.createPet(petToCreate)
