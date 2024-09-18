@@ -98,6 +98,14 @@ class PetDao(private val sql: DSLContext) {
             .and(petTable.companyId.eq(companyId))
             .execute()
 
+    fun adoptPets(ownerId: Long, companyId: Long, petsIds: List<Long>) =
+        sql.update(petTable)
+            .set(petTable.ownerId, ownerId)
+            .where(petTable.id.`in`(petsIds))
+            .and(petTable.companyId.eq(companyId))
+            .and(petTable.ownerId.isNull())
+            .execute()
+
     fun createMultiplePets(pets: List<PetCreationRequest>) {
         val insert = sql.insertInto(petTable)
            .columns(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)

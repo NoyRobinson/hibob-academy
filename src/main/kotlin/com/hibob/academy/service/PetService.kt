@@ -43,11 +43,10 @@ class PetService(private val petDao: PetDao) {
     fun countPetsByType(companyId: Long) =
         petDao.countPetsByType(companyId)
 
-    fun adoptPets(ownerId: Long, companyId: Long, petsIds: List<Long>): Map<Long, Boolean> {
-        return petsIds.associate { petId ->
-            val success = petDao.updatePetOwner(petId, ownerId, companyId)
-            petId to (success == 1)
-        }
+    fun adoptPets(ownerId: Long, companyId: Long, petsIds: List<Long>) {
+        val success = petDao.adoptPets(ownerId, companyId, petsIds) > 0
+        if(!success)
+            throw IllegalStateException("Pets dont exist or they already have owners")
     }
 
     fun createMultiplePets(pets: List<PetCreationRequest>) {

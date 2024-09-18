@@ -148,18 +148,19 @@ class PetServiceTest{
     }
 
     @Test
-    fun `adoptPets should return a map of pet IDs and if they were adopted`() {
+    fun `adoptPets should successfully update at least one of the pets owner in the list`() {
         val petsIds = listOf(1L, 2L, 3L)
-        whenever(petDao.updatePetOwner(1L, 18L, 14L)).thenReturn(1)
-        whenever(petDao.updatePetOwner(2L, 18L, 14L)).thenReturn(1)
-        whenever(petDao.updatePetOwner(3L, 18L, 14L)).thenReturn(0)
-        val result = petService.adoptPets(18L, 14L, petsIds)
-        val expected = mapOf(
-            1L to true,
-            2L to true,
-            3L to false
-        )
-        assertEquals(expected, result)
+        whenever(petDao.adoptPets(18L, 14L, petsIds)).thenReturn(1)
+        petService.adoptPets(18L, 14L, petsIds)
+        verify(petDao).adoptPets(18L, 14L, petsIds)
+    }
+
+    @Test
+    fun `adoptPets should throw an exception when can't update the pets owner for all pets in the list`() {
+        val petsIds = listOf(1L, 2L, 3L)
+        whenever(petDao.adoptPets(18L, 14L, petsIds)).thenReturn(0)
+        val exception = assertThrows<IllegalStateException> { petService.adoptPets(18L, 14L, petsIds) }
+        assertEquals("Pets dont exist or they already have owners", exception.message)
     }
 
     @Test
