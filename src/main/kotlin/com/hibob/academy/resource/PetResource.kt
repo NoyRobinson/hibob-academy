@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody
         @Path("company/{companyId}/{petId}/{ownerId}/updatePetsOwner")
         fun updateOwnerForPet(@PathParam("petId") petId: Long, @PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long): Response {
             petService.updatePetOwner(petId, ownerId, companyId)
-            return Response.ok().entity("Pet $petId got a new owner!").build()
+            return Response.ok(petId).build()
         }
 
         @GET
@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @GET
-        @Path("{companyId}/allPets")
+        @Path("company/{companyId}/allPets")
         fun getAllPets(@PathParam("companyId") companyId: Long): Response {
             val listOfPets = petService.getAllPets(companyId)
             return Response.ok(listOfPets).build()
