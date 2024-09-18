@@ -22,14 +22,14 @@ class OwnerResource @Inject constructor(private val ownerService: OwnerService) 
     }
 
     @GET
-    @Path("/{companyId}/getOwners")
+    @Path("company/{companyId}/getOwners")
     fun getAllOwners(@PathParam("companyId") companyId: Long): Response {
         val owner = ownerService.getAllOwners(companyId)
         return Response.ok().entity(owner).build()
     }
 
     @GET
-    @Path("{companyId}/{petId}/ownerInformation")
+    @Path("company/{companyId}/{petId}/ownerInformation")
     fun getOwnerForPet(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long): Response {
         val ownerInfo = ownerService.getOwnerByPetId(petId, companyId)
         return Response.ok(ownerInfo).build()
