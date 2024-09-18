@@ -77,4 +77,12 @@ import org.springframework.web.bind.annotation.RequestBody
             val typeCounter = petService.countPetsByType(companyId)
             return Response.ok(typeCounter).build()
         }
+
+        @PUT
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Path("{companyId}/{ownerId}/adoptPets")
+        fun adoptMultiplePets(@PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long, @RequestBody petsIds: List<Long>): Response {
+            val petsAdopted = petService.adoptPets(ownerId, companyId, petsIds)
+            return Response.ok(petsAdopted).build()
+        }
     }
