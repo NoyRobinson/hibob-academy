@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestBody
-import java.util.*
+import java.sql.Date
 
 @Controller
     @Path("/api/pets")
@@ -25,18 +25,9 @@ import java.util.*
 
         @PUT
         @Path("{companyId}/{petId}/updatePetName")
-        fun updateName(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long, @QueryParam("newName") newName: String): Response {
+        fun updateName(@PathParam("petId") petId: Long, @PathParam("companyId") companyId: Long, @QueryParam("newName") newName: String?): Response {
             petService.updatePetName(petId, newName, companyId)
             return Response.ok().entity("Pets name changed successfully").build()
-        }
-
-        @PUT
-        @Consumes(MediaType.APPLICATION_JSON)
-        @Path("/{petId}/updatePetName")
-        fun updateName(@PathParam("petId") petId: Long, @QueryParam("newName") newName: String?): Response {
-            val petName = newName?. let{ it } ?: "Angie"
-            val pet = PetData(id = petId, name = petName, type = PetType.DOG, companyId = 12L, dateOfArrival = Date(), ownerId = null)
-            return Response.ok(pet).build()
         }
 
         @PUT
