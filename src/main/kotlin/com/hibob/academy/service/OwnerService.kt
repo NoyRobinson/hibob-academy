@@ -3,11 +3,10 @@ package com.hibob.academy.service
 import com.hibob.academy.dao.OwnerCreationRequest
 import com.hibob.academy.dao.OwnerDao
 import com.hibob.academy.dao.OwnerData
-import jakarta.inject.Inject
 import org.springframework.stereotype.Service
 
 @Service
-class OwnerService @Inject constructor(private val ownerDao: OwnerDao) {
+class OwnerService(private val ownerDao: OwnerDao) {
 
     fun createOwner(owner: OwnerCreationRequest) =
         ownerDao.createOwner(owner)

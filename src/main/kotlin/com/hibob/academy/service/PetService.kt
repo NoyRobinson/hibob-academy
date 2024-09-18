@@ -1,11 +1,10 @@
 package com.hibob.academy.service
 
 import com.hibob.academy.dao.*
-import jakarta.inject.Inject
 import org.springframework.stereotype.Service
 
 @Service
-class PetService @Inject constructor(private val petDao: PetDao) {
+class PetService(private val petDao: PetDao) {
 
     fun createPet(pet: PetCreationRequest): Long =
         petDao.createPet(pet)

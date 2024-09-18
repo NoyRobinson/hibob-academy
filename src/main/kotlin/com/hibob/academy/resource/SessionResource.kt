@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 
 @Controller
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/session")
+@Path("/api")
 class SessionResource(private val sessionService: SessionService) {
 
     companion object {
@@ -24,7 +24,7 @@ class SessionResource(private val sessionService: SessionService) {
     @Path("/login")
     fun login(@RequestBody user: User): Response {
         Response.ok().build()
-        val cookie = NewCookie.Builder(COOKIE_NAME).value(sessionService.createJwtToken(user)).build()
+        val cookie = NewCookie.Builder(COOKIE_NAME).value(sessionService.createJwtToken(user)).path("/api/").build()
         return Response.ok().cookie(cookie).build()
     }
 

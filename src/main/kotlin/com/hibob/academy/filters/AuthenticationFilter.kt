@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 class AuthenticationFilter: ContainerRequestFilter {
 
     companion object {
-        const val LOGIN_PATH: String = "session/login"
+        const val LOGIN_PATH: String = "api/login"
         const val COOKIE_NAME = "JWT"
     }
 
@@ -30,13 +30,20 @@ class AuthenticationFilter: ContainerRequestFilter {
         verify(jwtCookie)
     }
 
-    fun verify(cookie: String?): Jws<Claims>? =
-        cookie?.let {
-            try{
-                Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(it)
+    fun verify(cookie: String?) {
+        if (cookie.isNullOrEmpty())
+            throw WebApplicationException(
+                Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Cookie").build()
+            )
+
+        cookie.let {
+            try {
+                Jwts.parser().setSigningKey(SECRET_KEY)
             } catch (e: Exception) {
                 throw WebApplicationException(
-                    Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Cookie").build())
+                    Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Cookie").build()
+                )
             }
         }
+    }
 }
