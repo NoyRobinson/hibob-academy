@@ -18,7 +18,7 @@ class OwnerResource @Inject constructor(private val ownerService: OwnerService) 
     @Consumes(MediaType.APPLICATION_JSON)
     fun addOwner(@RequestBody owner: OwnerCreationRequest): Response {
         val ownerId = ownerService.createOwner(owner)
-        return Response.ok().entity("new owner created with id $ownerId").build()
+        return Response.ok(ownerId).build()
     }
 
     @GET

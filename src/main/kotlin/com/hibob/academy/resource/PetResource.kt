@@ -1,6 +1,6 @@
 package com.hibob.academy.resource
 
-import com.hibob.academy.dao.PetrCreationRequest
+import com.hibob.academy.dao.PetCreationRequest
 import com.hibob.academy.dao.PetType
 import com.hibob.academy.service.PetService
 import jakarta.inject.Inject
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody
     class PetsResource @Inject constructor(private val petService: PetService) {
 
         @POST
-        fun addPet(@RequestBody pet: PetrCreationRequest): Response {
+        fun addPet(@RequestBody pet: PetCreationRequest): Response {
             val petId = petService.createPet(pet)
-            return Response.ok().entity("new pet created with id $petId").build()
+            return Response.ok(petId).build()
         }
 
         @PUT
@@ -37,14 +37,14 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @GET
-        @Path("company/{companyId}/{petType}")
+        @Path("company/{companyId}/{petType}/petsByType")
         fun getPetType(@PathParam("petType") petType: PetType, @PathParam("companyId") companyId: Long): Response {
             val petsByType = petService.getPetsByType(petType, companyId)
             return Response.ok(petsByType).build()
         }
 
         @GET
-        @Path("company/{companyId}/allPets")
+        @Path("{companyId}/allPets")
         fun getAllPets(@PathParam("companyId") companyId: Long): Response {
             val listOfPets = petService.getAllPets(companyId)
             return Response.ok(listOfPets).build()
@@ -79,10 +79,16 @@ import org.springframework.web.bind.annotation.RequestBody
         }
 
         @PUT
-        @Consumes(MediaType.APPLICATION_JSON)
-        @Path("{companyId}/{ownerId}/adoptPets")
+        @Path("{companyId}/adoptPets/{ownerId}")
         fun adoptMultiplePets(@PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long, @RequestBody petsIds: List<Long>): Response {
             val petsAdopted = petService.adoptPets(ownerId, companyId, petsIds)
             return Response.ok(petsAdopted).build()
+        }
+
+        @POST
+        @Path("multiplePets")
+        fun createMultiplePets(@RequestBody pets: List<PetCreationRequest>): Response {
+            petService.createMultiplePets(pets)
+            return Response.ok().entity("multiple pets were created").build()
         }
     }

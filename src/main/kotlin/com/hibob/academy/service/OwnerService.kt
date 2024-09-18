@@ -15,10 +15,10 @@ class OwnerService @Inject constructor(private val ownerDao: OwnerDao) {
     fun getAllOwners(companyId: Long) =
         ownerDao.getAllOwners(companyId)
 
-    fun getOwnerByPetId(petId: Long, companyId: Long): OwnerData {
+    fun getOwnerByPetId(petId: Long, companyId: Long): OwnerData? {
         val ownerInfo = ownerDao.getOwnerByPetId(petId, companyId)
         ownerInfo?.let{
             return ownerInfo
-        } ?: throw IllegalArgumentException("Pet doesn't have an owner")
+        } ?: return null
     }
 }

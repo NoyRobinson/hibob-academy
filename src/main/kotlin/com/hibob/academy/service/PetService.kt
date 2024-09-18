@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class PetService @Inject constructor(private val petDao: PetDao) {
 
-    fun createPet(pet: PetrCreationRequest): Long =
+    fun createPet(pet: PetCreationRequest): Long =
         petDao.createPet(pet)
 
     fun getPetsByType(petType: PetType, companyId: Long) =
@@ -25,8 +25,8 @@ class PetService @Inject constructor(private val petDao: PetDao) {
 
     fun updatePetOwner(petId: Long, ownerId: Long, companyId: Long) {
         val success = petDao.updatePetOwner(petId, ownerId, companyId) > 0
-        if(success) return
-        throw IllegalStateException("Pet doesn't exist or pet already has an owner")
+        if(!success)
+            throw IllegalStateException("Pet doesn't exist or pet already has an owner")
     }
 
     fun updatePetName(petId: Long, newName: String?, companyId: Long) {
@@ -49,5 +49,9 @@ class PetService @Inject constructor(private val petDao: PetDao) {
             val success = petDao.updatePetOwner(petId, ownerId, companyId)
             petId to (success == 1)
         }
+    }
+
+    fun createMultiplePets(pets: List<PetCreationRequest>) {
+        petDao.createMultiplePets(pets)
     }
 }

@@ -1,14 +1,17 @@
 package com.hibob.academy.dao
 
+import com.hibob.academy.dao.*
 import jakarta.inject.Inject
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.RecordMapper
 import org.jooq.impl.DSL
+import org.springframework.stereotype.Component
+import java.sql.Date
 import org.springframework.stereotype.Repository
 
 @Repository
-class PetDao @Inject constructor(private val sql: DSLContext) {
+class PetDao(private val sql: DSLContext) {
 
     private val petTable = PetTable.instance
 
@@ -23,7 +26,7 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
         )
     }
 
-    fun createPet(pet: PetrCreationRequest): Long {
+    fun createPet(pet: PetCreationRequest): Long {
         val id = sql.insertInto(petTable)
             .set(petTable.name, pet.name)
             .set(petTable.type, pet.type.toString())
@@ -98,4 +101,21 @@ class PetDao @Inject constructor(private val sql: DSLContext) {
             .where(petTable.id.eq(petId))
             .and(petTable.companyId.eq(companyId))
             .execute()
+
+    fun createMultiplePets(pets: List<PetCreationRequest>) {
+        val insert = sql.insertInto(petTable)
+           .columns(petTable.name, petTable.type, petTable.companyId, petTable.dateOfArrival, petTable.ownerId)
+            .values(
+                DSL.param(petTable.name),
+                DSL.param(petTable.type),
+                DSL.param(petTable.companyId),
+                DSL.param(petTable.dateOfArrival),
+                DSL.param(petTable.ownerId)
+            )
+        val batch = sql.batch(insert)
+        pets.forEach { pet ->
+            batch.bind(pet.name, pet.type, pet.companyId, pet.dateOfArrival, pet.ownerId)
+        }
+        batch.execute()
+   }
 }

@@ -28,7 +28,6 @@ class OwnerTable(tableName: String = "owner"): JooqTable(tableName) {
     }
 }
 
-
 class VaccineTable(tableName: String = "vaccine"): JooqTable(tableName) {
 
     val id = createBigIntField("id")
