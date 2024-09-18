@@ -8,7 +8,6 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.sql.Date
 
 class OwnerServiceTest{
     private val ownerDao = mock<OwnerDao>{}
