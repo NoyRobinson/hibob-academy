@@ -128,9 +128,6 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `adopt multiple pets`(){
-        val listOfPetsIds = mutableListOf<Long>()
-        val ownerIdThatAdopts = 20L
-
         val pet1 = PetCreationRequest("Angie", PetType.convertStringToPetType("DOG"), companyId, Date.valueOf("2010-05-20"), 18L)
         val id1 = petDao.createPet(pet1)
 
@@ -140,16 +137,9 @@ class PetDaoTest @Autowired constructor(private val sql: DSLContext){
         val pet3 = PetCreationRequest("Max", PetType.convertStringToPetType("CAT"), companyId, Date.valueOf("2010-05-20"), null )
         val id3 = petDao.createPet(pet3)
 
-        listOfPetsIds.add(id1)
-        listOfPetsIds.add(id2)
-        listOfPetsIds.add(id3)
-
-        val actual = listOfPetsIds.associate { petId ->
-            val success = petDao.updatePetOwner(petId, ownerIdThatAdopts, companyId)
-            petId to (success == 1)
-        }
-        val expected = mapOf(id1 to false, id2 to true, id3 to true)
-        assertEquals(expected, actual)
+        val listOfPets = listOf(id1, id2, id3)
+        val success = petDao.adoptPets(20L, companyId, listOfPets) > 0
+        assertTrue(success)
     }
 
     @Test

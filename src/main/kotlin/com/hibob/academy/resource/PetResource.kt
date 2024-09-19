@@ -80,8 +80,8 @@ import org.springframework.web.bind.annotation.RequestBody
         @PUT
         @Path("{companyId}/adoptPets/{ownerId}")
         fun adoptMultiplePets(@PathParam("ownerId") ownerId: Long, @PathParam("companyId") companyId: Long, @RequestBody petsIds: List<Long>): Response {
-            val petsAdopted = petService.adoptPets(ownerId, companyId, petsIds)
-            return Response.ok(petsAdopted).build()
+            petService.adoptPets(ownerId, companyId, petsIds)
+            return Response.ok("Pets were adopted!").build()
         }
 
         @POST
