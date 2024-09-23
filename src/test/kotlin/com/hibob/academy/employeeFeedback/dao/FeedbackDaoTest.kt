@@ -75,7 +75,6 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         assertEquals(expected, actual)
     }
 
-    @BeforeEach
     @AfterEach
     fun cleanup() {
         sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
