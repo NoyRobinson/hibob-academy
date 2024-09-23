@@ -75,6 +75,22 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun `Get employee id of feedback`(){
+        val newFeedback  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED, "I'm very happy at my workspace!")
+        val feedbackId = feedbackDao.submitFeedback(newFeedback)
+        val actual = feedbackDao.getFeedbackEmployeeId(feedbackId, companyId)
+        assertEquals(12, actual)
+    }
+
+    @Test
+    fun `Try get employee id of anonymous feedback and return null`(){
+        val newFeedback  = FeedbackForSubmission(null, companyId, AnonymityType.IDENTIFIED, "I'm very happy at my workspace!")
+        val feedbackId = feedbackDao.submitFeedback(newFeedback)
+        val actual = feedbackDao.getFeedbackEmployeeId(feedbackId, companyId)
+        assertEquals(null, actual)
+    }
+
     @AfterEach
     fun cleanup() {
         sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
