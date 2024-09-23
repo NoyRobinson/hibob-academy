@@ -1,5 +1,6 @@
 package com.hibob.academy.employeeFeedback.dao
 
+import com.hibob.nullability.Employee
 import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.jooq.RecordMapper

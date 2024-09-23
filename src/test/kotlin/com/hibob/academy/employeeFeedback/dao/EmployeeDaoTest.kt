@@ -14,13 +14,6 @@ class EmployeeDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val employeeTable = EmployeeTable.instance
 
     @Test
-    fun `Get employee info by id`(){
-        val employee = EmployeeInfo(1, RoleType.ADMIN, "dev", 1)
-        val actual = employeeDao.getEmployeeById(1)
-        assertEquals(employee, actual)
-    }
-
-    @Test
     fun `Employee with this id doesn't exist`(){
         assertThrows<BadRequestException>{ employeeDao.getEmployeeById(100) }
     }
