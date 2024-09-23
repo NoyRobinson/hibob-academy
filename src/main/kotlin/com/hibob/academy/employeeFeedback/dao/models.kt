@@ -8,7 +8,6 @@ data class FeedbackInfo(val id: Int, val employeeId: Int, val companyId: Int, va
 
 data class FeedbackForSubmission(val anonymity: AnonymityType, val feedback: String)
 
-
 data class Response(val id: Int,val feedbackId: Int, val dateOfResponse: Date, val reviewerId: Int, val response: String)
 
 enum class RoleType {
@@ -25,8 +24,6 @@ enum class RoleType {
 
 enum class AnonymityType {
     ANONYMOUS, IDENTIFIED;
-
-
 
     companion object {
         fun convertAnonymityTypeToString(anonymity: AnonymityType): String =
