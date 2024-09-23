@@ -1,5 +1,6 @@
 package com.hibob.academy.employeeFeedback.dao
 
+import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
@@ -32,7 +33,7 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetchOne()
 
         return id?.get(feedbackTable.id)
-            ?: -1
+            ?: throw BadRequestException("Unable to create feedback")
     }
 
     fun viewAllSubmittedFeedback(companyId: Int): List<FeedbackInfo> =
@@ -41,13 +42,26 @@ class FeedbackDao(private val sql: DSLContext) {
             .where(feedbackTable.companyId.eq(companyId))
             .fetch(feedbackMapper)
 
-    fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int): Boolean {
+    fun viewStatusOfMyFeedback(feedbackStatus: FeedbackStatus): Boolean {
         val status = sql.select(feedbackTable.reviewed)
             .from(feedbackTable)
-            .where(feedbackTable.companyId.eq(companyId))
-            .and(feedbackTable.employeeId.eq(employeeId))
+            .where(feedbackTable.id.eq(feedbackStatus.feedbackId))
+            .and(feedbackTable.companyId.eq(feedbackStatus.companyId))
+            .and(feedbackTable.employeeId.eq(feedbackStatus.employeeId))
             .fetchOne()
 
         return status?.value1() ?: false
+    }
+
+    fun viewStatusesOfAllMySubmittedFeedback(companyId: Int, employeeId: Int): Map<Int, Boolean> {
+        val statuses = sql.select(feedbackTable.id, feedbackTable.reviewed)
+            .from(feedbackTable)
+            .where(feedbackTable.companyId.eq(companyId))
+            .and(feedbackTable.employeeId.eq(employeeId))
+            .fetch()
+
+        return statuses.associate { record ->
+            record.value1() to record.value2()
+        }
     }
 }
