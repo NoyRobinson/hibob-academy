@@ -1,11 +1,13 @@
 package com.hibob.academy.employeeFeedback.dao
 
 import com.hibob.academy.utils.BobDbTest
+import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import java.sql.Date
 
@@ -40,11 +42,8 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
     }
 
     @Test
-    fun `View feedback from a different company than mine`(){
-        val newFeedback  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED, "I'm very happy at my workspace!")
-        feedbackDao.submitFeedback(newFeedback)
-
-        val actual = feedbackDao.viewAllSubmittedFeedback(2)
+    fun `View feedbacks of company without any feedbacks`(){
+        val actual = feedbackDao.viewAllSubmittedFeedback(companyId)
         assertEquals(emptyList<FeedbackInfo>(), actual)
     }
 
@@ -55,6 +54,12 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         val feedbackToCheck = FeedbackStatus(companyId, 12, feedbackId)
         val actual = feedbackDao.viewStatusOfMyFeedback(feedbackToCheck)
         assertEquals(false, actual)
+    }
+
+    @Test
+    fun `View status of feedback that doesn't exist`(){
+        val feedbackToCheck = FeedbackStatus(companyId, 12, 1)
+        assertThrows<BadRequestException>{ feedbackDao.viewStatusOfMyFeedback(feedbackToCheck) }
     }
 
     @Test

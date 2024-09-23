@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class FeedbackDao(private val sql: DSLContext) {
-
     private val feedbackTable = FeedbackTable.instance
 
     private val feedbackMapper = RecordMapper<Record, FeedbackInfo> { record ->
@@ -50,7 +49,7 @@ class FeedbackDao(private val sql: DSLContext) {
             .and(feedbackTable.employeeId.eq(feedbackStatus.employeeId))
             .fetchOne()
 
-        return status?.value1() ?: false
+        return status?.value1() ?: throw BadRequestException("Feedback not found")
     }
 
     fun viewStatusesOfAllMySubmittedFeedback(companyId: Int, employeeId: Int): Map<Int, Boolean> {
@@ -61,7 +60,7 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetch()
 
         return statuses.associate { record ->
-            record.value1() to record.value2()
+            record[feedbackTable.id] to record[feedbackTable.reviewed]
         }
     }
 }
