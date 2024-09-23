@@ -63,4 +63,13 @@ class FeedbackDao(private val sql: DSLContext) {
             record[feedbackTable.id] to record[feedbackTable.reviewed]
         }
     }
+
+    fun getFeedbackEmployeeId(feedbackId: Int, companyId: Int): Int? {
+        val employeeId = sql.select(feedbackTable.employeeId)
+            .from(feedbackTable)
+            .where(feedbackTable.id.eq(feedbackId))
+            .and(feedbackTable.companyId.eq(companyId))
+            .fetchOne()
+        return employeeId?.value1()
+    }
 }
