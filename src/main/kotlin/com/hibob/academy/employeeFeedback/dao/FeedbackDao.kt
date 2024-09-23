@@ -24,6 +24,8 @@ class FeedbackDao(private val sql: DSLContext) {
 
     fun submitFeedback(feedbackToSubmit: FeedbackForSubmission): Int {
         val id = sql.insertInto(feedbackTable)
+            .set(feedbackTable.employeeId, feedbackToSubmit.employeeId)
+            .set(feedbackTable.companyId, feedbackToSubmit.companyId)
             .set(feedbackTable.anonymity, AnonymityType.convertAnonymityTypeToString(feedbackToSubmit.anonymity))
             .set(feedbackTable.feedback, feedbackToSubmit.feedback)
             .returning(feedbackTable.id)
@@ -34,8 +36,18 @@ class FeedbackDao(private val sql: DSLContext) {
     }
 
     fun viewAllSubmittedFeedback(companyId: Int): List<FeedbackInfo> =
-        sql.select()
+        sql.select(feedbackTable.id, feedbackTable.employeeId, feedbackTable.companyId, feedbackTable.dateOfFeedback, feedbackTable.anonymity, feedbackTable.reviewed, feedbackTable.feedback)
             .from(feedbackTable)
             .where(feedbackTable.companyId.eq(companyId))
             .fetch(feedbackMapper)
+
+    fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int): Boolean {
+        val status = sql.select(feedbackTable.reviewed)
+            .from(feedbackTable)
+            .where(feedbackTable.companyId.eq(companyId))
+            .and(feedbackTable.employeeId.eq(employeeId))
+            .fetchOne()
+
+        return status?.value1() ?: false
+    }
 }
