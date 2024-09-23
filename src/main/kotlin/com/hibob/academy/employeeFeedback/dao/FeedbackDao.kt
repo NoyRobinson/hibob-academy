@@ -34,7 +34,7 @@ class FeedbackDao(private val sql: DSLContext) {
     }
 
     fun viewAllSubmittedFeedback(companyId: Int): List<FeedbackInfo> =
-        sql.select()
+        sql.select(feedbackTable.id, feedbackTable.employeeId, feedbackTable.companyId, feedbackTable.dateOfFeedback, feedbackTable.anonymity, feedbackTable.reviewed, feedbackTable.feedback)
             .from(feedbackTable)
             .where(feedbackTable.companyId.eq(companyId))
             .fetch(feedbackMapper)
