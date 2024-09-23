@@ -35,8 +35,10 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
 
     fun viewStatusOfMyFeedback(employeeId: Int, feedbackId: Int): Boolean {
         val employeeInfo = employeeDao.getInfoById(employeeId)
-        val feedbackInfo = feedbackDao.getFeedback(feedbackId)
-        if (feedbackInfo.employeeId != employeeId)
+        val feedbackEmployeeId = feedbackDao.getFeedbackEmployeeId(feedbackId, employeeInfo.companyId)
+        if(feedbackEmployeeId == null)
+            throw Exception("Can't check status of anonymous feedback")
+        if(employeeId != feedbackEmployeeId)
             throw BadRequestException("Unauthorized to view this feedback status")
         val feedbackStatus = FeedbackStatus(employeeInfo.companyId, employeeId, feedbackId)
         return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
