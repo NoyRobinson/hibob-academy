@@ -2,7 +2,7 @@ package com.hibob.academy.employeeFeedback.dao
 
 import java.sql.Date
 
-data class EmployeeInfo(val id: Int, val firstName: String, val lastName: String, val role: RoleType, val department: String, val companyId: Int)
+data class EmployeeInfo(val id: Int, val role: RoleType, val department: String, val companyId: Int)
 
 data class FeedbackInfo(val id: Int, val employeeId: Int, val companyId: Int, val dateOfFeedback: Date, val anonymity: AnonymityType, val reviewed: Boolean, val feedback: String)
 
