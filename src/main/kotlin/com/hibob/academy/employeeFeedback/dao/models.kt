@@ -4,7 +4,7 @@ import java.sql.Date
 
 data class Employee(val id: Int, val firstName: String, val lastName: String, val role: RoleType, val department: String, val companyId: Int)
 
-data class Feedback(val id: Int, val employeeId: Int, val companyId: Int, val dateOfFeedback: Date, val anonymity: AnonymityType, val reviewed: Boolean, val feedback: String)
+data class FeedbackInfo(val id: Int, val employeeId: Int, val companyId: Int, val dateOfFeedback: Date, val anonymity: AnonymityType, val reviewed: Boolean, val feedback: String)
 
 data class Response(val id: Int,val feedbackId: Int, val dateOfResponse: Date, val reviewerId: Int, val response: String)
 
