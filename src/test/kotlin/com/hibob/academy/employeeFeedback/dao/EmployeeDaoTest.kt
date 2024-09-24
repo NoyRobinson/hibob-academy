@@ -3,7 +3,6 @@ package com.hibob.academy.employeeFeedback.dao
 import com.hibob.academy.utils.BobDbTest
 import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
