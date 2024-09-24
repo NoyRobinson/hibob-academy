@@ -39,7 +39,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
     }
 
     fun viewStatusesOfAllMySubmittedFeedback(employeeId: Int, companyId: Int): Map<Int, Boolean> {
-            val feedbackStatus = FindFeedbackStatus(employeeId, companyId,null)
+            val feedbackStatus = FindFeedbackStatus(companyId,employeeId,null)
             return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
     }
 }
