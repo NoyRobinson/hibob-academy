@@ -1,6 +1,7 @@
 package com.hibob.academy.resource
 
 import com.hibob.academy.service.SessionService
+import jakarta.ws.rs.GET
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.Produces
@@ -21,16 +22,22 @@ class SessionResource(private val sessionService: SessionService) {
 
     @POST
     @Path("/login")
-    fun login(@RequestBody employee: Employee): Response {
+    fun login(@RequestBody user: User): Response {
         Response.ok().build()
-        val cookie = NewCookie.Builder(COOKIE_NAME).value(sessionService.createJwtToken(employee)).path("/api/").build()
+        val cookie = NewCookie.Builder(COOKIE_NAME).value(sessionService.createJwtToken(user)).path("/api/").build()
         return Response.ok().cookie(cookie).build()
+    }
+
+    @GET
+    @Path("/getUserName")
+    fun getUserName(): Response {
+        return Response.ok("ok").build()
     }
 }
 
 
-data class Employee(
-    val id: Int,
-    val firstName: String,
-    val lastName: String
+data class User(
+    val username: String,
+    val email: String,
+    val isAdmin: Boolean
 )
