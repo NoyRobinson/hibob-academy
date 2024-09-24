@@ -36,7 +36,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
     fun viewStatusOfMyFeedback(employeeId: Int, feedbackId: Int): Map<Int, Boolean> {
         val employeeInfo = employeeDao.getEmployeeById(employeeId)
         val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, employeeInfo.companyId)
-        val idOfEmployeeThatWroteFeedbackDao = feedbackInfo.employeeId
+        val idOfEmployeeThatWroteFeedbackDao = feedbackInfo!!.employeeId
             ?: throw Exception("Can't check status of anonymous feedback")
         if (employeeId != idOfEmployeeThatWroteFeedbackDao)
             throw BadRequestException("Unauthorized to view this feedback status")
