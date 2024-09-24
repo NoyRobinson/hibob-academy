@@ -20,7 +20,7 @@ class EmployeeDao(private val sql: DSLContext) {
     }
 
     fun getEmployeeById(id: Int): EmployeeInfo {
-        val employee = sql.select(employeeTable.id, employeeTable.role, employeeTable.department, employeeTable.companyId)
+        val employee = sql.select(employeeTable.id, employeeTable.role, employeeTable.department, employeeTable.companyId, employeeTable.role)
             .from(employeeTable)
             .where(employeeTable.id.eq(id))
             .fetchOne(employeeMapper)

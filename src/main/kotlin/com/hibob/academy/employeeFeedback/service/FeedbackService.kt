@@ -2,15 +2,16 @@ package com.hibob.academy.employeeFeedback.service
 
 import com.hibob.academy.employeeFeedback.dao.AnonymityType
 import com.hibob.academy.employeeFeedback.dao.FeedbackDao
+import com.hibob.academy.employeeFeedback.dao.EmployeeDao
 import com.hibob.academy.employeeFeedback.dao.FeedbackForSubmission
 import com.hibob.academy.employeeFeedback.dao.FeedbackStatus
 import jakarta.ws.rs.BadRequestException
 import org.springframework.stereotype.Service
 
 @Service
-class FeedbackService(private val feedbackDao: FeedbackDao) {
+class FeedbackService(private val feedbackDao: FeedbackDao, private val employeeDao: EmployeeDao) {
     fun submitFeedback(employeeId: Int, anonymity: AnonymityType, feedback: String): Boolean {
-        val employeeInfo = employeeDao.getInfoById(employeeId)
+        val employeeInfo = employeeDao.getEmployeeById(employeeId)
 
         var employeeIdForFeedback: Int? = employeeId
         if (anonymity == AnonymityType.ANONYMOUS)
@@ -26,8 +27,8 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
     }
 
     fun viewAllSubmittedFeedback(employeeId: Int, companyId: Int): Boolean {
-        val employeeInfo = employeeDao.getInfoById(employeeId)
-        if (employeeInfo.role != "ADMIN" && employeeInfo.role != "HR")
+        val employeeInfo = employeeDao.getEmployeeById(employeeId)
+        if (!employeeInfo.role.equals("ADMIN") && !employeeInfo.role.equals("HR"))
             return false
         if (employeeInfo.companyId != companyId)
             return false
@@ -36,7 +37,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
     }
 
     fun viewStatusOfMyFeedback(employeeId: Int, feedbackId: Int, companyId: Int): Boolean {
-        val employeeInfo = employeeDao.getInfoById(employeeId)
+        val employeeInfo = employeeDao.getEmployeeById(employeeId)
         val feedbackEmployeeId = feedbackDao.getFeedbackEmployeeId(feedbackId, employeeInfo.companyId)
         if(feedbackEmployeeId == null)
             throw Exception("Can't check status of anonymous feedback")
@@ -49,9 +50,9 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
     }
 
     fun viewStatusesOfAllMySubmittedFeedback(companyId: Int, employeeId: Int) {
-        val employeeInfo = employeeDao.getInfoById(employeeId)
+        val employeeInfo = employeeDao.getEmployeeById(employeeId)
         if (employeeInfo.companyId != companyId)
             throw BadRequestException("Unauthorized to view feedback of a different company")
-        feedbackDao.viewStatusesOfAllMySubmittedFeedback(employeeInfo.companyId, employeeInfo.employeeId)
+        feedbackDao.viewStatusesOfAllMySubmittedFeedback(employeeInfo.companyId, employeeInfo.id)
     }
 }
