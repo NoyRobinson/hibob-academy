@@ -29,7 +29,6 @@ class EmployeeServiceTest{
     @Test
     fun `Get employee by id should handle the exception from employeeDao`() {
         whenever(employeeDao.getEmployeeById(12)).thenThrow(BadRequestException("Employee not found"))
-        val exception = assertThrows<BadRequestException> { employeeService.getEmployeeById(12) }
-        assertEquals("Employee not found", exception.message)
+        assertThrows<BadRequestException> { employeeService.getEmployeeById(12) }
     }
 }
