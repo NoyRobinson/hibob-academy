@@ -76,7 +76,8 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
         val feedbackToCheck = FeedbackStatus(companyId, 12, feedbackId)
         val actual = feedbackDao.viewStatusOfMyFeedback(feedbackToCheck)
-        assertEquals(false, actual)
+        val expected = mapOf(feedbackId to false)
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -97,8 +98,10 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
         val feedbackId2 = feedbackDao.submitFeedback(newFeedback2)
 
+        val feedbackToCheck = FeedbackStatus(companyId, 12, null)
+
         val expected = mapOf(feedbackId1 to false, feedbackId2 to false)
-        val actual = feedbackDao.viewStatusesOfAllMySubmittedFeedback(companyId, 12)
+        val actual = feedbackDao.viewStatusOfMyFeedback(feedbackToCheck)
         assertEquals(expected, actual)
     }
 

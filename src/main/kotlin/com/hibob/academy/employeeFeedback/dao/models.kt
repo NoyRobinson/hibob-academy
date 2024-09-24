@@ -8,7 +8,7 @@ data class FeedbackInfo(val id: Int, val employeeId: Int?, val companyId: Int, v
 
 data class FeedbackForSubmission(val employeeId: Int?, val companyId: Int, val anonymity: AnonymityType, val feedback: String)
 
-data class FeedbackStatus(val companyId: Int, val employeeId: Int, val feedbackId: Int)
+data class FeedbackStatus(val companyId: Int, val employeeId: Int, val feedbackId: Int?)
 
 data class Response(val id: Int,val feedbackId: Int, val dateOfResponse: Date, val reviewerId: Int, val response: String)
 

@@ -44,25 +44,20 @@ class FeedbackDao(private val sql: DSLContext) {
             .where(feedbackTable.companyId.eq(companyId))
             .fetch(feedbackMapper)
 
-    fun viewStatusOfMyFeedback(feedbackStatus: FeedbackStatus): Boolean {
-        val status = sql.select(feedbackTable.reviewed)
+    fun viewStatusOfMyFeedback(feedbackStatus: FeedbackStatus): Map<Int, Boolean> {
+        val query = sql.select(feedbackTable.id, feedbackTable.reviewed)
             .from(feedbackTable)
-            .where(feedbackTable.id.eq(feedbackStatus.feedbackId))
-            .and(feedbackTable.companyId.eq(feedbackStatus.companyId))
+            .where(feedbackTable.companyId.eq(feedbackStatus.companyId))
             .and(feedbackTable.employeeId.eq(feedbackStatus.employeeId))
-            .fetchOne()
 
-        return status?.value1() ?: throw BadRequestException("Feedback not found")
-    }
+        if(feedbackStatus.feedbackId != null)
+            query.and(feedbackTable.id.eq(feedbackStatus.feedbackId))
 
-    fun viewStatusesOfAllMySubmittedFeedback(companyId: Int, employeeId: Int): Map<Int, Boolean> {
-        val statuses = sql.select(feedbackTable.id, feedbackTable.reviewed)
-            .from(feedbackTable)
-            .where(feedbackTable.companyId.eq(companyId))
-            .and(feedbackTable.employeeId.eq(employeeId))
-            .fetch()
+        val status = query.fetch()
+        if(status.isEmpty())
+            throw BadRequestException("Feedback not found")
 
-        return statuses.associate { record ->
+        return status.associate { record ->
             record[feedbackTable.id] to record[feedbackTable.reviewed]
         }
     }
