@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class FeedbackService(private val feedbackDao: FeedbackDao, private val employeeDao: EmployeeDao) {
-    fun submitFeedback(employeeId: Int, anonymity: AnonymityType, feedback: String): Boolean {
-        val employeeInfo = employeeDao.getEmployeeById(employeeId)
-
+    fun submitFeedback(employeeId: Int, companyId: Int, anonymity: AnonymityType, feedback: String): Boolean {
         var employeeIdForFeedback: Int? = employeeId
         if (anonymity == AnonymityType.ANONYMOUS)
             employeeIdForFeedback = null
@@ -17,7 +15,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
             return false
 
         val feedbackForSubmission =
-            FeedbackForSubmission(employeeIdForFeedback, employeeInfo!!.companyId, anonymity, feedback)
+            FeedbackForSubmission(employeeIdForFeedback, companyId, anonymity, feedback)
         feedbackDao.submitFeedback(feedbackForSubmission)
         return true
     }

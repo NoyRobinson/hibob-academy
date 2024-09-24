@@ -19,42 +19,28 @@ class FeedbackServiceTest{
     fun `Submit identified feedback successfully`(){
         val anonymity = AnonymityType.IDENTIFIED
         val feedback = "I'm very happy with my workspace, i'm treated well"
-        val expectedEmployee = EmployeeInfo(12, RoleType.convertStringToRoleType("ADMIN"),
-                                    "dev", 1)
-        whenever(employeeDao.getEmployeeById(12)).thenReturn(expectedEmployee)
-        val feedbackForSubmission = FeedbackForSubmission(expectedEmployee.id,
-                                    expectedEmployee.companyId, anonymity, feedback)
-        val output = feedbackService.submitFeedback(expectedEmployee.id, anonymity, feedback)
+        val feedbackForSubmission = FeedbackForSubmission(12,1, anonymity, feedback)
+        val output = feedbackService.submitFeedback(12, 1, anonymity, feedback)
         assertTrue(output)
         verify(feedbackDao).submitFeedback(feedbackForSubmission)
-        verify(employeeDao).getEmployeeById(12)
     }
 
     @Test
     fun `Submit anonymous feedback successfully`(){
         val anonymity = AnonymityType.ANONYMOUS
         val feedback = "I'm very happy with my workspace, i'm treated well"
-        val expectedEmployee = EmployeeInfo(12, RoleType.convertStringToRoleType("ADMIN"),
-                                            "dev", 1)
-        whenever(employeeDao.getEmployeeById(12)).thenReturn(expectedEmployee)
-        val feedbackForSubmission = FeedbackForSubmission(null,
-                                        expectedEmployee.companyId, anonymity, feedback)
-        val output = feedbackService.submitFeedback(expectedEmployee.id, anonymity, feedback)
+        val feedbackForSubmission = FeedbackForSubmission(null, 1, anonymity, feedback)
+        val output = feedbackService.submitFeedback(12, 1, anonymity, feedback)
         assertTrue(output)
         verify(feedbackDao).submitFeedback(feedbackForSubmission)
-        verify(employeeDao).getEmployeeById(12)
     }
 
     @Test
     fun `Submit feedback with a length of less than 30 characters`(){
         val anonymity = AnonymityType.IDENTIFIED
         val feedback = "ok"
-        val expectedEmployee = EmployeeInfo(12, RoleType.convertStringToRoleType("ADMIN"),
-                                            "dev", 1)
-        whenever(employeeDao.getEmployeeById(12)).thenReturn(expectedEmployee)
-        val output = feedbackService.submitFeedback(expectedEmployee.id, anonymity, feedback)
+        val output = feedbackService.submitFeedback(12, 1, anonymity, feedback)
         assertFalse(output)
-        verify(employeeDao).getEmployeeById(12)
     }
 
     @Test
