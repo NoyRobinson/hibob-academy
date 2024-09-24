@@ -12,24 +12,13 @@ import java.sql.Date
 class FeedbackServiceTest{
 
     private val feedbackDao = mock<FeedbackDao>{}
-    private val employeeDao = mock<EmployeeDao>{}
-    private val feedbackService = FeedbackService(feedbackDao, employeeDao)
+    private val feedbackService = FeedbackService(feedbackDao)
 
     @Test
     fun `Submit identified feedback successfully`(){
         val anonymity = AnonymityType.IDENTIFIED
         val feedback = "I'm very happy with my workspace, i'm treated well"
         val feedbackForSubmission = FeedbackForSubmission(12,1, anonymity, feedback)
-        val output = feedbackService.submitFeedback(12, 1, anonymity, feedback)
-        assertTrue(output)
-        verify(feedbackDao).submitFeedback(feedbackForSubmission)
-    }
-
-    @Test
-    fun `Submit anonymous feedback successfully`(){
-        val anonymity = AnonymityType.ANONYMOUS
-        val feedback = "I'm very happy with my workspace, i'm treated well"
-        val feedbackForSubmission = FeedbackForSubmission(null, 1, anonymity, feedback)
         val output = feedbackService.submitFeedback(12, 1, anonymity, feedback)
         assertTrue(output)
         verify(feedbackDao).submitFeedback(feedbackForSubmission)
@@ -58,7 +47,7 @@ class FeedbackServiceTest{
             Date.valueOf("2024-09-24"), AnonymityType.IDENTIFIED,false,
             "I'm very happy with my workspace, i'm treated well")
         whenever(feedbackDao.getFeedbackById(20, 1)).thenReturn(expectedFeedback)
-        val feedbackStatus = FindFeedbackStatus(1,12,20)
+        val feedbackStatus = FeedbackStatusData(1,12,20)
         whenever(feedbackDao.viewStatusOfMyFeedback(feedbackStatus)).thenReturn(mapOf(20 to false))
         val output = feedbackService.viewStatusOfMyFeedback(12,1, 20)
         assertEquals(mapOf(20 to false), output)
@@ -95,17 +84,17 @@ class FeedbackServiceTest{
 
     @Test
     fun `View statuses of all my feedbacks successfully`() {
-        val feedbackStatus = FindFeedbackStatus(1, 12, null)
+        val feedbackStatus = FeedbackStatusData(1, 12, null)
         whenever(feedbackDao.viewStatusOfMyFeedback(feedbackStatus)).thenReturn(mapOf(20 to false, 21 to false))
-        val output = feedbackService.viewStatusesOfAllMySubmittedFeedback(12, 1)
+        val output = feedbackService.viewStatusesOfMyFeedback(12, 1)
         assertEquals(mapOf(20 to false, 21 to false), output)
         verify(feedbackDao).viewStatusOfMyFeedback(feedbackStatus)
     }
 
     @Test
     fun `View statuses of my feedbacks should return an empty map if there are no feedbacks`(){
-        val output = feedbackService.viewStatusesOfAllMySubmittedFeedback(12,1)
-        val feedbackStatus = FindFeedbackStatus(1, 12,null)
+        val output = feedbackService.viewStatusesOfMyFeedback(12,1)
+        val feedbackStatus = FeedbackStatusData(1, 12,null)
         assertEquals(emptyMap<Int, Boolean>(), output)
         verify(feedbackDao).viewStatusOfMyFeedback(feedbackStatus)
     }

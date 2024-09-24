@@ -42,7 +42,7 @@ class FeedbackDao(private val sql: DSLContext) {
             .where(feedbackTable.companyId.eq(companyId))
             .fetch(feedbackMapper)
 
-    fun viewStatusOfMyFeedback(feedbackStatus: FindFeedbackStatus): Map<Int, Boolean> {
+    fun viewStatusOfMyFeedback(feedbackStatus: FeedbackStatusData): Map<Int, Boolean> {
         val query = sql.select(feedbackTable.id, feedbackTable.reviewed)
             .from(feedbackTable)
             .where(feedbackTable.companyId.eq(feedbackStatus.companyId))

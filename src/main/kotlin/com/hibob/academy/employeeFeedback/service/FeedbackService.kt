@@ -5,19 +5,42 @@ import jakarta.ws.rs.BadRequestException
 import org.springframework.stereotype.Service
 
 @Service
-class FeedbackService(private val feedbackDao: FeedbackDao, private val employeeDao: EmployeeDao) {
+class FeedbackService(private val feedbackDao: FeedbackDao) {
+    fun feedbackLengthValidation(feedback: String): Boolean {
+        val minCharacters = 30
+        val maxCharacters = 500
+        return !(feedback.length < minCharacters || feedback.length > maxCharacters)
+    }
+
+    fun anonymityStatusValidation(employeeId: Int?): Int{
+        return employeeId ?: throw Exception("Can't check status of anonymous feedback")
+    }
+
+    fun authorizationToViewValidation(employeeId: Int, feedbacksEmployeeId: Int) {
+        if (feedbacksEmployeeId != employeeId)
+            throw BadRequestException("Unauthorized to view this feedback status")
+    }
+
     fun submitFeedback(employeeId: Int, companyId: Int, anonymity: AnonymityType, feedback: String): Boolean {
         var employeeIdForFeedback: Int? = employeeId
+
         if (anonymity == AnonymityType.ANONYMOUS)
             employeeIdForFeedback = null
 
-        if (feedback.length < 30 || feedback.length > 500)
-            return false
+        val validation = feedbackLengthValidation(feedback)
 
-        val feedbackForSubmission =
-            FeedbackForSubmission(employeeIdForFeedback, companyId, anonymity, feedback)
-        feedbackDao.submitFeedback(feedbackForSubmission)
-        return true
+        if (validation) {
+            val feedbackForSubmission = FeedbackForSubmission(
+                employeeIdForFeedback,
+                companyId,
+                anonymity,
+                feedback)
+            feedbackDao.submitFeedback(feedbackForSubmission)
+
+            return true
+        }
+
+        return false
     }
 
     fun viewAllSubmittedFeedback(employeeId: Int, companyId: Int): List<FeedbackInfo> {
@@ -26,18 +49,22 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
 
     fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int, feedbackId: Int): Map<Int, Boolean> {
         val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
+
         feedbackInfo?.let{
-            val idOfEmployeeThatWroteFeedbackDao = feedbackInfo.employeeId
-                ?: throw Exception("Can't check status of anonymous feedback")
-            if (employeeId != idOfEmployeeThatWroteFeedbackDao)
-                throw BadRequestException("Unauthorized to view this feedback status")
-            val feedbackStatus = FindFeedbackStatus(companyId, employeeId, feedbackId)
+
+            val feedbacksEmployeeId = anonymityStatusValidation(feedbackInfo.employeeId)
+            authorizationToViewValidation(employeeId, feedbacksEmployeeId)
+
+            val feedbackStatus = FeedbackStatusData(companyId, employeeId, feedbackId)
+
             return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
+
         } ?: throw Exception("Feedback not found")
     }
 
-    fun viewStatusesOfAllMySubmittedFeedback(employeeId: Int, companyId: Int): Map<Int, Boolean> {
-            val feedbackStatus = FindFeedbackStatus(companyId,employeeId,null)
-            return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
+    fun viewStatusesOfMyFeedback(employeeId: Int, companyId: Int): Map<Int, Boolean> {
+         val feedbackStatus = FeedbackStatusData(companyId, employeeId, null)
+
+        return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
     }
 }
