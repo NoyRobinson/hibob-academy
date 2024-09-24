@@ -105,13 +105,13 @@ class FeedbackServiceTest{
     fun `view status of one of my feedbacks successfully`(){
         val expectedEmployee = EmployeeInfo(12, RoleType.EMPLOYEE, "dev", 1)
         whenever(employeeDao.getEmployeeById(12)).thenReturn(expectedEmployee)
-        whenever(feedbackDao.getFeedbackEmployeeId(20, 1)).thenReturn(12)
-        val feedbackStatus = FeedbackStatus(1, 12,20)
+        whenever(feedbackDao.getFeedbackById(20, 1).employeeId).thenReturn(12)
+        val feedbackStatus = FindFeedbackStatus(1, 12,20)
         whenever(feedbackDao.viewStatusOfMyFeedback(feedbackStatus)).thenReturn(mapOf(20 to false))
         val output = feedbackService.viewStatusOfMyFeedback(12, 20)
         assertEquals(mapOf(20 to false), output)
         verify(feedbackDao).viewStatusOfMyFeedback(feedbackStatus)
-        verify(feedbackDao).getFeedbackEmployeeId(20, 1)
+        verify(feedbackDao).getFeedbackById(20, 1).employeeId
         verify(employeeDao).getEmployeeById(12)
     }
 
