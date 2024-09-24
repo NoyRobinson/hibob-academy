@@ -1,14 +1,10 @@
 package com.hibob.academy.employeeFeedback.service
 
-import com.hibob.academy.dao.OwnerCreationRequest
-import com.hibob.academy.dao.OwnerData
 import com.hibob.academy.employeeFeedback.dao.EmployeeDao
 import com.hibob.academy.employeeFeedback.dao.EmployeeInfo
 import com.hibob.academy.employeeFeedback.dao.RoleType
-import jakarta.ws.rs.BadRequestException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -27,8 +23,10 @@ class EmployeeServiceTest{
     }
 
     @Test
-    fun `Get employee by id should handle the exception from employeeDao`() {
-        whenever(employeeDao.getEmployeeById(12)).thenThrow(BadRequestException("Employee not found"))
-        assertThrows<BadRequestException> { employeeService.getEmployeeById(12) }
+    fun `Get employee should return null if the employee does not exist`() {
+        whenever(employeeDao.getEmployeeById(12)).thenReturn(null)
+        val actualEmployee = employeeService.getEmployeeById(12)
+        assertEquals(null, actualEmployee)
+        verify(employeeDao).getEmployeeById(12)
     }
 }

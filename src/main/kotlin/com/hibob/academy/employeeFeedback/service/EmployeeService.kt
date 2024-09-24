@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class EmployeeService(private val employeeDao: EmployeeDao) {
-    fun getEmployeeById(id: Int): EmployeeInfo {
+    fun getEmployeeById(id: Int): EmployeeInfo? {
         return employeeDao.getEmployeeById(id)
     }
 }
