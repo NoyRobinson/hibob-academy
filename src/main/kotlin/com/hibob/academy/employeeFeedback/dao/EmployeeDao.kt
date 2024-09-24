@@ -19,6 +19,19 @@ class EmployeeDao(private val sql: DSLContext) {
         )
     }
 
+    fun insertNewEmployee(newEmployee: EmployeeCreation): Int? {
+        val id = sql.insertInto(employeeTable)
+            .set(employeeTable.firstName, newEmployee.firstName)
+            .set(employeeTable.lastName, newEmployee.lastName)
+            .set(employeeTable.role, newEmployee.role.toString())
+            .set(employeeTable.department, newEmployee.department)
+            .set(employeeTable.companyId, newEmployee.companyId)
+            .returning(employeeTable.id)
+            .fetchOne()
+
+        return id?.get(employeeTable.id)
+    }
+
     fun findEmployeeByLoginParams(loginParams: LoginParams): LoggedInEmployeeInfo? {
         val loggedInEmployeeInfo = sql.select(employeeTable.id, employeeTable.firstName,
                                             employeeTable.lastName, employeeTable.companyId,
