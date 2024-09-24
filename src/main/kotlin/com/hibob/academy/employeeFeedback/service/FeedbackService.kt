@@ -22,30 +22,24 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
         return true
     }
 
-    fun viewAllSubmittedFeedback(employeeId: Int): Boolean {
-        val employeeInfo = employeeDao.getEmployeeById(employeeId)
-        val roles: List<RoleType> =
-            listOf(RoleType.convertStringToRoleType("ADMIN"), RoleType.convertStringToRoleType("HR"))
-        if (employeeInfo!!.role !in roles)
-            return false
-        feedbackDao.viewAllSubmittedFeedback(employeeInfo.companyId)
-        return true
+    fun viewAllSubmittedFeedback(employeeId: Int, companyId: Int): List<FeedbackInfo> {
+        return feedbackDao.viewAllSubmittedFeedback(companyId)
     }
 
-    fun viewStatusOfMyFeedback(employeeId: Int, feedbackId: Int): Map<Int, Boolean> {
-        val employeeInfo = employeeDao.getEmployeeById(employeeId)
-        val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, employeeInfo!!.companyId)
-        val idOfEmployeeThatWroteFeedbackDao = feedbackInfo!!.employeeId
-            ?: throw Exception("Can't check status of anonymous feedback")
-        if (employeeId != idOfEmployeeThatWroteFeedbackDao)
-            throw BadRequestException("Unauthorized to view this feedback status")
-        val feedbackStatus = FindFeedbackStatus(employeeInfo.companyId, employeeId, feedbackId)
-        return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
+    fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int, feedbackId: Int): Map<Int, Boolean> {
+        val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
+        feedbackInfo?.let{
+            val idOfEmployeeThatWroteFeedbackDao = feedbackInfo.employeeId
+                ?: throw Exception("Can't check status of anonymous feedback")
+            if (employeeId != idOfEmployeeThatWroteFeedbackDao)
+                throw BadRequestException("Unauthorized to view this feedback status")
+            val feedbackStatus = FindFeedbackStatus(companyId, employeeId, feedbackId)
+            return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
+        } ?: throw Exception("Feedback not found")
     }
 
-    fun viewStatusesOfAllMySubmittedFeedback(employeeId: Int): Map<Int, Boolean> {
-        val employeeInfo = employeeDao.getEmployeeById(employeeId)
-        val feedbackStatus = FindFeedbackStatus(employeeInfo!!.companyId, employeeInfo.id, null)
-        return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
+    fun viewStatusesOfAllMySubmittedFeedback(employeeId: Int, companyId: Int): Map<Int, Boolean> {
+            val feedbackStatus = FindFeedbackStatus(employeeId, companyId,null)
+            return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
     }
 }
