@@ -31,8 +31,7 @@ class FeedbackDao(private val sql: DSLContext) {
             .returning(feedbackTable.id)
             .fetchOne()
 
-        return id?.get(feedbackTable.id)
-            ?: throw BadRequestException("Unable to create feedback")
+        return id!!.get(feedbackTable.id)
     }
 
     fun viewAllSubmittedFeedback(companyId: Int): List<FeedbackInfo> =
@@ -64,7 +63,7 @@ class FeedbackDao(private val sql: DSLContext) {
         }
     }
 
-    fun getFeedbackById(feedbackId: Int, companyId: Int): FeedbackInfo {
+    fun getFeedbackById(feedbackId: Int, companyId: Int): FeedbackInfo? {
         val feedbackFromDb = sql.select(feedbackTable.id, feedbackTable.employeeId, feedbackTable.companyId,
                     feedbackTable.dateOfFeedback, feedbackTable.anonymity, feedbackTable.reviewed,
                     feedbackTable.feedback)
@@ -73,6 +72,6 @@ class FeedbackDao(private val sql: DSLContext) {
             .and(feedbackTable.companyId.eq(companyId))
             .fetchOne(feedbackMapper)
 
-        return feedbackFromDb ?: throw BadRequestException("Feedback not found")
+        return feedbackFromDb
     }
 }

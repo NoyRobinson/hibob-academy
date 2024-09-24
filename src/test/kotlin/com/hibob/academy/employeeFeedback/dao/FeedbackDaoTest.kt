@@ -24,7 +24,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         val feedbackFromDb = feedbackDao.getFeedbackById(feedbackId, companyId)
 
         val expected = listOf(FeedbackInfo(feedbackId, newFeedback.employeeId, newFeedback.companyId,
-                                feedbackFromDb.dateOfFeedback, newFeedback.anonymity, false,
+                                feedbackFromDb!!.dateOfFeedback, newFeedback.anonymity, false,
                                 newFeedback.feedback))
 
         val actual = feedbackDao.viewAllSubmittedFeedback(newFeedback.companyId)
@@ -40,7 +40,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         val feedbackFromDb1 = feedbackDao.getFeedbackById(feedbackId1, companyId)
 
         val feedback1 = FeedbackInfo(feedbackId1, newFeedback1.employeeId, newFeedback1.companyId,
-                                    feedbackFromDb1.dateOfFeedback, newFeedback1.anonymity,
+                                    feedbackFromDb1!!.dateOfFeedback, newFeedback1.anonymity,
                                     false, newFeedback1.feedback)
 
         val newFeedback2  = FeedbackForSubmission(13, companyId, AnonymityType.IDENTIFIED,
@@ -50,7 +50,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         val feedbackFromDb2 = feedbackDao.getFeedbackById(feedbackId2, companyId)
 
         val feedback2 = FeedbackInfo(feedbackId2, newFeedback2.employeeId, newFeedback2.companyId,
-                                        feedbackFromDb2.dateOfFeedback, newFeedback2.anonymity,
+                                        feedbackFromDb2!!.dateOfFeedback, newFeedback2.anonymity,
                                         false, newFeedback2.feedback)
 
         val expected = listOf(feedback1, feedback2)
@@ -110,7 +110,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
         val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
-        val actual = feedbackInfo.employeeId
+        val actual = feedbackInfo!!.employeeId
         assertEquals(12, actual)
     }
 
@@ -121,7 +121,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
         val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
-        val actual = feedbackInfo.employeeId
+        val actual = feedbackInfo!!.employeeId
         assertEquals(null, actual)
     }
 
@@ -132,13 +132,14 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
         val actual = feedbackDao.getFeedbackById(feedbackId, companyId)
-        val expected = FeedbackInfo(feedbackId, newFeedback.employeeId, newFeedback.companyId, actual.dateOfFeedback, newFeedback.anonymity, false, newFeedback.feedback)
+        val expected = FeedbackInfo(feedbackId, newFeedback.employeeId, newFeedback.companyId, actual!!.dateOfFeedback, newFeedback.anonymity, false, newFeedback.feedback)
         assertEquals(expected, actual)
     }
 
     @Test
-    fun `Try get feedback by id of feedback that doesn't exist and throw an exception`(){
-        assertThrows<BadRequestException>{ feedbackDao.getFeedbackById(1, companyId) }
+    fun `Try get feedback by id of feedback that doesn't exist and return null`(){
+        val actual = feedbackDao.getFeedbackById(1, companyId)
+        assertEquals(null, actual)
     }
 
     @AfterEach
