@@ -1,17 +1,13 @@
 package com.hibob.academy.employeeFeedback.dao
 
-import com.hibob.academy.dao.OwnerCreationRequest
-import com.hibob.academy.dao.OwnerData
 import com.hibob.academy.utils.BobDbTest
 import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
-import java.sql.Date
 
 @BobDbTest
 class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
