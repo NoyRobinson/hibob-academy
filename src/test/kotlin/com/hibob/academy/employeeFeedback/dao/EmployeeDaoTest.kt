@@ -2,7 +2,6 @@ package com.hibob.academy.employeeFeedback.dao
 
 import com.hibob.academy.utils.BobDbTest
 import org.jooq.DSLContext
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
