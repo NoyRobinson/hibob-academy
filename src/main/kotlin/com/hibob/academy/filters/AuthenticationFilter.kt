@@ -19,16 +19,15 @@ class AuthenticationFilter: ContainerRequestFilter {
     }
 
     override fun filter(requestContext: ContainerRequestContext) {
-
         if(requestContext.uriInfo.path == LOGIN_PATH) return
 
         val cookies = requestContext.cookies
         val jwtCookie = cookies[COOKIE_NAME]?.value
 
-        verify(jwtCookie)
+        verify(jwtCookie, requestContext)
     }
 
-    fun verify(cookie: String?) {
+    fun verify(cookie: String?, requestContext: ContainerRequestContext) {
         if (cookie.isNullOrEmpty())
             throw WebApplicationException(
                 Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Cookie").build()
@@ -36,7 +35,14 @@ class AuthenticationFilter: ContainerRequestFilter {
 
         cookie.let {
             try {
-                Jwts.parser().setSigningKey(SECRET_KEY)
+                val claims = Jwts.parser()
+                                    .setSigningKey(SECRET_KEY)
+                                    .parseClaimsJws(cookie)
+                                    .body
+                requestContext.setProperty("employeeId", claims["id"])
+                requestContext.setProperty("companyId", claims["companyId"])
+                requestContext.setProperty("companyId", claims["companyId"])
+
             } catch (e: Exception) {
                 throw WebApplicationException(
                     Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Cookie").build()
@@ -45,3 +51,5 @@ class AuthenticationFilter: ContainerRequestFilter {
         }
     }
 }
+
+
