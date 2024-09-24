@@ -1,8 +1,6 @@
 package com.hibob.academy.filters
 
 import com.hibob.academy.service.SessionService.Companion.SECRET_KEY
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
 import jakarta.ws.rs.WebApplicationException
 import jakarta.ws.rs.container.ContainerRequestContext
