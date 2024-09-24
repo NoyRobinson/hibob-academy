@@ -18,7 +18,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
             return false
 
         val feedbackForSubmission =
-            FeedbackForSubmission(employeeIdForFeedback, employeeInfo.companyId, anonymity, feedback)
+            FeedbackForSubmission(employeeIdForFeedback, employeeInfo!!.companyId, anonymity, feedback)
         feedbackDao.submitFeedback(feedbackForSubmission)
         return true
     }
@@ -27,7 +27,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
         val employeeInfo = employeeDao.getEmployeeById(employeeId)
         val roles: List<RoleType> =
             listOf(RoleType.convertStringToRoleType("ADMIN"), RoleType.convertStringToRoleType("HR"))
-        if (employeeInfo.role !in roles)
+        if (employeeInfo!!.role !in roles)
             return false
         feedbackDao.viewAllSubmittedFeedback(employeeInfo.companyId)
         return true
@@ -35,7 +35,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
 
     fun viewStatusOfMyFeedback(employeeId: Int, feedbackId: Int): Map<Int, Boolean> {
         val employeeInfo = employeeDao.getEmployeeById(employeeId)
-        val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, employeeInfo.companyId)
+        val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, employeeInfo!!.companyId)
         val idOfEmployeeThatWroteFeedbackDao = feedbackInfo!!.employeeId
             ?: throw Exception("Can't check status of anonymous feedback")
         if (employeeId != idOfEmployeeThatWroteFeedbackDao)
@@ -46,7 +46,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao, private val employee
 
     fun viewStatusesOfAllMySubmittedFeedback(employeeId: Int): Map<Int, Boolean> {
         val employeeInfo = employeeDao.getEmployeeById(employeeId)
-        val feedbackStatus = FindFeedbackStatus(employeeInfo.companyId, employeeInfo.id, null)
+        val feedbackStatus = FindFeedbackStatus(employeeInfo!!.companyId, employeeInfo.id, null)
         return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
     }
 }
