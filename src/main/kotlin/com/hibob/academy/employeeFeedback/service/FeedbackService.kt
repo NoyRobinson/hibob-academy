@@ -2,7 +2,6 @@ package com.hibob.academy.employeeFeedback.service
 
 import com.hibob.academy.employeeFeedback.dao.*
 import jakarta.ws.rs.BadRequestException
-import jakarta.ws.rs.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service
