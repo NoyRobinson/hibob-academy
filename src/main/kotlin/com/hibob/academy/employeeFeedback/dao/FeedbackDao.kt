@@ -44,31 +44,24 @@ class FeedbackDao(private val sql: DSLContext) {
             .where(feedbackTable.companyId.eq(companyId))
             .fetch(feedbackMapper)
 
-    fun viewStatusOfMyFeedback(feedbackStatus: FeedbackStatus): Map<Int, Boolean> {
+    fun viewStatusOfMyFeedback(feedbackStatus: FindFeedbackStatus): Map<Int, Boolean> {
         val query = sql.select(feedbackTable.id, feedbackTable.reviewed)
             .from(feedbackTable)
             .where(feedbackTable.companyId.eq(feedbackStatus.companyId))
             .and(feedbackTable.employeeId.eq(feedbackStatus.employeeId))
 
-        if(feedbackStatus.feedbackId != null)
+        feedbackStatus.feedbackId?.let{
             query.and(feedbackTable.id.eq(feedbackStatus.feedbackId))
+        }
 
         val status = query.fetch()
-        if(status.isEmpty())
-            throw BadRequestException("Feedback not found")
+
+        if (status.isEmpty())
+            return emptyMap()
 
         return status.associate { record ->
             record[feedbackTable.id] to record[feedbackTable.reviewed]
         }
-    }
-
-    fun getFeedbackEmployeeId(feedbackId: Int, companyId: Int): Int? {
-        val employeeId = sql.select(feedbackTable.employeeId)
-            .from(feedbackTable)
-            .where(feedbackTable.id.eq(feedbackId))
-            .and(feedbackTable.companyId.eq(companyId))
-            .fetchOne()
-        return employeeId?.value1()
     }
 
     fun getFeedbackById(feedbackId: Int, companyId: Int): FeedbackInfo {
