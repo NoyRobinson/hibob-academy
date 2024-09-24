@@ -28,6 +28,7 @@ class EmployeeDao(private val sql: DSLContext) {
             .and(employeeTable.firstName.eq(loginParams.firstName))
             .and(employeeTable.lastName.eq(loginParams.lastName))
             .fetchOne(employeeMapper)
+
         return loggedInEmployeeInfo
     }
 }
