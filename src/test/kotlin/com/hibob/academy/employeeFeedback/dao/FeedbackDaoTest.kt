@@ -86,8 +86,10 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `View status of feedback that doesn't exist`(){
-        val feedbackToCheck = FeedbackStatus(companyId, 12, 1)
-        assertThrows<BadRequestException>{ feedbackDao.viewStatusOfMyFeedback(feedbackToCheck) }
+        val feedbackToCheck = FindFeedbackStatus(companyId, 12, 1)
+        val actual = feedbackDao.viewStatusOfMyFeedback(feedbackToCheck)
+        val expected = emptyMap<Int, Boolean>()
+        assertEquals(expected, actual)
     }
 
     @Test
