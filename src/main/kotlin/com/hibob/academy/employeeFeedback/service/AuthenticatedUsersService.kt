@@ -31,7 +31,11 @@ class AuthenticatedUsersService {
         return convertStringToRoleType(role)
     }
 
-    fun validateRole(role: RoleType): Boolean {
-        return role == RoleType.HR || role == RoleType.ADMIN
+    fun validateHr(role: RoleType): Boolean {
+        return role == RoleType.HR
+    }
+
+    fun validateAdmin(role: RoleType): Boolean {
+        return role == RoleType.ADMIN
     }
 }

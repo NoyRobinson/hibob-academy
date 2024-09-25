@@ -53,7 +53,6 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
 
     fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int, feedbackId: Int?): Map<Int, Boolean> {
         feedbackId?.let{
-
             return getStatusByFeedbackId(employeeId, companyId, feedbackId)
 
         } ?: return getAllStatuses(employeeId, companyId)
