@@ -2,6 +2,7 @@ package com.hibob.academy.employeeFeedback.resource
 
 import com.hibob.academy.employeeFeedback.dao.FeedbackSubmitRequest
 import com.hibob.academy.employeeFeedback.dao.Response
+import com.hibob.academy.employeeFeedback.service.FeedbackService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.Context
@@ -15,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody
 @Produces(MediaType.APPLICATION_JSON)
 class FeedbackResource(private val feedbackService: FeedbackService) {
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    fun submitFeedback(@RequestBody feedbackRequest: FeedbackSubmitRequest, @Context request: ContainerRequestContext): Response {
-        val LoggedInEmployeeId = request.getProperty("id") as? Int
-        val success = feedbackService.submitFeedback(LoggedInEmployeeId, feedbackRequest.anonymity, feedbackRequest.feedback)
-        if (success)
-            return Response.ok("Feedback created Successfully").build()
-        return Response.status(Response.Status.BAD_REQUEST).build()
-    }
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    fun submitFeedback(@RequestBody feedbackRequest: FeedbackSubmitRequest, @Context request: ContainerRequestContext): Response {
+//        val LoggedInEmployeeId = request.getProperty("id") as? Int
+//        val success = feedbackService.submitFeedback(LoggedInEmployeeId, feedbackRequest.anonymity, feedbackRequest.feedback)
+//        if (success)
+//            return Response.ok("Feedback created Successfully").build()
+//        return Response.status(Response.Status.BAD_REQUEST).build()
+//    }
 
     //    @GET
 //    @Path("company/{companyId}/getOwners")
