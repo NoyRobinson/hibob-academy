@@ -5,6 +5,7 @@ import com.hibob.academy.employeeFeedback.dao.AnonymityType
 import com.hibob.academy.employeeFeedback.dao.FeedbackDao
 import com.hibob.academy.employeeFeedback.dao.FeedbackForSubmission
 import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.NotAuthorizedException
 import jakarta.ws.rs.NotFoundException
 import org.springframework.stereotype.Service
 
@@ -23,7 +24,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
 
     fun authorizationToViewValidation(employeeId: Int, feedbacksEmployeeId: Int) {
         if (feedbacksEmployeeId != employeeId)
-            throw BadRequestException("Unauthorized to view this feedback status")
+            throw NotAuthorizedException("Unauthorized to view this feedback status")
     }
 
     fun submitFeedback(employeeId: Int, companyId: Int, anonymity: AnonymityType, feedback: String): Boolean {
