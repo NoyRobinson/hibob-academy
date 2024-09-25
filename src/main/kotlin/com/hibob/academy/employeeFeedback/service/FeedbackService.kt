@@ -78,4 +78,13 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
 
         } ?: throw NotFoundException("Feedback not found")
     }
+
+    fun changeToReviewedOrUnreviewed(feedbackId: Int, companyId: Int, employeeId: Int, reviewed: Boolean) {
+        val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
+
+        feedbackInfo?.let{
+            feedbackDao.changeToReviewedOrUnreviewed(feedbackId, companyId, reviewed)
+
+        } ?: throw NotFoundException("Feedback not found")
+    }
 }
