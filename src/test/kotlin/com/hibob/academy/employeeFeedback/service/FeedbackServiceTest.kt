@@ -44,6 +44,15 @@ class FeedbackServiceTest{
     }
 
     @Test
+    fun `View all of my submitted feedback successfully`(){
+        val feedbackInfo1 = FeedbackInfo(1, 12, 1, Date.valueOf("2024-09-24"), AnonymityType.IDENTIFIED,false, "I'm very happy with my workspace, i'm treated well")
+        whenever(feedbackDao.viewFeedbackOfEmployee(12, 1)).thenReturn(listOf(feedbackInfo1))
+        val output = feedbackService.viewFeedbackOfEmployee(12, 1)
+        assertEquals(output, listOf(feedbackInfo1))
+        verify(feedbackDao).viewFeedbackOfEmployee(12, 1)
+    }
+
+    @Test
     fun `view status of one of my feedbacks successfully`(){
         val expectedFeedback = FeedbackInfo(20, 12, 1,
             Date.valueOf("2024-09-24"), AnonymityType.IDENTIFIED,false,

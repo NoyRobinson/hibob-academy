@@ -1,6 +1,7 @@
 package com.hibob.academy.employeeFeedback.dao
 
 import com.hibob.kotlinBasics.PersonalReview
+import com.hibob.nullability.Employee
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
@@ -42,6 +43,16 @@ class FeedbackDao(private val sql: DSLContext) {
                     feedbackTable.feedback)
             .from(feedbackTable)
             .where(feedbackTable.companyId.eq(companyId))
+            .fetch(feedbackMapper)
+
+    fun viewFeedbackOfEmployee(employeeId: Int, companyId: Int): List<FeedbackInfo> =
+        sql.select(feedbackTable.id, feedbackTable.employeeId,
+            feedbackTable.companyId, feedbackTable.dateOfFeedback,
+            feedbackTable.anonymity, feedbackTable.reviewed,
+            feedbackTable.feedback)
+            .from(feedbackTable)
+            .where(feedbackTable.companyId.eq(companyId))
+            .and(feedbackTable.employeeId.eq(employeeId))
             .fetch(feedbackMapper)
 
     fun viewStatusOfMyFeedback(feedbackStatus: FeedbackStatusData): Map<Int, Boolean> {

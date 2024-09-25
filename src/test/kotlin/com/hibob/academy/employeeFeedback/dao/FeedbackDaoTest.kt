@@ -58,6 +58,33 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
     }
 
     @Test
+    fun `View all submitted feedback of the logged in employee`(){
+        val newFeedback1  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED,
+            "I'm very happy at my workspace!")
+
+        val feedbackId1 = feedbackDao.submitFeedback(newFeedback1)
+        val feedbackFromDb1 = feedbackDao.getFeedbackById(feedbackId1, companyId)
+
+        val feedback1 = FeedbackInfo(feedbackId1, newFeedback1.employeeId, newFeedback1.companyId,
+            feedbackFromDb1!!.dateOfFeedback, newFeedback1.anonymity,
+            false, newFeedback1.feedback)
+
+        val newFeedback2  = FeedbackForSubmission(13, companyId, AnonymityType.IDENTIFIED,
+            "I'm treated very well")
+
+        val feedbackId2 = feedbackDao.submitFeedback(newFeedback2)
+        val feedbackFromDb2 = feedbackDao.getFeedbackById(feedbackId2, companyId)
+
+        val feedback2 = FeedbackInfo(feedbackId2, newFeedback2.employeeId, newFeedback2.companyId,
+            feedbackFromDb2!!.dateOfFeedback, newFeedback2.anonymity,
+            false, newFeedback2.feedback)
+
+        val expected = listOf(feedback1)
+        val actual = feedbackDao.viewFeedbackOfEmployee(12, companyId)
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun `View feedbacks of company without any feedbacks`(){
         val actual = feedbackDao.viewAllSubmittedFeedback(companyId)
         assertEquals(emptyList<FeedbackInfo>(), actual)

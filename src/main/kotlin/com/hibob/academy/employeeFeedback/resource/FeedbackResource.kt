@@ -40,11 +40,21 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
         val role = authenticatedUsersService.getLoggedInRole(request)
         val validRoles = listOf(RoleType.ADMIN, RoleType.HR)
 
-        authenticatedUsersService.validateRole(role, validRoles)
+        return try{
+            authenticatedUsersService.validateRole(role, validRoles)
+            val allFeedback = feedbackService.viewAllSubmittedFeedback(employeeId, companyId)
 
-        val allFeedback = feedbackService.viewAllSubmittedFeedback(employeeId, companyId)
+            Response.ok(allFeedback).build()
 
-        return Response.ok(allFeedback).build()
+        } catch (e: Exception) {
+            val employeeFeedback = feedbackService.viewFeedbackOfEmployee(employeeId, companyId)
+
+            Response.ok(employeeFeedback).build()
+        }
+
+
+
+
     }
 
     @GET
