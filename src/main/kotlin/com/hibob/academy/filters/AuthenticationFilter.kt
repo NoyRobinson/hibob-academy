@@ -42,7 +42,7 @@ class AuthenticationFilter: ContainerRequestFilter {
                                     .body
                 requestContext.setProperty("employeeId", claims["id"])
                 requestContext.setProperty("companyId", claims["companyId"])
-                requestContext.setProperty("companyId", claims["companyId"])
+                requestContext.setProperty("role", claims["role"])
 
             } catch (e: Exception) {
                 throw WebApplicationException(
@@ -52,5 +52,3 @@ class AuthenticationFilter: ContainerRequestFilter {
         }
     }
 }
-
-

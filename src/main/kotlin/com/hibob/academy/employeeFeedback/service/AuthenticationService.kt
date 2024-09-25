@@ -5,6 +5,7 @@ import com.hibob.academy.employeeFeedback.dao.LoggedInEmployeeInfo
 import com.hibob.academy.employeeFeedback.dao.LoginParams
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import jakarta.ws.rs.NotAuthorizedException
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -20,7 +21,7 @@ class AuthenticationService(private val employeeDao: EmployeeDao) {
     fun authenticate(id: Int, firstName: String, lastName: String): LoggedInEmployeeInfo {
         val loginParams = LoginParams(id, firstName, lastName)
         val loggedInEmployeeInfo = employeeDao.findEmployeeByLoginParams(loginParams)
-            ?: throw Exception("Authentication failed")
+            ?: throw NotAuthorizedException("Authentication failed")
 
         return LoggedInEmployeeInfo(
             id = loggedInEmployeeInfo.id,
