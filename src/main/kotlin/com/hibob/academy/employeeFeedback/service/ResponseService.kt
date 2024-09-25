@@ -20,15 +20,19 @@ class ResponseService(private val responseDao: ResponseDao, private val feedback
     fun doesFeedbackExist(feedbackInfo: FeedbackInfo?) =
         feedbackInfo ?: throw NotFoundException("This feedback doesn't exist")
 
-    fun submitResponse(feedbackId: Int, reviewerId: Int, response: String, companyId: Int): Boolean {
+    fun validateResponse(feedbackId: Int, companyId: Int, response: String){
         val feedbackToRespond = feedbackDao.getFeedbackById(feedbackId, companyId)
-
         doesFeedbackExist(feedbackToRespond)
 
         val feedbackWriterId = feedbackToRespond?.employeeId
-
         isWriterIdentified(feedbackWriterId)
+
         responseLengthValidation(response)
+    }
+
+    fun submitResponse(feedbackId: Int, reviewerId: Int, response: String, companyId: Int): Boolean {
+
+        validateResponse(feedbackId, companyId, response)
 
         val responseForSubmission = ResponseForSubmission(
             feedbackId,
