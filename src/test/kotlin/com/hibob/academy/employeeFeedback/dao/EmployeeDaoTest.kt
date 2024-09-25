@@ -16,7 +16,7 @@ class EmployeeDaoTest @Autowired constructor(private val sql: DSLContext) {
 
     @Test
     fun `find existing employee from db with login params`(){
-        val newEmployee = EmployeeCreation("Rachel", "Green", RoleType.ADMIN, "dev", companyId)
+        val newEmployee = EmployeeCreationRequest("Rachel", "Green", RoleType.ADMIN, "dev", companyId)
         val employeeId = employeeDao.insertNewEmployee(newEmployee)
         employeeId?.let{
             val loginParams = LoginParams(employeeId, "Rachel", "Green")

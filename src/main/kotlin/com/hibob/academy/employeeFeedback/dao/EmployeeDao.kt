@@ -19,7 +19,7 @@ class EmployeeDao(private val sql: DSLContext) {
         )
     }
 
-    fun insertNewEmployee(newEmployee: EmployeeCreation): Int? {
+    fun insertNewEmployee(newEmployee: EmployeeCreationRequest): Int? {
         val id = sql.insertInto(employeeTable)
             .set(employeeTable.firstName, newEmployee.firstName)
             .set(employeeTable.lastName, newEmployee.lastName)

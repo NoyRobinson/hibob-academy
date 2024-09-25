@@ -4,7 +4,7 @@ import java.sql.Date
 
 data class EmployeeInfo(val id: Int, val role: RoleType, val department: String, val companyId: Int)
 
-data class EmployeeCreation(val firstName: String, val lastName: String, val role: RoleType, val department: String, val companyId: Int)
+data class EmployeeCreationRequest(val firstName: String, val lastName: String, val role: RoleType, val department: String, val companyId: Int)
 
 data class LoggedInEmployeeInfo(val id: Int, val firstName: String, val lastName: String, val companyId: Int, val role: RoleType)
 
