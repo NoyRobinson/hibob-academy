@@ -1,12 +1,10 @@
 package com.hibob.academy.employeeFeedback.dao
 
 import com.hibob.academy.utils.BobDbTest
-import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 @BobDbTest
@@ -70,7 +68,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
                                                 "I'm very happy at my workspace!")
 
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
-        val feedbackToCheck = FindFeedbackStatus(companyId, 12, feedbackId)
+        val feedbackToCheck = FeedbackStatusData(companyId, 12, feedbackId)
         val actual = feedbackDao.viewStatusOfMyFeedback(feedbackToCheck)
         val expected = mapOf(feedbackId to false)
         assertEquals(expected, actual)
@@ -78,7 +76,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `View status of feedback that doesn't exist`(){
-        val feedbackToCheck = FindFeedbackStatus(companyId, 12, 1)
+        val feedbackToCheck = FeedbackStatusData(companyId, 12, 1)
         val actual = feedbackDao.viewStatusOfMyFeedback(feedbackToCheck)
         val expected = emptyMap<Int, Boolean>()
         assertEquals(expected, actual)
@@ -96,7 +94,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
         val feedbackId2 = feedbackDao.submitFeedback(newFeedback2)
 
-        val feedbackToCheck = FindFeedbackStatus(companyId, 12, null)
+        val feedbackToCheck = FeedbackStatusData(companyId, 12, null)
 
         val expected = mapOf(feedbackId1 to false, feedbackId2 to false)
         val actual = feedbackDao.viewStatusOfMyFeedback(feedbackToCheck)

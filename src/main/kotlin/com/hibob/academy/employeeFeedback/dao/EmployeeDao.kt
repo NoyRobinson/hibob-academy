@@ -1,6 +1,5 @@
 package com.hibob.academy.employeeFeedback.dao
 
-import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
@@ -19,12 +18,12 @@ class EmployeeDao(private val sql: DSLContext) {
         )
     }
 
-    fun getEmployeeById(id: Int): EmployeeInfo {
-        val employee = sql.select(employeeTable.id, employeeTable.role, employeeTable.department, employeeTable.companyId)
+    fun getEmployeeById(id: Int): EmployeeInfo? {
+        val employee = sql.select(employeeTable.id, employeeTable.role, employeeTable.department, employeeTable.companyId, employeeTable.role)
             .from(employeeTable)
             .where(employeeTable.id.eq(id))
             .fetchOne(employeeMapper)
 
-        return employee ?: throw BadRequestException("Employee not found")
+        return employee
     }
 }
