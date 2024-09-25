@@ -12,23 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired
 class EmployeeDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val employeeDao = EmployeeDao(sql)
     private val employeeTable = EmployeeTable.instance
-    private val companyId = 1
+    private val companyId = 3
 
     @Test
     fun `find existing employee from db with login params`(){
-        val newEmployee = EmployeeCreationRequest("Rachel", "Green", RoleType.ADMIN, "dev", companyId)
+        val newEmployee = EmployeeCreationRequest("Noy", "Robinson", RoleType.ADMIN, "dev", companyId)
         val employeeId = employeeDao.insertNewEmployee(newEmployee)
         employeeId?.let{
-            val loginParams = LoginParams(employeeId, "Rachel", "Green")
+            val loginParams = LoginParams(employeeId, "Noy", "Robinson")
             val actual = employeeDao.findEmployeeByLoginParams(loginParams)
-            val expected = LoggedInEmployeeInfo(employeeId, "Rachel", "Green", companyId, RoleType.ADMIN)
+            val expected = LoggedInEmployeeInfo(employeeId, "Noy", "Robinson", companyId, RoleType.ADMIN)
             assertEquals(expected, actual)
         }
     }
 
     @Test
     fun `findEmployeeByLoginParams should return null when this employee does not exist`(){
-        val loginParams = LoginParams(12, "Noy", "Robinson")
+        val loginParams = LoginParams(12, "Tom", "Robinson")
         val actual = employeeDao.findEmployeeByLoginParams(loginParams)
         assertNull(actual)
     }
