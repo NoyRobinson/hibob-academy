@@ -93,18 +93,14 @@ class FeedbackServiceTest{
 
     @Test
     fun `Change to reviewed should update the field of reviewed successfully`(){
-        val expectedFeedback = FeedbackInfo(20, 12, 1,
-            Date.valueOf("2024-09-24"), AnonymityType.IDENTIFIED,false,
-            "I'm very happy with my workspace, i'm treated well")
-        whenever(feedbackDao.getFeedbackById(20, 1)).thenReturn(expectedFeedback)
-
+        whenever(feedbackDao.changeToReviewedOrUnreviewed(20, 1, true)).thenReturn(1)
         feedbackService.changeToReviewedOrUnreviewed(20, 1, 12, true)
         verify(feedbackDao).changeToReviewedOrUnreviewed(20, 1, true)
     }
 
     @Test
     fun `Change to reviewed should return an exception if the feedback doesnt exist`(){
-        whenever(feedbackDao.getFeedbackById(100, 1)).thenReturn(null)
+        whenever(feedbackDao.changeToReviewedOrUnreviewed(100, 1, true)).thenReturn(0)
         assertThrows<NotFoundException> { feedbackService.changeToReviewedOrUnreviewed(100, 1,
                                         14, true) }
     }
