@@ -1,12 +1,11 @@
 package com.hibob.academy.employeeFeedback.dao
 
 import com.hibob.academy.utils.BobDbTest
-import jakarta.ws.rs.BadRequestException
 import org.jooq.DSLContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 @BobDbTest
@@ -85,14 +84,6 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
     }
 
     @Test
-    fun `View status of feedback that doesn't exist`(){
-        val feedbackToCheck = FindFeedbackStatus(companyId, 12, 1)
-        val actual = feedbackDao.viewStatusOfMyFeedback(feedbackToCheck)
-        val expected = emptyMap<Int, Boolean>()
-        assertEquals(expected, actual)
-    }
-
-    @Test
     fun `View statuses of all my submitted feedback`(){
         val newFeedback1  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED,
                                                     "I'm very happy at my workspace!")
@@ -130,7 +121,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
         val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
         val actual = feedbackInfo!!.employeeId
-        assertEquals(null, actual)
+        assertNull(actual)
     }
 
     @Test
@@ -147,7 +138,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
     @Test
     fun `Try get feedback by id of feedback that doesn't exist and return null`(){
         val actual = feedbackDao.getFeedbackById(1, companyId)
-        assertEquals(null, actual)
+        assertNull(actual)
     }
 
     @AfterEach

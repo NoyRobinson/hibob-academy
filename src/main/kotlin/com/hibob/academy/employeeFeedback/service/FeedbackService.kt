@@ -4,8 +4,8 @@ import com.hibob.academy.employeeFeedback.dao.*
 import com.hibob.academy.employeeFeedback.dao.AnonymityType
 import com.hibob.academy.employeeFeedback.dao.FeedbackDao
 import com.hibob.academy.employeeFeedback.dao.FeedbackForSubmission
-import com.hibob.academy.employeeFeedback.dao.FeedbackStatus
 import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service
