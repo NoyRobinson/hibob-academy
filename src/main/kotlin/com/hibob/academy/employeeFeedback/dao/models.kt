@@ -14,6 +14,8 @@ data class EmployeeLoginRequest(val id: Int, val firstName: String, val lastName
 
 data class FeedbackInfo(val id: Int, val employeeId: Int?, val companyId: Int, val dateOfFeedback: Date, val anonymity: AnonymityType, val reviewed: Boolean, val feedback: String)
 
+data class FeedbackSubmitRequest(val anonymity: AnonymityType, val feedback: String)
+
 data class FeedbackForSubmission(val employeeId: Int?, val companyId: Int, val anonymity: AnonymityType, val feedback: String)
 
 data class FeedbackStatusData(val companyId: Int, val employeeId: Int, val feedbackId: Int?)
