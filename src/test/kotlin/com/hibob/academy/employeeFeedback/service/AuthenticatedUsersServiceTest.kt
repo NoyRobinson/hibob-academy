@@ -56,9 +56,10 @@ class AuthenticatedUsersServiceTest{
     }
 
     @Test
-    fun `validateHr should return true when role is hr`() {
+    fun `validateRole should return true when role is hr or admin`() {
         val role = RoleType.HR
-        val result = authenticatedUserService.validateHr(role)
+        val validRoles = listOf(RoleType.HR, RoleType.ADMIN)
+        val result = authenticatedUserService.validateRole(role, validRoles)
         assertTrue(result)
     }
 }

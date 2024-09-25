@@ -2,6 +2,7 @@ package com.hibob.academy.employeeFeedback.resource
 
 import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertStringToAnonymityType
 import com.hibob.academy.employeeFeedback.dao.FeedbackSubmitRequest
+import com.hibob.academy.employeeFeedback.dao.RoleType
 import com.hibob.academy.employeeFeedback.service.AuthenticatedUsersService
 import jakarta.ws.rs.core.Response
 import com.hibob.academy.employeeFeedback.service.FeedbackService
@@ -37,9 +38,9 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
         val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
         val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
         val role = authenticatedUsersService.getLoggedInRole(request)
+        val validRoles = listOf(RoleType.ADMIN, RoleType.HR)
 
-        if (!authenticatedUsersService.validateHr(role) && !authenticatedUsersService.validateAdmin(role))
-            return Response.status(Response.Status.UNAUTHORIZED).build()
+        if (!authenticatedUsersService.validateRole(role, validRoles)) return Response.status(Response.Status.UNAUTHORIZED).build()
 
         val allFeedback = feedbackService.viewAllSubmittedFeedback(employeeId, companyId)
 
