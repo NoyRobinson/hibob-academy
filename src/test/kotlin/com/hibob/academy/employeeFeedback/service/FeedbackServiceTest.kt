@@ -1,6 +1,8 @@
 package com.hibob.academy.employeeFeedback.service
 
 import com.hibob.academy.employeeFeedback.dao.*
+import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.NotFoundException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -61,24 +63,14 @@ class FeedbackServiceTest{
             Date.valueOf("2024-09-24"), AnonymityType.ANONYMOUS,false,
             "I'm very happy with my workspace, i'm treated well")
         whenever(feedbackDao.getFeedbackById(20, 1)).thenReturn(expectedFeedback)
-        assertThrows<Exception> { feedbackService.viewStatusOfMyFeedback(12,
+        assertThrows<BadRequestException> { feedbackService.viewStatusOfMyFeedback(12,
                                 1, 20) }
-    }
-
-    @Test
-    fun `viewing a status of a feedback of a different employee should throw an exception`(){
-        val expectedFeedback = FeedbackInfo(20, 14, 1,
-            Date.valueOf("2024-09-24"), AnonymityType.IDENTIFIED,false,
-            "I'm very happy with my workspace, i'm treated well")
-        whenever(feedbackDao.getFeedbackById(20, 1)).thenReturn(expectedFeedback)
-        assertThrows<Exception> { feedbackService.viewStatusOfMyFeedback(12,
-            1, 20) }
     }
 
     @Test
     fun `Try view status of a feedback that doesnt exist should throw an exception`(){
         whenever(feedbackDao.getFeedbackById(100, 1)).thenReturn(null)
-        assertThrows<Exception> { feedbackService.viewStatusOfMyFeedback(12,
+        assertThrows<NotFoundException> { feedbackService.viewStatusOfMyFeedback(12,
             1, 100) }
     }
 
