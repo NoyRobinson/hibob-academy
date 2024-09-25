@@ -78,14 +78,14 @@ class FeedbackServiceTest{
     fun `View statuses of all my feedbacks successfully`() {
         val feedbackStatus = FeedbackStatusData(1, 12, null)
         whenever(feedbackDao.viewStatusOfMyFeedback(feedbackStatus)).thenReturn(mapOf(20 to false, 21 to false))
-        val output = feedbackService.viewStatusesOfMyFeedback(12, 1)
+        val output = feedbackService.viewStatusOfMyFeedback(12, 1, null)
         assertEquals(mapOf(20 to false, 21 to false), output)
         verify(feedbackDao).viewStatusOfMyFeedback(feedbackStatus)
     }
 
     @Test
     fun `View statuses of my feedbacks should return an empty map if there are no feedbacks`(){
-        val output = feedbackService.viewStatusesOfMyFeedback(12,1)
+        val output = feedbackService.viewStatusOfMyFeedback(12, 1, null)
         val feedbackStatus = FeedbackStatusData(1, 12,null)
         assertEquals(emptyMap<Int, Boolean>(), output)
         verify(feedbackDao).viewStatusOfMyFeedback(feedbackStatus)

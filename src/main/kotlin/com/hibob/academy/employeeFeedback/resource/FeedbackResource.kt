@@ -2,11 +2,9 @@ package com.hibob.academy.employeeFeedback.resource
 
 import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertStringToAnonymityType
 import com.hibob.academy.employeeFeedback.dao.FeedbackSubmitRequest
-import com.hibob.academy.employeeFeedback.dao.RoleType
-import com.hibob.academy.employeeFeedback.dao.RoleType.Companion.convertStringToRoleType
+import com.hibob.academy.employeeFeedback.service.AuthenticatedUsersService
 import jakarta.ws.rs.core.Response
 import com.hibob.academy.employeeFeedback.service.FeedbackService
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.ws.rs.*
 import jakarta.ws.rs.container.ContainerRequestContext
 import jakarta.ws.rs.core.Context
@@ -18,13 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody
 @Controller
 @Path("/api/feedback")
 @Produces(MediaType.APPLICATION_JSON)
-class FeedbackResource(private val feedbackService: FeedbackService) {
-
+class FeedbackResource(private val feedbackService: FeedbackService, private val authenticatedUsersService: AuthenticatedUsersService) {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     fun submitFeedback(@RequestBody feedbackRequest: FeedbackSubmitRequest, @Context request: ContainerRequestContext): Response {
-        val employeeId = getLoggedInEmployeeId(request)
-        val companyId = getLoggedInCompanyId(request)
+        val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
+        val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
         val anonymity = convertStringToAnonymityType(feedbackRequest.anonymity)
 
         val success = feedbackService.submitFeedback(employeeId, companyId, anonymity, feedbackRequest.feedback)
@@ -37,11 +34,11 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
     @GET
     @Path("/allFeedback")
     fun viewFeedback(@Context request: ContainerRequestContext): Response {
-        val employeeId = getLoggedInEmployeeId(request)
-        val companyId = getLoggedInCompanyId(request)
-        val role = getLoggedInRole(request)
+        val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
+        val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
+        val role = authenticatedUsersService.getLoggedInRole(request)
 
-        if (!validateRole(role)) return Response.status(Response.Status.UNAUTHORIZED).build()
+        if (!authenticatedUsersService.validateRole(role)) return Response.status(Response.Status.UNAUTHORIZED).build()
 
         val allFeedback = feedbackService.viewAllSubmittedFeedback(employeeId, companyId)
 
@@ -51,38 +48,11 @@ class FeedbackResource(private val feedbackService: FeedbackService) {
     @GET
     @Path("/checkStatus")
     fun checkFeedbackStatus(@QueryParam ("feedbackId") feedbackId: Int?, @Context request: ContainerRequestContext): Response {
-        val employeeId = getLoggedInEmployeeId(request)
-        val companyId = getLoggedInCompanyId(request)
+        val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
+        val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
 
-        feedbackId?.let {
+        val statusOfMyFeedback = feedbackService.viewStatusOfMyFeedback(employeeId, companyId, feedbackId)
 
-            return Response.ok(feedbackService.viewStatusOfMyFeedback(employeeId, companyId, feedbackId)).build()
-
-        } ?: return Response.ok(feedbackService.viewStatusesOfMyFeedback(employeeId, companyId)).build()
-    }
-
-    fun getLoggedInEmployeeId(@Context request: ContainerRequestContext) : Int {
-        val loggedInEmployeeId = request.getProperty("employeeId") as? Int
-            ?: throw WebApplicationException("Employee id not found", Response.Status.UNAUTHORIZED)
-
-        return loggedInEmployeeId
-    }
-
-    fun getLoggedInCompanyId(@Context request: ContainerRequestContext) : Int {
-        val companyId = request.getProperty("companyId") as? Int
-            ?: throw WebApplicationException("Company id not found", Response.Status.UNAUTHORIZED)
-
-        return companyId
-    }
-
-    fun getLoggedInRole(@Context request: ContainerRequestContext) : RoleType {
-        val role = request.getProperty("role") as? String
-            ?: throw WebApplicationException("Role not found", Response.Status.UNAUTHORIZED)
-
-        return convertStringToRoleType(role)
-    }
-
-    fun validateRole(role: RoleType): Boolean {
-        return role == RoleType.HR || role == RoleType.ADMIN
+        return Response.ok(statusOfMyFeedback).build()
     }
 }

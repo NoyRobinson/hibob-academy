@@ -51,7 +51,21 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
         return feedbackDao.viewAllSubmittedFeedback(companyId)
     }
 
-    fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int, feedbackId: Int): Map<Int, Boolean> {
+    fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int, feedbackId: Int?): Map<Int, Boolean> {
+        feedbackId?.let{
+
+            return getStatusByFeedbackId(employeeId, companyId, feedbackId)
+
+        } ?: return getAllStatuses(employeeId, companyId)
+    }
+
+    fun getAllStatuses(employeeId: Int, companyId: Int): Map<Int, Boolean> {
+        val feedbackStatus = FeedbackStatusData(companyId, employeeId, null)
+
+        return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
+    }
+
+    fun getStatusByFeedbackId(employeeId: Int, companyId: Int, feedbackId: Int): Map<Int, Boolean> {
         val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
 
         feedbackInfo?.let{
@@ -64,11 +78,5 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
             return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
 
         } ?: throw NotFoundException("Feedback not found")
-    }
-
-    fun viewStatusesOfMyFeedback(employeeId: Int, companyId: Int): Map<Int, Boolean> {
-         val feedbackStatus = FeedbackStatusData(companyId, employeeId, null)
-
-        return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
     }
 }

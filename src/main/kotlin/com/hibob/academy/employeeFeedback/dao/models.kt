@@ -18,7 +18,7 @@ data class FeedbackForSubmission(val employeeId: Int?, val companyId: Int, val a
 
 data class FeedbackStatusData(val companyId: Int, val employeeId: Int, val feedbackId: Int?)
 
-//data class Response(val id: Int,val feedbackId: Int, val dateOfResponse: Date, val reviewerId: Int, val response: String)
+data class FeedbackResponse(val id: Int, val feedbackId: Int, val dateOfResponse: Date, val reviewerId: Int, val response: String)
 
 enum class RoleType {
     HR, ADMIN, EMPLOYEE;
