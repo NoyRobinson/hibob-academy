@@ -4,6 +4,7 @@ import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
 import org.springframework.stereotype.Repository
+import java.sql.Date
 
 @Repository
 class FeedbackDao(private val sql: DSLContext) {

@@ -40,7 +40,7 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
         val role = authenticatedUsersService.getLoggedInRole(request)
         val validRoles = listOf(RoleType.ADMIN, RoleType.HR)
 
-        if (!authenticatedUsersService.validateRole(role, validRoles)) return Response.status(Response.Status.UNAUTHORIZED).build()
+        authenticatedUsersService.validateRole(role, validRoles)
 
         val allFeedback = feedbackService.viewAllSubmittedFeedback(employeeId, companyId)
 

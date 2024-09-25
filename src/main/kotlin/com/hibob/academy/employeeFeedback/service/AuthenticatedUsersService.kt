@@ -2,6 +2,7 @@ package com.hibob.academy.employeeFeedback.service
 
 import com.hibob.academy.employeeFeedback.dao.RoleType
 import com.hibob.academy.employeeFeedback.dao.RoleType.Companion.convertStringToRoleType
+import jakarta.ws.rs.NotAuthorizedException
 import jakarta.ws.rs.WebApplicationException
 import jakarta.ws.rs.container.ContainerRequestContext
 import jakarta.ws.rs.core.Context
@@ -31,7 +32,7 @@ class AuthenticatedUsersService {
         return convertStringToRoleType(role)
     }
 
-    fun validateRole(role: RoleType, validRoles: List<RoleType>): Boolean {
-        return validRoles.contains(role)
+    fun validateRole(role: RoleType, validRoles: List<RoleType>) {
+        if (!validRoles.contains(role)) throw NotAuthorizedException("Unauthorized role")
     }
 }

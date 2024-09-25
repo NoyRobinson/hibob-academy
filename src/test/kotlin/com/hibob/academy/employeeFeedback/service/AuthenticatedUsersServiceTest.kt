@@ -1,6 +1,7 @@
 package com.hibob.academy.employeeFeedback.service
 
 import com.hibob.academy.employeeFeedback.dao.RoleType
+import jakarta.ws.rs.NotAuthorizedException
 import jakarta.ws.rs.WebApplicationException
 import jakarta.ws.rs.container.ContainerRequestContext
 import org.junit.jupiter.api.Assertions.*
@@ -56,10 +57,9 @@ class AuthenticatedUsersServiceTest{
     }
 
     @Test
-    fun `validateRole should return true when role is hr or admin`() {
-        val role = RoleType.HR
+    fun `validateRole should throw an exception when role isn't hr or admin`() {
+        val role = RoleType.EMPLOYEE
         val validRoles = listOf(RoleType.HR, RoleType.ADMIN)
-        val result = authenticatedUserService.validateRole(role, validRoles)
-        assertTrue(result)
+        assertThrows<NotAuthorizedException> { authenticatedUserService.validateRole(role, validRoles) }
     }
 }
