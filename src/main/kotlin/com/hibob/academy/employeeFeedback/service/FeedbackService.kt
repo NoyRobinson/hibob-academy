@@ -2,6 +2,7 @@ package com.hibob.academy.employeeFeedback.service
 
 import com.hibob.academy.employeeFeedback.dao.*
 import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -9,11 +10,12 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
     fun feedbackLengthValidation(feedback: String): Boolean {
         val minCharacters = 30
         val maxCharacters = 500
+
         return !(feedback.length < minCharacters || feedback.length > maxCharacters)
     }
 
     fun anonymityStatusValidation(employeeId: Int?): Int{
-        return employeeId ?: throw Exception("Can't check status of anonymous feedback")
+        return employeeId ?: throw BadRequestException("Can't check status of anonymous feedback")
     }
 
     fun authorizationToViewValidation(employeeId: Int, feedbacksEmployeeId: Int) {
@@ -29,18 +31,16 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
 
         val validation = feedbackLengthValidation(feedback)
 
-        if (validation) {
-            val feedbackForSubmission = FeedbackForSubmission(
-                employeeIdForFeedback,
-                companyId,
-                anonymity,
-                feedback)
-            feedbackDao.submitFeedback(feedbackForSubmission)
+        if (!validation) return false
 
-            return true
-        }
+        val feedbackForSubmission = FeedbackForSubmission(
+            employeeIdForFeedback,
+            companyId,
+            anonymity,
+            feedback)
+        feedbackDao.submitFeedback(feedbackForSubmission)
 
-        return false
+        return true
     }
 
     fun viewAllSubmittedFeedback(employeeId: Int, companyId: Int): List<FeedbackInfo> {
@@ -59,7 +59,7 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
 
             return feedbackDao.viewStatusOfMyFeedback(feedbackStatus)
 
-        } ?: throw Exception("Feedback not found")
+        } ?: throw NotFoundException("Feedback not found")
     }
 
     fun viewStatusesOfMyFeedback(employeeId: Int, companyId: Int): Map<Int, Boolean> {
