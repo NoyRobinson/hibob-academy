@@ -9,21 +9,39 @@ import org.springframework.stereotype.Repository
 class EmployeeDao(private val sql: DSLContext) {
     private val employeeTable = EmployeeTable.instance
 
-    private val employeeMapper = RecordMapper<Record, EmployeeInfo> { record ->
-        EmployeeInfo(
+    private val employeeMapper = RecordMapper<Record, LoggedInEmployeeInfo> { record ->
+        LoggedInEmployeeInfo(
             record[employeeTable.id],
-            RoleType.convertStringToRoleType(record[employeeTable.role]),
-            record[employeeTable.department],
-            record[employeeTable.companyId]
+            record[employeeTable.firstName],
+            record[employeeTable.lastName],
+            record[employeeTable.companyId],
+            RoleType.convertStringToRoleType(record[employeeTable.role])
         )
     }
 
-    fun getEmployeeById(id: Int): EmployeeInfo? {
-        val employee = sql.select(employeeTable.id, employeeTable.role, employeeTable.department, employeeTable.companyId, employeeTable.role)
+    fun insertNewEmployee(newEmployee: EmployeeCreationRequest): Int? {
+        val id = sql.insertInto(employeeTable)
+            .set(employeeTable.firstName, newEmployee.firstName)
+            .set(employeeTable.lastName, newEmployee.lastName)
+            .set(employeeTable.role, newEmployee.role.toString())
+            .set(employeeTable.department, newEmployee.department)
+            .set(employeeTable.companyId, newEmployee.companyId)
+            .returning(employeeTable.id)
+            .fetchOne()
+
+        return id?.get(employeeTable.id)
+    }
+
+    fun findEmployeeByLoginParams(loginParams: LoginParams): LoggedInEmployeeInfo? {
+        val loggedInEmployeeInfo = sql.select(employeeTable.id, employeeTable.firstName,
+                                            employeeTable.lastName, employeeTable.companyId,
+                                            employeeTable.role)
             .from(employeeTable)
-            .where(employeeTable.id.eq(id))
+            .where(employeeTable.id.eq(loginParams.id))
+            .and(employeeTable.firstName.eq(loginParams.firstName))
+            .and(employeeTable.lastName.eq(loginParams.lastName))
             .fetchOne(employeeMapper)
 
-        return employee
+        return loggedInEmployeeInfo
     }
 }
