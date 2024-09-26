@@ -76,7 +76,7 @@ class FeedbackDao(private val sql: DSLContext) {
         return feedbackFromDb
     }
 
-    fun changeToReviewedOrUnreviewed(feedbackId: Int, companyId: Int, reviewed: Boolean): Int {
+    fun changeReviewedStatus(feedbackId: Int, companyId: Int, reviewed: Boolean): Int {
         return sql.update(feedbackTable)
             .set(feedbackTable.reviewed, reviewed)
             .where(feedbackTable.id.eq(feedbackId))
