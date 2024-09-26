@@ -31,7 +31,6 @@ class ResponseService(private val responseDao: ResponseDao, private val feedback
     }
 
     fun submitResponse(feedbackId: Int, reviewerId: Int, response: String, companyId: Int): Boolean {
-
         validateResponse(feedbackId, companyId, response)
 
         val responseForSubmission = ResponseForSubmission(
