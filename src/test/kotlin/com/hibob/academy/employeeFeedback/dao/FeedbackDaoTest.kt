@@ -12,55 +12,89 @@ import org.springframework.beans.factory.annotation.Autowired
 class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
     private val feedbackDao = FeedbackDao(sql)
     private val feedbackTable = FeedbackTable.instance
+    private val employeeTable = EmployeeTable.instance
     private val companyId = 1
 
     @Test
     fun `Submit a new feedback successfully`() {
+        val filterRequest = FeedbackFilterBy(null, null, null)
         val newFeedback  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED,
-                                                    "I'm very happy at my workspace!")
+            "I'm very happy at my workspace!")
 
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
         val feedbackFromDb = feedbackDao.getFeedbackById(feedbackId, companyId)
 
         val expected = listOf(FeedbackInfo(feedbackId, newFeedback.employeeId, newFeedback.companyId,
-                                feedbackFromDb!!.dateOfFeedback, newFeedback.anonymity, false,
-                                newFeedback.feedback))
+            feedbackFromDb!!.dateOfFeedback, newFeedback.anonymity, false,
+            newFeedback.feedback))
 
-        val actual = feedbackDao.viewAllSubmittedFeedback(newFeedback.companyId)
+        val actual = feedbackDao.viewAllSubmittedFeedback(filterRequest, newFeedback.companyId)
         assertEquals(expected, actual)
     }
 
     @Test
-    fun `View all submitted feedback`(){
+    fun `View all submitted feedback not filtered`(){
+        val filterRequest = FeedbackFilterBy(null, null, null)
+
         val newFeedback1  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED,
-                                                    "I'm very happy at my workspace!")
+            "I'm very happy at my workspace!")
 
         val feedbackId1 = feedbackDao.submitFeedback(newFeedback1)
         val feedbackFromDb1 = feedbackDao.getFeedbackById(feedbackId1, companyId)
 
         val feedback1 = FeedbackInfo(feedbackId1, newFeedback1.employeeId, newFeedback1.companyId,
-                                    feedbackFromDb1!!.dateOfFeedback, newFeedback1.anonymity,
-                                    false, newFeedback1.feedback)
+            feedbackFromDb1!!.dateOfFeedback, newFeedback1.anonymity,
+            false, newFeedback1.feedback)
 
         val newFeedback2  = FeedbackForSubmission(13, companyId, AnonymityType.IDENTIFIED,
-                                                "I'm treated very well")
+            "I'm treated very well")
 
         val feedbackId2 = feedbackDao.submitFeedback(newFeedback2)
         val feedbackFromDb2 = feedbackDao.getFeedbackById(feedbackId2, companyId)
 
         val feedback2 = FeedbackInfo(feedbackId2, newFeedback2.employeeId, newFeedback2.companyId,
-                                        feedbackFromDb2!!.dateOfFeedback, newFeedback2.anonymity,
-                                        false, newFeedback2.feedback)
+            feedbackFromDb2!!.dateOfFeedback, newFeedback2.anonymity,
+            false, newFeedback2.feedback)
 
         val expected = listOf(feedback1, feedback2)
-        val actual = feedbackDao.viewAllSubmittedFeedback(companyId)
+        val actual = feedbackDao.viewAllSubmittedFeedback(filterRequest, companyId)
         assertEquals(expected, actual)
     }
 
     @Test
     fun `View feedbacks of company without any feedbacks`(){
-        val actual = feedbackDao.viewAllSubmittedFeedback(companyId)
+        val filterRequest = FeedbackFilterBy(null, null, null)
+        val actual = feedbackDao.viewAllSubmittedFeedback(filterRequest, 4)
         assertEquals(emptyList<FeedbackInfo>(), actual)
+    }
+
+    @Test
+    fun `view feedbacks filtered by type of anonymity`(){
+        val filterRequest = FeedbackFilterBy(null, null, AnonymityType.ANONYMOUS)
+
+        val newFeedback1  = FeedbackForSubmission(12, companyId, AnonymityType.ANONYMOUS,
+            "I'm very happy at my workspace!")
+
+        val feedbackId1 = feedbackDao.submitFeedback(newFeedback1)
+        val feedbackFromDb1 = feedbackDao.getFeedbackById(feedbackId1, companyId)
+
+        val feedback1 = FeedbackInfo(feedbackId1, newFeedback1.employeeId, newFeedback1.companyId,
+            feedbackFromDb1!!.dateOfFeedback, newFeedback1.anonymity,
+            false, newFeedback1.feedback)
+
+        val newFeedback2  = FeedbackForSubmission(13, companyId, AnonymityType.IDENTIFIED,
+            "I'm treated very well")
+
+        val feedbackId2 = feedbackDao.submitFeedback(newFeedback2)
+        val feedbackFromDb2 = feedbackDao.getFeedbackById(feedbackId2, companyId)
+
+        val feedback2 = FeedbackInfo(feedbackId2, newFeedback2.employeeId, newFeedback2.companyId,
+            feedbackFromDb2!!.dateOfFeedback, newFeedback2.anonymity,
+            false, newFeedback2.feedback)
+
+        val expected = listOf(feedback1)
+        val actual = feedbackDao.viewAllSubmittedFeedback(filterRequest, companyId)
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -155,6 +189,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
     @AfterEach
     fun cleanup() {
+        sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
         sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
     }
 }

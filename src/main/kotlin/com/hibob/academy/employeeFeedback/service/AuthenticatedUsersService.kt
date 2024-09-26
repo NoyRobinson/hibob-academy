@@ -1,5 +1,7 @@
 package com.hibob.academy.employeeFeedback.service
 
+import com.hibob.academy.employeeFeedback.dao.AnonymityType
+import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertStringToAnonymityType
 import com.hibob.academy.employeeFeedback.dao.RoleType
 import com.hibob.academy.employeeFeedback.dao.RoleType.Companion.convertStringToRoleType
 import jakarta.ws.rs.NotAuthorizedException

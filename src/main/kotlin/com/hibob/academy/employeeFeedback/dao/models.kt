@@ -24,6 +24,9 @@ data class ResponseForSubmission(val feedbackId: Int, val reviewerId: Int, val r
 
 data class ResponseSubmitRequest(val response: String)
 
+data class FeedbackFilterRequest(val date: Date?, val department: String?, val anonymity: String?)
+
+data class FeedbackFilterBy(val date: Date?, val department: String?, val anonymity: AnonymityType?)
 
 enum class RoleType {
     HR, ADMIN, EMPLOYEE;
@@ -46,17 +49,12 @@ enum class AnonymityType {
 
         fun convertStringToAnonymityType(anonymity: String): AnonymityType =
             valueOf(anonymity.toUpperCase())
-    }
-}
 
-enum class FilterType {
-    DATE, DEPARTMENT, ANONYMITY_STATUS;
+        fun convertToAnonymityType(anonymity: String?): AnonymityType? {
+            anonymity?.let{
+                return convertStringToAnonymityType(anonymity)
 
-    companion object {
-        fun convertFilterTypeToString(filterBy: FilterType): String =
-            filterBy.toString()
-
-        fun convertStringToAnonymityType(filterBy: String): FilterType =
-            valueOf(filterBy.toUpperCase())
+            } ?: return null
+        }
     }
 }
