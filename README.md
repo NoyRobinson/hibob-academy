@@ -1,5 +1,5 @@
-- [Product Specification - Simple Employee Feedback System](#product-specification---simple-employee-feedback-system)
-- [HLD - Employee Feedback System](#hld---employee-feedback-system)
+[Product Specification - Simple Employee Feedback System](#product-specification---simple-employee-feedback-system)
+[HLD - Employee Feedback System](#hld---employee-feedback-system)
 
 # **Product Specification - Simple Employee Feedback System**
 
@@ -69,29 +69,29 @@ specs
 
 ## **API’s**
 - **POST**
-  - **Login** ✔️
+  - **Login**
     
     ![11](https://github.com/user-attachments/assets/5c7df5a0-56d9-4f57-b409-d985382388f8)       ![12](https://github.com/user-attachments/assets/946f7357-b479-452a-8109-0d2566efe0e6)
 
-  - **Submit feedback** ✔️
+  - **Submit feedback**
     
     ![13](https://github.com/user-attachments/assets/a81b3c3e-f231-43b2-894d-52dd8d501cd4)       ![14](https://github.com/user-attachments/assets/45eacbf6-3370-446a-ad9f-9db3ac51b1df)
 
-  - **Submit response** ✔️
+  - **Submit response**
     
     ![15](https://github.com/user-attachments/assets/5b67a551-119d-4399-8a39-05da3b159dd3)
 
 - **GET**
-  - **View all submitted feedback** ✔️
+  - **View all submitted feedback**
     
     ![16](https://github.com/user-attachments/assets/f323855a-ada5-41fc-a17e-d4ed31c423fc)
 
-  - **Check status** ✔️
+  - **Check status**
     
     ![17](https://github.com/user-attachments/assets/1431fae1-6f4a-47fe-bf54-03dbef71dc29)
 
 - **PUT**
-  - **Mark reviewed/ unreviewed** ✔️
+  - **Mark reviewed/ unreviewed**
     
     ![18](https://github.com/user-attachments/assets/08bab99c-aed1-4f41-8736-dab0de91233b)
 
@@ -155,20 +155,19 @@ Employee A can’t review the feedback employee B left unless employee A is an a
 
 ## **Time table**
 **Sunday**
-- HLD ✔️
+- HLD
 
 **Monday - Tuesday**
-- Migrations - create all tables, add data to employee table ✔️
-- Write data classes ✔️
-- Resource - write Api’s of Employee Feedback Submission ✔️
-- Resource - write Api’s of feedback Viewing ✔️
-- Service - write a service file for Employee Feedback Submission + tests ✔️
-- Service - write a service file for feedback Viewing + tests ✔️
-- Dao - write a dao file for Employee Feedback Submission + tests ✔️
-- Dao - write a dao file for feedback Viewing + tests ✔️
-- Login ✔️
+- Migrations - create all tables, add data to employee table.
+- Write data classes.
+- Resource - write Api’s of Employee Feedback Submission.
+- Resource - write Api’s of feedback Viewing.
+- Service - write a service file for Employee Feedback Submission + tests.
+- Service - write a service file for feedback Viewing + tests.
+- Dao - write a dao file for Employee Feedback Submission + tests.
+- Dao - write a dao file for feedback Viewing + tests.
+- Login.
 
 **Wednesday - Thursday**
-- Add feedback filtering feature- Resource, service, dao, tests. ✔️
-- Add HR response feature- Resource, service, dao, tests. ✔️
-
+- Add feedback filtering feature- Resource, service, dao, tests.
+- Add HR response feature- Resource, service, dao, tests.
