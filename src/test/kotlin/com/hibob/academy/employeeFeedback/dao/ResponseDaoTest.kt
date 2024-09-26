@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired
 @BobDbTest
 class ResponseDaoTest @Autowired constructor(private val sql: DSLContext) {
     private val responseDao = ResponseDao(sql)
-    private val responseTable = ResponseTable.instance
 
     @Test
     fun `Submit a new response successfully`() {

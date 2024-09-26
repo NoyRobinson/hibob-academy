@@ -36,7 +36,7 @@ class FeedbackServiceTest{
 
     @Test
     fun `View all submitted feedback successfully`(){
-        val filterRequest = FeedbackFilterBy(null, null, null)
+        val filterRequest = FeedbackFilterInputs(null, null, null)
         val expectedFeedbackInfo = FeedbackInfo(1, 12, 1, Date.valueOf("2024-09-24"),
                                                 AnonymityType.IDENTIFIED,false,
                                                 "I'm very happy with my workspace, i'm treated well")
@@ -51,15 +51,15 @@ class FeedbackServiceTest{
 
     @Test
     fun `View all submitted feedback filtered by department and anonymous should throw an exception`() {
-        val filterRequest = FeedbackFilterBy(null, "dev", AnonymityType.ANONYMOUS)
+        val filterRequest = FeedbackFilterInputs(null, "dev", AnonymityType.ANONYMOUS)
         assertThrows<BadRequestException> { feedbackService.viewAllSubmittedFeedback(filterRequest, 1) }
     }
 
     @Test
     fun `view status of one of my feedbacks successfully`(){
         val expectedFeedback = FeedbackInfo(20, 12, 1,
-            Date.valueOf("2024-09-24"), AnonymityType.IDENTIFIED,false,
-            "I'm very happy with my workspace, i'm treated well")
+                                    Date.valueOf("2024-09-24"), AnonymityType.IDENTIFIED,false,
+                                    "I'm very happy with my workspace, i'm treated well")
         whenever(feedbackDao.getFeedbackById(20, 1)).thenReturn(expectedFeedback)
         val feedbackStatus = FeedbackStatusData(1,12,20)
         whenever(feedbackDao.viewStatusOfMyFeedback(feedbackStatus)).thenReturn(mapOf(20 to false))
@@ -72,8 +72,8 @@ class FeedbackServiceTest{
     @Test
     fun `viewing status of an anonymous feedback should throw an exception`(){
         val expectedFeedback = FeedbackInfo(20, null, 1,
-            Date.valueOf("2024-09-24"), AnonymityType.ANONYMOUS,false,
-            "I'm very happy with my workspace, i'm treated well")
+                                            Date.valueOf("2024-09-24"), AnonymityType.ANONYMOUS,false,
+                                              "I'm very happy with my workspace, i'm treated well")
         whenever(feedbackDao.getFeedbackById(20, 1)).thenReturn(expectedFeedback)
         assertThrows<BadRequestException> { feedbackService.viewStatusOfMyFeedback(12, 1, 20) }
     }
@@ -81,8 +81,7 @@ class FeedbackServiceTest{
     @Test
     fun `Try view status of a feedback that doesnt exist should throw an exception`(){
         whenever(feedbackDao.getFeedbackById(100, 1)).thenReturn(null)
-        assertThrows<NotFoundException> { feedbackService.viewStatusOfMyFeedback(12,
-            1, 100) }
+        assertThrows<NotFoundException> { feedbackService.viewStatusOfMyFeedback(12, 1, 100) }
     }
 
     @Test

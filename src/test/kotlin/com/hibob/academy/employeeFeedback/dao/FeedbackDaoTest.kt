@@ -12,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired
 class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
     private val feedbackDao = FeedbackDao(sql)
     private val feedbackTable = FeedbackTable.instance
-    private val employeeTable = EmployeeTable.instance
     private val companyId = 1
 
     @Test
     fun `Submit a new feedback successfully`() {
-        val filterRequest = FeedbackFilterBy(null, null, null)
+        val filterRequest = FeedbackFilterInputs(null, null, null)
         val newFeedback  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED,
             "I'm very happy at my workspace!")
 
@@ -34,7 +33,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `View all submitted feedback not filtered`(){
-        val filterRequest = FeedbackFilterBy(null, null, null)
+        val filterRequest = FeedbackFilterInputs(null, null, null)
 
         val newFeedback1  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED,
             "I'm very happy at my workspace!")
@@ -63,14 +62,14 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
     @Test
     fun `View feedbacks of company without any feedbacks`(){
-        val filterRequest = FeedbackFilterBy(null, null, null)
+        val filterRequest = FeedbackFilterInputs(null, null, null)
         val actual = feedbackDao.viewAllSubmittedFeedback(filterRequest, 4)
         assertEquals(emptyList<FeedbackInfo>(), actual)
     }
 
     @Test
     fun `view feedbacks filtered by type of anonymity`(){
-        val filterRequest = FeedbackFilterBy(null, null, AnonymityType.ANONYMOUS)
+        val filterRequest = FeedbackFilterInputs(null, null, AnonymityType.ANONYMOUS)
 
         val newFeedback1  = FeedbackForSubmission(12, companyId, AnonymityType.ANONYMOUS,
             "I'm very happy at my workspace!")
@@ -181,7 +180,6 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
             "I'm very happy at my workspace!")
 
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
-        val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
         val actual = feedbackDao.changeReviewedStatus(feedbackId, companyId, true)
 
         assertEquals(1, actual)
@@ -189,7 +187,6 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
 
     @AfterEach
     fun cleanup() {
-        sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
         sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
     }
 }
