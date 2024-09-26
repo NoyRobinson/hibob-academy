@@ -1,6 +1,7 @@
 package com.hibob.academy.employeeFeedback.resource
 
 import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertStringToAnonymityType
+import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertToAnonymityType
 import com.hibob.academy.employeeFeedback.dao.FeedbackFilterBy
 import com.hibob.academy.employeeFeedback.dao.FeedbackFilterRequest
 import com.hibob.academy.employeeFeedback.dao.FeedbackSubmitRequest
@@ -41,7 +42,7 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
         val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
         val role = authenticatedUsersService.getLoggedInRole(request)
         val validRoles = listOf(RoleType.ADMIN, RoleType.HR)
-        val anonymity = authenticatedUsersService.convertToAnonymityType(filterBy.anonymity)
+        val anonymity = convertToAnonymityType(filterBy.anonymity)
 
         authenticatedUsersService.validateRole(role, validRoles)
 
