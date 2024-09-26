@@ -68,7 +68,7 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
         val validRoles = listOf(RoleType.HR)
 
         authenticatedUsersService.validateRole(role, validRoles)
-        feedbackService.changeToReviewedOrUnreviewed(feedbackId, companyId, employeeId, reviewed)
+        feedbackService.changeReviewedStatus(feedbackId, companyId, employeeId, reviewed)
 
         return Response.ok("Changed successfully").build()
     }
