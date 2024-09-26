@@ -5,7 +5,6 @@ import org.jooq.RecordMapper
 import org.jooq.Record
 import org.springframework.stereotype.Repository
 
-
 @Repository
 class FeedbackDao(private val sql: DSLContext) {
     private val feedbackTable = FeedbackTable.instance
@@ -17,7 +16,7 @@ class FeedbackDao(private val sql: DSLContext) {
             record[feedbackTable.employeeId],
             record[feedbackTable.companyId],
             record[feedbackTable.dateOfFeedback],
-            AnonymityType.convertStringToAnonymityType(record[feedbackTable.anonymity]),
+            AnonymityType.convertToAnonymityType(record[feedbackTable.anonymity]),
             record[feedbackTable.reviewed],
             record[feedbackTable.feedback]
         )
@@ -33,6 +32,32 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetchOne()
 
         return id!!.get(feedbackTable.id)
+    }
+
+    fun viewAllSubmittedFeedback(filterRequest: FeedbackFilterInputs, companyId: Int): List<FeedbackInfo> {
+        val query = sql.select(feedbackTable.id, feedbackTable.employeeId,
+                                feedbackTable.companyId, feedbackTable.dateOfFeedback,
+                                feedbackTable.anonymity, feedbackTable.reviewed,
+                                feedbackTable.feedback)
+
+                        .from(feedbackTable)
+                        .leftJoin(employeeTable)
+                        .on(employeeTable.id.eq(feedbackTable.employeeId))
+                        .where(feedbackTable.companyId.eq(companyId))
+
+        filterRequest.department?.let{
+            query.and(employeeTable.department.eq(filterRequest.department))
+        }
+
+        filterRequest.date?.let{
+            query.and(feedbackTable.dateOfFeedback.eq(filterRequest.date))
+        }
+
+        filterRequest.anonymity?.let{
+            query.and(feedbackTable.anonymity.eq(AnonymityType.convertAnonymityTypeToString(filterRequest.anonymity)))
+        }
+
+        return query.fetch(feedbackMapper)
     }
 
     fun viewStatusOfMyFeedback(feedbackStatus: FeedbackStatusData): Map<Int, Boolean> {
@@ -73,30 +98,5 @@ class FeedbackDao(private val sql: DSLContext) {
             .where(feedbackTable.id.eq(feedbackId))
             .and(feedbackTable.companyId.eq(companyId))
             .execute()
-    }
-
-    fun viewAllSubmittedFeedback(filterRequest: FeedbackFilterBy, companyId: Int): List<FeedbackInfo> {
-        val query = sql.select(feedbackTable.id, feedbackTable.employeeId,
-                                feedbackTable.companyId, feedbackTable.dateOfFeedback,
-                                feedbackTable.anonymity, feedbackTable.reviewed,
-                                feedbackTable.feedback)
-                        .from(feedbackTable)
-                        .leftJoin(employeeTable)
-                        .on(employeeTable.id.eq(feedbackTable.employeeId))
-                        .where(feedbackTable.companyId.eq(companyId))
-
-        filterRequest.department?.let{
-            query.and(employeeTable.department.eq(filterRequest.department))
-        }
-
-        filterRequest.date?.let{
-            query.and(feedbackTable.dateOfFeedback.eq(filterRequest.date))
-        }
-
-        filterRequest.anonymity?.let{
-            query.and(feedbackTable.anonymity.eq(AnonymityType.convertAnonymityTypeToString(filterRequest.anonymity)))
-        }
-
-        return query.fetch(feedbackMapper)
     }
 }

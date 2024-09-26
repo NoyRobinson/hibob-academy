@@ -26,15 +26,12 @@ data class ResponseSubmitRequest(val response: String)
 
 data class FeedbackFilterRequest(val date: Date?, val department: String?, val anonymity: String?)
 
-data class FeedbackFilterBy(val date: Date?, val department: String?, val anonymity: AnonymityType?)
+data class FeedbackFilterInputs(val date: Date?, val department: String?, val anonymity: AnonymityType?)
 
 enum class RoleType {
     HR, ADMIN, EMPLOYEE;
 
     companion object {
-        fun convertRoleTypeToString(role: RoleType): String =
-            role.toString()
-
         fun convertStringToRoleType(role: String): RoleType =
             valueOf(role.toUpperCase())
     }
@@ -47,12 +44,12 @@ enum class AnonymityType {
         fun convertAnonymityTypeToString(anonymity: AnonymityType): String =
             anonymity.toString()
 
-        fun convertStringToAnonymityType(anonymity: String): AnonymityType =
+        fun convertToAnonymityType(anonymity: String): AnonymityType =
             valueOf(anonymity.toUpperCase())
 
-        fun convertToAnonymityType(anonymity: String?): AnonymityType? {
+        fun convertFromString(anonymity: String?): AnonymityType? {
             anonymity?.let{
-                return convertStringToAnonymityType(anonymity)
+                return convertToAnonymityType(anonymity)
 
             } ?: return null
         }

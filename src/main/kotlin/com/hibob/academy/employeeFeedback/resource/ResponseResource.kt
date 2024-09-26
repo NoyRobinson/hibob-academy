@@ -1,7 +1,5 @@
 package com.hibob.academy.employeeFeedback.resource
 
-import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertStringToAnonymityType
-import com.hibob.academy.employeeFeedback.dao.FeedbackSubmitRequest
 import com.hibob.academy.employeeFeedback.dao.ResponseSubmitRequest
 import com.hibob.academy.employeeFeedback.dao.RoleType
 import com.hibob.academy.employeeFeedback.service.AuthenticatedUsersService

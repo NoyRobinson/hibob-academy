@@ -19,7 +19,7 @@ class AuthenticationFilter: ContainerRequestFilter {
     }
 
     override fun filter(requestContext: ContainerRequestContext) {
-        if(requestContext.uriInfo.path == LOGIN_PATH) return
+        if (requestContext.uriInfo.path == LOGIN_PATH) return
 
         val cookies = requestContext.cookies
         val jwtCookie = cookies[COOKIE_NAME]?.value
@@ -28,7 +28,6 @@ class AuthenticationFilter: ContainerRequestFilter {
     }
 
     fun verify(cookie: String?, requestContext: ContainerRequestContext) {
-
         if (cookie.isNullOrEmpty())
             throw WebApplicationException(
                 Response.status(Response.Status.UNAUTHORIZED).entity("Invalid Cookie").build()

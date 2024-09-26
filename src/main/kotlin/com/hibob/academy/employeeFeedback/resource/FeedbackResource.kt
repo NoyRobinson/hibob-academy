@@ -1,11 +1,6 @@
 package com.hibob.academy.employeeFeedback.resource
 
-import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertStringToAnonymityType
-import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertToAnonymityType
-import com.hibob.academy.employeeFeedback.dao.FeedbackFilterBy
-import com.hibob.academy.employeeFeedback.dao.FeedbackFilterRequest
-import com.hibob.academy.employeeFeedback.dao.FeedbackSubmitRequest
-import com.hibob.academy.employeeFeedback.dao.RoleType
+import com.hibob.academy.employeeFeedback.dao.*
 import com.hibob.academy.employeeFeedback.service.AuthenticatedUsersService
 import jakarta.ws.rs.core.Response
 import com.hibob.academy.employeeFeedback.service.FeedbackService
@@ -26,7 +21,7 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
     fun submitFeedback(@RequestBody feedbackRequest: FeedbackSubmitRequest, @Context request: ContainerRequestContext): Response {
         val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
         val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
-        val anonymity = convertStringToAnonymityType(feedbackRequest.anonymity)
+        val anonymity = AnonymityType.convertToAnonymityType(feedbackRequest.anonymity)
 
         val success = feedbackService.submitFeedback(employeeId, companyId, anonymity, feedbackRequest.feedback)
 
@@ -38,15 +33,14 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
     @GET
     @Path("/allFeedback")
     fun viewFeedback(@RequestBody filterBy: FeedbackFilterRequest, @Context request: ContainerRequestContext): Response {
-        val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
         val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
         val role = authenticatedUsersService.getLoggedInRole(request)
         val validRoles = listOf(RoleType.ADMIN, RoleType.HR)
-        val anonymity = convertToAnonymityType(filterBy.anonymity)
+        val anonymity = AnonymityType.convertFromString(filterBy.anonymity)
 
         authenticatedUsersService.validateRole(role, validRoles)
 
-        val filter = FeedbackFilterBy(filterBy.date, filterBy.department, anonymity)
+        val filter = FeedbackFilterInputs(filterBy.date, filterBy.department, anonymity)
         val allFeedback = feedbackService.viewAllSubmittedFeedback(filter, companyId)
 
         return Response.ok(allFeedback).build()
