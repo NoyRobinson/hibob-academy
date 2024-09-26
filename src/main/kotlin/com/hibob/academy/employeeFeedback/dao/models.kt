@@ -44,12 +44,12 @@ enum class AnonymityType {
         fun convertAnonymityTypeToString(anonymity: AnonymityType): String =
             anonymity.toString()
 
-        fun convertToAnonymityType(anonymity: String): AnonymityType =
+        fun fromString(anonymity: String): AnonymityType =
             valueOf(anonymity.toUpperCase())
 
         fun convertFromString(anonymity: String?): AnonymityType? {
             anonymity?.let{
-                return convertToAnonymityType(anonymity)
+                return fromString(anonymity)
 
             } ?: return null
         }

@@ -16,7 +16,7 @@ class FeedbackDao(private val sql: DSLContext) {
             record[feedbackTable.employeeId],
             record[feedbackTable.companyId],
             record[feedbackTable.dateOfFeedback],
-            AnonymityType.convertToAnonymityType(record[feedbackTable.anonymity]),
+            AnonymityType.fromString(record[feedbackTable.anonymity]),
             record[feedbackTable.reviewed],
             record[feedbackTable.feedback]
         )
