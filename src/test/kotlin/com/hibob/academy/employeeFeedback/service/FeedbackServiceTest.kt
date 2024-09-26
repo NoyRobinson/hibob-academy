@@ -41,7 +41,6 @@ class FeedbackServiceTest{
                                                 AnonymityType.IDENTIFIED,false,
                                                 "I'm very happy with my workspace, i'm treated well")
 
-
         whenever(feedbackDao.viewAllSubmittedFeedback(filterRequest, 1))
             .thenReturn(listOf(expectedFeedbackInfo))
 

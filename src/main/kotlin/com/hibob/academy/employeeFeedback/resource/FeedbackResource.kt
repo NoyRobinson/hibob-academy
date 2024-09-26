@@ -77,5 +77,4 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
 
         return Response.ok("Changed successfully").build()
     }
-
 }
