@@ -1,5 +1,7 @@
 package com.hibob.academy.employeeFeedback.service
 
+import com.hibob.academy.employeeFeedback.dao.AnonymityType
+import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertStringToAnonymityType
 import com.hibob.academy.employeeFeedback.dao.RoleType
 import com.hibob.academy.employeeFeedback.dao.RoleType.Companion.convertStringToRoleType
 import jakarta.ws.rs.NotAuthorizedException
@@ -34,5 +36,12 @@ class AuthenticatedUsersService {
 
     fun validateRole(role: RoleType, validRoles: List<RoleType>) {
         if (!validRoles.contains(role)) throw NotAuthorizedException("Unauthorized role")
+    }
+
+    fun convertToAnonymityType(anonymity: String?): AnonymityType? {
+        anonymity?.let{
+            return convertStringToAnonymityType(anonymity)
+
+        } ?: return null
     }
 }

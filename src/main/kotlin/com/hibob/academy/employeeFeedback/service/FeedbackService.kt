@@ -27,6 +27,13 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
             throw NotAuthorizedException("Unauthorized to view this feedback status")
     }
 
+    fun isDepartmentNotNullWithAnonymous(filterRequest: FeedbackFilterBy) {
+        filterRequest.department?.let {
+            if (filterRequest.anonymity == AnonymityType.ANONYMOUS)
+                throw BadRequestException("Can't filter by department for anonymous feedback")
+        }
+    }
+
     fun submitFeedback(employeeId: Int, companyId: Int, anonymity: AnonymityType, feedback: String): Boolean {
         var employeeIdForFeedback: Int? = employeeId
 
@@ -47,8 +54,10 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
         return true
     }
 
-    fun viewAllSubmittedFeedback(employeeId: Int, companyId: Int): List<FeedbackInfo> {
-        return feedbackDao.viewAllSubmittedFeedback(companyId)
+    fun viewAllSubmittedFeedback(filterRequest: FeedbackFilterBy, companyId: Int): List<FeedbackInfo> {
+        isDepartmentNotNullWithAnonymous(filterRequest)
+
+        return feedbackDao.viewAllSubmittedFeedback(filterRequest, companyId)
     }
 
     fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int, feedbackId: Int?): Map<Int, Boolean> {

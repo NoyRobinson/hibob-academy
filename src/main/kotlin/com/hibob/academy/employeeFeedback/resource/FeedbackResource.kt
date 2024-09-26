@@ -1,6 +1,8 @@
 package com.hibob.academy.employeeFeedback.resource
 
 import com.hibob.academy.employeeFeedback.dao.AnonymityType.Companion.convertStringToAnonymityType
+import com.hibob.academy.employeeFeedback.dao.FeedbackFilterBy
+import com.hibob.academy.employeeFeedback.dao.FeedbackFilterRequest
 import com.hibob.academy.employeeFeedback.dao.FeedbackSubmitRequest
 import com.hibob.academy.employeeFeedback.dao.RoleType
 import com.hibob.academy.employeeFeedback.service.AuthenticatedUsersService
@@ -34,15 +36,17 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
 
     @GET
     @Path("/allFeedback")
-    fun viewFeedback(@Context request: ContainerRequestContext): Response {
+    fun viewFeedback(@RequestBody filterBy: FeedbackFilterRequest, @Context request: ContainerRequestContext): Response {
         val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
         val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
         val role = authenticatedUsersService.getLoggedInRole(request)
         val validRoles = listOf(RoleType.ADMIN, RoleType.HR)
+        val anonymity = authenticatedUsersService.convertToAnonymityType(filterBy.anonymity)
 
         authenticatedUsersService.validateRole(role, validRoles)
 
-        val allFeedback = feedbackService.viewAllSubmittedFeedback(employeeId, companyId)
+        val filter = FeedbackFilterBy(filterBy.date, filterBy.department, anonymity)
+        val allFeedback = feedbackService.viewAllSubmittedFeedback(filter, companyId)
 
         return Response.ok(allFeedback).build()
     }
