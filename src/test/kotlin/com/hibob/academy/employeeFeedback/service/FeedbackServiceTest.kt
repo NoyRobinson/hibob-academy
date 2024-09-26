@@ -93,15 +93,15 @@ class FeedbackServiceTest{
 
     @Test
     fun `Change to reviewed should update the field of reviewed successfully`(){
-        whenever(feedbackDao.changeToReviewedOrUnreviewed(20, 1, true)).thenReturn(1)
-        feedbackService.changeToReviewedOrUnreviewed(20, 1, 12, true)
-        verify(feedbackDao).changeToReviewedOrUnreviewed(20, 1, true)
+        whenever(feedbackDao.changeReviewedStatus(20, 1, true)).thenReturn(1)
+        feedbackService.changeReviewedStatus(20, 1, 12, true)
+        verify(feedbackDao).changeReviewedStatus(20, 1, true)
     }
 
     @Test
     fun `Change to reviewed should return an exception if the feedback doesnt exist`(){
-        whenever(feedbackDao.changeToReviewedOrUnreviewed(100, 1, true)).thenReturn(0)
-        assertThrows<NotFoundException> { feedbackService.changeToReviewedOrUnreviewed(100, 1,
+        whenever(feedbackDao.changeReviewedStatus(100, 1, true)).thenReturn(0)
+        assertThrows<NotFoundException> { feedbackService.changeReviewedStatus(100, 1,
                                         14, true) }
     }
 }
