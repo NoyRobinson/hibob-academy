@@ -60,8 +60,8 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/feedbackId/{feedbackId}/markReviewedOrUnreviewed")
-    fun markReviewedOrUnreviewed(@RequestBody reviewed: Boolean, @PathParam("feedbackId") feedbackId: Int, @Context request: ContainerRequestContext): Response {
+    @Path("/feedbackId/{feedbackId}/changeReviewedStatus")
+    fun changeReviewedStatus(@RequestBody reviewed: Boolean, @PathParam("feedbackId") feedbackId: Int, @Context request: ContainerRequestContext): Response {
         val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
         val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
         val role = authenticatedUsersService.getLoggedInRole(request)
