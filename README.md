@@ -116,17 +116,17 @@ specs
     ![25](https://github.com/user-attachments/assets/283c9354-5b7a-43fa-bf52-c8694843ccf9)
 
 ## **Tables**
-![30](https://github.com/user-attachments/assets/c16ba707-c18c-4779-a06f-4ae340a46488) < br / >
+![30](https://github.com/user-attachments/assets/c16ba707-c18c-4779-a06f-4ae340a46488)
   
-![31](https://github.com/user-attachments/assets/659fefeb-e691-422b-8ebd-a5a8d9202f59) < br / >
+![31](https://github.com/user-attachments/assets/659fefeb-e691-422b-8ebd-a5a8d9202f59)
   
-![32](https://github.com/user-attachments/assets/3709265c-2898-4bec-9c56-415f797171a0) < br / >
+![32](https://github.com/user-attachments/assets/3709265c-2898-4bec-9c56-415f797171a0)
   
-![33](https://github.com/user-attachments/assets/7be35c0f-40ee-431a-bc66-cdbbc1398158) < br / >
+![33](https://github.com/user-attachments/assets/7be35c0f-40ee-431a-bc66-cdbbc1398158)
   
-![34](https://github.com/user-attachments/assets/6da187a9-2667-4d95-94e4-583a8adba682) < br / >
+![34](https://github.com/user-attachments/assets/6da187a9-2667-4d95-94e4-583a8adba682) 
   
-![35](https://github.com/user-attachments/assets/e9e91ad4-fb4b-4f7f-bfcf-2d62e88af7b5) < br / >
+![35](https://github.com/user-attachments/assets/e9e91ad4-fb4b-4f7f-bfcf-2d62e88af7b5)
 
 ## **Validation**
 Feedback and response length should be a minimum of 30 characters and a maximum of 500 characters.
