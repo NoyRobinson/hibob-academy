@@ -6,11 +6,13 @@ Employees can provide feedback on their work experience, either anonymously or i
 
 ## **Objectives**
   - **Empower Employees:**
-    Provide a platform for employees to share their experiences and feedback securely and anonymously if desired.
+    - Provide a platform for employees to share their experiences and feedback securely and anonymously if desired.
+      
   - **Streamline Feedback Management:**
-    Enable HR and Admin to view, filter, and respond to feedback efficiently.
+    - Enable HR and Admin to view, filter, and respond to feedback efficiently.
+      
   - **Improve Employee Satisfaction:**
-    Foster a culture of transparency and responsiveness by addressing employee concerns promptly.
+    - Foster a culture of transparency and responsiveness by addressing employee concerns promptly.
 
 ## **Key Features**
   1. **Employee Feedback Submission**
