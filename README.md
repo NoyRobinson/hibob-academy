@@ -1,7 +1,7 @@
 - [Product Specification: Simple Employee Feedback System](#product-specification---simple-employee-feedback-system)
 - [HLD: Employee Feedback System](#hld-employee-feedback-system)
 
-# **Product Specification: Simple Employee Feedback System**
+# **Product Specification - Simple Employee Feedback System**
 
 ## **Overview**
 The Simple Employee Feedback System is a backend service designed to facilitate the submission, review, and response to employee feedback within an organization. 
