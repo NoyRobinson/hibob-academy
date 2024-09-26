@@ -1,5 +1,5 @@
-[Product Specification: Simple Employee Feedback System](#product-specification:-simple-employee-feedback-system)
-[HLD: Employee Feedback System](#hld:-employee-feedback-system)
+[Product Specification: Simple Employee Feedback System](#product-specification---simple-employee-feedback-system)
+[HLD: Employee Feedback System](#hld---employee-feedback-system)
 
 # **Product Specification: Simple Employee Feedback System**
 
@@ -60,7 +60,7 @@ Employees can provide feedback on their work experience, either anonymously or i
 This system will allow employees to provide feedback on their work experience, either anonymously or identified. In addition, admins and HR can review the feedback left and filter them by three categories. HR can also respond to feedback which isn’t anonymous.
 
 ## **Relevant docs (specs/design)**
-[Product Specification: Simple Employee Feedback System](#product-specification:-simple-employee-feedback-system)
+[Product Specification: Simple Employee Feedback System](#product-specification----simple-employee-feedback-system)
 
 specs
 
