@@ -1,3 +1,6 @@
+[Product Specification: Simple Employee Feedback System](#product-specification:-simple-employee-feedback-system)
+[HLD: Employee Feedback System](#hld:-employee-feedback-system)
+
 # **Product Specification: Simple Employee Feedback System**
 
 ## **Overview**
@@ -48,7 +51,6 @@ Employees can provide feedback on their work experience, either anonymously or i
 **Data Security:** Ensuring that feedback remains confidential, especially for anonymous submissions, is critical.
 
 
-
 -------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -68,36 +70,58 @@ specs
 ## **API’s**
 - **POST**
   - **Login** ✔️
+    ![11](https://github.com/user-attachments/assets/5c7df5a0-56d9-4f57-b409-d985382388f8)
+    
+    ![12](https://github.com/user-attachments/assets/946f7357-b479-452a-8109-0d2566efe0e6)
 
   - **Submit feedback** ✔️
+    ![13](https://github.com/user-attachments/assets/a81b3c3e-f231-43b2-894d-52dd8d501cd4)
+
+    ![14](https://github.com/user-attachments/assets/45eacbf6-3370-446a-ad9f-9db3ac51b1df)
 
   - **Submit response** ✔️
+    ![15](https://github.com/user-attachments/assets/5b67a551-119d-4399-8a39-05da3b159dd3)
 
 - **GET**
   - **View all submitted feedback** ✔️
+    ![16](https://github.com/user-attachments/assets/f323855a-ada5-41fc-a17e-d4ed31c423fc)
 
   - **Check status** ✔️
-  
+    ![17](https://github.com/user-attachments/assets/1431fae1-6f4a-47fe-bf54-03dbef71dc29)
+
 - **PUT**
   - **Mark reviewed/ unreviewed** ✔️
+    ![18](https://github.com/user-attachments/assets/08bab99c-aed1-4f41-8736-dab0de91233b)
 
 ## **Flow**
 - **POST**
   -  **Login**
+    ![20](https://github.com/user-attachments/assets/da8b6687-8c61-4d10-ac69-68451c995bde)
 
   - **Submit feedback**
+    ![21](https://github.com/user-attachments/assets/a30c92b5-6a0c-4efc-9b30-986a2c64762c)
 
   - **Submit response**
+    ![22](https://github.com/user-attachments/assets/69d7ffa8-45ac-4d4f-8320-64633bba2cea)
 
 - **GET**
   - **View all submitted feedback**
+    ![23](https://github.com/user-attachments/assets/d5b520e6-5575-4c56-a1ef-712e8a4704bf)
 
   - **Check status**
+    ![24](https://github.com/user-attachments/assets/20437b4b-cca8-4f27-85ad-f7ca4c5e4d45)
 
 - **PUT**
   - **Mark reviewed/unreviewed**
+    ![25](https://github.com/user-attachments/assets/283c9354-5b7a-43fa-bf52-c8694843ccf9)
 
 ## **Tables**
+![30](https://github.com/user-attachments/assets/c16ba707-c18c-4779-a06f-4ae340a46488)
+![31](https://github.com/user-attachments/assets/659fefeb-e691-422b-8ebd-a5a8d9202f59)
+![32](https://github.com/user-attachments/assets/3709265c-2898-4bec-9c56-415f797171a0)
+![33](https://github.com/user-attachments/assets/7be35c0f-40ee-431a-bc66-cdbbc1398158)
+![34](https://github.com/user-attachments/assets/6da187a9-2667-4d95-94e4-583a8adba682)
+![35](https://github.com/user-attachments/assets/e9e91ad4-fb4b-4f7f-bfcf-2d62e88af7b5)
 
 ## **Validation**
 Feedback and response length should be a minimum of 30 characters and a maximum of 500 characters.
