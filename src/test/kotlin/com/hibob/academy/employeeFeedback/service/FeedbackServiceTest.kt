@@ -36,11 +36,23 @@ class FeedbackServiceTest{
 
     @Test
     fun `View all submitted feedback successfully`(){
-        val expectedFeedbackInfo = FeedbackInfo(1, 12, 1, Date.valueOf("2024-09-24"), AnonymityType.IDENTIFIED,false, "I'm very happy with my workspace, i'm treated well")
-        whenever(feedbackDao.viewAllSubmittedFeedback(1)).thenReturn(listOf(expectedFeedbackInfo))
-        val output = feedbackService.viewAllSubmittedFeedback(12, 1)
+        val filterRequest = FeedbackFilterBy(null, null, null)
+        val expectedFeedbackInfo = FeedbackInfo(1, 12, 1, Date.valueOf("2024-09-24"),
+                                                AnonymityType.IDENTIFIED,false,
+                                                "I'm very happy with my workspace, i'm treated well")
+
+        whenever(feedbackDao.viewAllSubmittedFeedback(filterRequest, 1))
+            .thenReturn(listOf(expectedFeedbackInfo))
+
+        val output = feedbackService.viewAllSubmittedFeedback(filterRequest, 1)
         assertEquals(output, listOf(expectedFeedbackInfo))
-        verify(feedbackDao).viewAllSubmittedFeedback(1)
+        verify(feedbackDao).viewAllSubmittedFeedback(filterRequest, 1)
+    }
+
+    @Test
+    fun `View all submitted feedback filtered by department and anonymous should throw an exception`() {
+        val filterRequest = FeedbackFilterBy(null, "dev", AnonymityType.ANONYMOUS)
+        assertThrows<BadRequestException> { feedbackService.viewAllSubmittedFeedback(filterRequest, 1) }
     }
 
     @Test
@@ -63,8 +75,7 @@ class FeedbackServiceTest{
             Date.valueOf("2024-09-24"), AnonymityType.ANONYMOUS,false,
             "I'm very happy with my workspace, i'm treated well")
         whenever(feedbackDao.getFeedbackById(20, 1)).thenReturn(expectedFeedback)
-        assertThrows<BadRequestException> { feedbackService.viewStatusOfMyFeedback(12,
-                                1, 20) }
+        assertThrows<BadRequestException> { feedbackService.viewStatusOfMyFeedback(12, 1, 20) }
     }
 
     @Test
