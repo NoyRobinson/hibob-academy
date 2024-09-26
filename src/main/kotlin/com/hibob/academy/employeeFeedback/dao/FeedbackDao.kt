@@ -1,5 +1,6 @@
 package com.hibob.academy.employeeFeedback.dao
 
+import com.hibob.kotlinBasics.PersonalReview
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
@@ -73,5 +74,13 @@ class FeedbackDao(private val sql: DSLContext) {
             .fetchOne(feedbackMapper)
 
         return feedbackFromDb
+    }
+
+    fun changeReviewedStatus(feedbackId: Int, companyId: Int, reviewed: Boolean): Int {
+        return sql.update(feedbackTable)
+            .set(feedbackTable.reviewed, reviewed)
+            .where(feedbackTable.id.eq(feedbackId))
+            .and(feedbackTable.companyId.eq(companyId))
+            .execute()
     }
 }

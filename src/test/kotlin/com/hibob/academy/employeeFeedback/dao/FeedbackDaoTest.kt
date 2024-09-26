@@ -141,6 +141,18 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         assertNull(actual)
     }
 
+    @Test
+    fun `Change status to reviewed or unreviewed`(){
+        val newFeedback  = FeedbackForSubmission(12, companyId, AnonymityType.IDENTIFIED,
+            "I'm very happy at my workspace!")
+
+        val feedbackId = feedbackDao.submitFeedback(newFeedback)
+        val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
+        val actual = feedbackDao.changeReviewedStatus(feedbackId, companyId, true)
+
+        assertEquals(1, actual)
+    }
+
     @AfterEach
     fun cleanup() {
         sql.deleteFrom(feedbackTable).where(feedbackTable.companyId.eq(companyId)).execute()
