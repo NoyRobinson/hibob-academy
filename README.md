@@ -5,9 +5,12 @@ The Simple Employee Feedback System is a backend service designed to facilitate 
 Employees can provide feedback on their work experience, either anonymously or identified, which can then be reviewed and responded to by HR or Admin.
 
 ## **Objectives**
-  - **Empower Employees:** Provide a platform for employees to share their experiences and feedback securely and anonymously if desired.
-  - **Streamline Feedback Management:** Enable HR and Admin to view, filter, and respond to feedback efficiently.
-  - **Improve Employee Satisfaction:** Foster a culture of transparency and responsiveness by addressing employee concerns promptly.
+  - **Empower Employees:**
+    Provide a platform for employees to share their experiences and feedback securely and anonymously if desired.
+  - **Streamline Feedback Management:**
+    Enable HR and Admin to view, filter, and respond to feedback efficiently.
+  - **Improve Employee Satisfaction:**
+    Foster a culture of transparency and responsiveness by addressing employee concerns promptly.
 
 ## **Key Features**
   1. **Employee Feedback Submission**
@@ -40,4 +43,4 @@ Employees can provide feedback on their work experience, either anonymously or i
       - Conduct unit testing and integration testing.
 
 ## **Risks**
-  - **Data Security:** Ensuring that feedback remains confidential, especially for anonymous submissions, is critical.
+**Data Security:** Ensuring that feedback remains confidential, especially for anonymous submissions, is critical.
