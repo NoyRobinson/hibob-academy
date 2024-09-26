@@ -47,7 +47,10 @@ Employees can provide feedback on their work experience, either anonymously or i
 ## **Risks**
 **Data Security:** Ensuring that feedback remains confidential, especially for anonymous submissions, is critical.
 
+
+
 -------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 # **HLD - Employee Feedback System**
 
@@ -78,31 +81,31 @@ specs
 
 ## **Flow**
 - **POST**
-  **Login**
+  -  **Login**
 
-  **Submit feedback**
+  - **Submit feedback**
 
-  **Submit response**
+  - **Submit response**
 
 - **GET**
-   **View all submitted feedback**
+  - **View all submitted feedback**
 
-  **Check status**
+  - **Check status**
 
 - **PUT**
-  **Mark reviewed/unreviewed**
+  - **Mark reviewed/unreviewed**
 
 ## **Tables**
 
-##Validation
+## **Validation**
 Feedback and response length should be a minimum of 30 characters and a maximum of 500 characters.
 
 ## **Testing Strategy**
-**Service**
-I’ll test the service during development. I’ll test each function by using a mocking framework to stimulate database interactions to check that each scenario is covered.
+- **Service**
+  I’ll test the service during development. I’ll test each function by using a mocking framework to stimulate database interactions to check that each scenario is covered.
 
-**Dao**
-I’ll add unit tests for each function in the DAO during development to make sure all the functions run as expected.
+- **Dao**
+  I’ll add unit tests for each function in the DAO during development to make sure all the functions run as expected.
 
 ## Authentication - JWT
 I’ll use JWT to authenticate and authorize an employee's action within an API. I’ll generate a token that contains the employee's information such as their employee id, company id and role. 
