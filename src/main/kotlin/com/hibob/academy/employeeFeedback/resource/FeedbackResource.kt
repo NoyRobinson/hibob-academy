@@ -21,7 +21,7 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
     fun submitFeedback(@RequestBody feedbackRequest: FeedbackSubmitRequest, @Context request: ContainerRequestContext): Response {
         val employeeId = authenticatedUsersService.getLoggedInEmployeeId(request)
         val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
-        val anonymity = AnonymityType.fromString(feedbackRequest.anonymity)
+        val anonymity = AnonymityType.convertFromString(feedbackRequest.anonymity)
 
         val success = feedbackService.submitFeedback(employeeId, companyId, anonymity, feedbackRequest.feedback)
 
@@ -36,7 +36,7 @@ class FeedbackResource(private val feedbackService: FeedbackService, private val
         val companyId = authenticatedUsersService.getLoggedInCompanyId(request)
         val role = authenticatedUsersService.getLoggedInRole(request)
         val validRoles = listOf(RoleType.ADMIN, RoleType.HR)
-        val anonymity = AnonymityType.convertFromString(filterBy.anonymity)
+        val anonymity = AnonymityType.optionalConvertFromString(filterBy.anonymity)
 
         authenticatedUsersService.validateRole(role, validRoles)
 
