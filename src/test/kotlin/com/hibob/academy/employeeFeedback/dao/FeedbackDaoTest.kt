@@ -149,6 +149,7 @@ class FeedbackDaoTest@Autowired constructor(private val sql: DSLContext){
         val feedbackId = feedbackDao.submitFeedback(newFeedback)
         val feedbackInfo = feedbackDao.getFeedbackById(feedbackId, companyId)
         val actual = feedbackDao.changeReviewedStatus(feedbackId, companyId, true)
+
         assertEquals(1, actual)
     }
 
