@@ -71,13 +71,11 @@ specs
 - **POST**
   - **Login** ✔️
     
-    ![11](https://github.com/user-attachments/assets/5c7df5a0-56d9-4f57-b409-d985382388f8)    ![12](https://github.com/user-attachments/assets/946f7357-b479-452a-8109-0d2566efe0e6)
+    ![11](https://github.com/user-attachments/assets/5c7df5a0-56d9-4f57-b409-d985382388f8)       ![12](https://github.com/user-attachments/assets/946f7357-b479-452a-8109-0d2566efe0e6)
 
   - **Submit feedback** ✔️
     
-    ![13](https://github.com/user-attachments/assets/a81b3c3e-f231-43b2-894d-52dd8d501cd4)
-
-    ![14](https://github.com/user-attachments/assets/45eacbf6-3370-446a-ad9f-9db3ac51b1df)
+    ![13](https://github.com/user-attachments/assets/a81b3c3e-f231-43b2-894d-52dd8d501cd4)       ![14](https://github.com/user-attachments/assets/45eacbf6-3370-446a-ad9f-9db3ac51b1df)
 
   - **Submit response** ✔️
     
