@@ -14,12 +14,15 @@ Employees can provide feedback on their work experience, either anonymously or i
      - **API Endpoint:** Provide an API endpoint for employees to submit feedback.
      - **Anonymous Submission Option:** Employees can choose to submit feedback anonymously.
      - **Basic Validation:** Implement validation for feedback content (e.g., enforce a minimum length of feedback).
+       
   2. **Feedback Viewing (HR/Admin only)**
      - **API Endpoint:** Provide an API endpoint for HR/Admin to view all submitted feedback.
      - **Filtering Options:** Allow HR/Admin to filter feedback based on date, department, or anonymity status.
+       
   3. **HR Response to Feedback**
      - **API Endpoint:** Allow HR to respond to feedback through an API endpoint, provided the feedback is not anonymous.
      - **Linked Responses:** Store responses so that they are linked to the original feedback entry.
+       
   4. **Feedback Status Tracking**
      - **Mark as Reviewed/Unreviewed:** Allow HR to mark feedback as reviewed or unreviewed.
      - **Status Checking API:** Provide an API endpoint for employees to check the status of their submitted feedback (if not anonymous).
