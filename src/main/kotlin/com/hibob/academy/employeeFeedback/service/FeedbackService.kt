@@ -54,6 +54,12 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
         return true
     }
 
+    fun viewAllSubmittedFeedback(filterRequest: FeedbackFilterBy, companyId: Int): List<FeedbackInfo> {
+        isDepartmentNotNullWithAnonymous(filterRequest)
+
+        return feedbackDao.viewAllSubmittedFeedback(filterRequest, companyId)
+    }
+
     fun viewStatusOfMyFeedback(employeeId: Int, companyId: Int, feedbackId: Int?): Map<Int, Boolean> {
         feedbackId?.let{
             return getStatusByFeedbackId(employeeId, companyId, feedbackId)
@@ -85,11 +91,5 @@ class FeedbackService(private val feedbackDao: FeedbackDao) {
     fun changeReviewedStatus(feedbackId: Int, companyId: Int, employeeId: Int, reviewed: Boolean) {
         if (feedbackDao.changeReviewedStatus(feedbackId, companyId, reviewed) == 0)
                 throw NotFoundException("Feedback not found")
-    }
-
-    fun viewAllSubmittedFeedback(filterRequest: FeedbackFilterBy, companyId: Int): List<FeedbackInfo> {
-        isDepartmentNotNullWithAnonymous(filterRequest)
-
-        return feedbackDao.viewAllSubmittedFeedback(filterRequest, companyId)
     }
 }
