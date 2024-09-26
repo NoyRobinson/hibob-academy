@@ -37,4 +37,11 @@ class AuthenticatedUsersService {
     fun validateRole(role: RoleType, validRoles: List<RoleType>) {
         if (!validRoles.contains(role)) throw NotAuthorizedException("Unauthorized role")
     }
+
+    fun convertToAnonymityType(anonymity: String?): AnonymityType? {
+        anonymity?.let{
+            return convertStringToAnonymityType(anonymity)
+
+        } ?: return null
+    }
 }

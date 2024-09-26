@@ -38,8 +38,9 @@ class FeedbackServiceTest{
     fun `View all submitted feedback successfully`(){
         val filterRequest = FeedbackFilterBy(null, null, null)
         val expectedFeedbackInfo = FeedbackInfo(1, 12, 1, Date.valueOf("2024-09-24"),
-            AnonymityType.IDENTIFIED,false,
-            "I'm very happy with my workspace, i'm treated well")
+                                                AnonymityType.IDENTIFIED,false,
+                                                "I'm very happy with my workspace, i'm treated well")
+
 
         whenever(feedbackDao.viewAllSubmittedFeedback(filterRequest, 1))
             .thenReturn(listOf(expectedFeedbackInfo))
@@ -75,8 +76,7 @@ class FeedbackServiceTest{
             Date.valueOf("2024-09-24"), AnonymityType.ANONYMOUS,false,
             "I'm very happy with my workspace, i'm treated well")
         whenever(feedbackDao.getFeedbackById(20, 1)).thenReturn(expectedFeedback)
-        assertThrows<BadRequestException> { feedbackService.viewStatusOfMyFeedback(12,
-                                1, 20) }
+        assertThrows<BadRequestException> { feedbackService.viewStatusOfMyFeedback(12, 1, 20) }
     }
 
     @Test
