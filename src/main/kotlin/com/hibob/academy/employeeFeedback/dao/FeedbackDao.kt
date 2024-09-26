@@ -1,15 +1,15 @@
 package com.hibob.academy.employeeFeedback.dao
 
-import com.hibob.kotlinBasics.PersonalReview
 import org.jooq.DSLContext
 import org.jooq.RecordMapper
 import org.jooq.Record
 import org.springframework.stereotype.Repository
-import java.sql.Date
+
 
 @Repository
 class FeedbackDao(private val sql: DSLContext) {
     private val feedbackTable = FeedbackTable.instance
+    private val employeeTable = EmployeeTable.instance
 
     private val feedbackMapper = RecordMapper<Record, FeedbackInfo> { record ->
         FeedbackInfo(
@@ -34,15 +34,6 @@ class FeedbackDao(private val sql: DSLContext) {
 
         return id!!.get(feedbackTable.id)
     }
-
-    fun viewAllSubmittedFeedback(companyId: Int): List<FeedbackInfo> =
-        sql.select(feedbackTable.id, feedbackTable.employeeId,
-                    feedbackTable.companyId, feedbackTable.dateOfFeedback,
-                    feedbackTable.anonymity, feedbackTable.reviewed,
-                    feedbackTable.feedback)
-            .from(feedbackTable)
-            .where(feedbackTable.companyId.eq(companyId))
-            .fetch(feedbackMapper)
 
     fun viewStatusOfMyFeedback(feedbackStatus: FeedbackStatusData): Map<Int, Boolean> {
         val query = sql.select(feedbackTable.id, feedbackTable.reviewed)
@@ -82,5 +73,30 @@ class FeedbackDao(private val sql: DSLContext) {
             .where(feedbackTable.id.eq(feedbackId))
             .and(feedbackTable.companyId.eq(companyId))
             .execute()
+    }
+
+    fun viewAllSubmittedFeedback(filterRequest: FeedbackFilterBy, companyId: Int): List<FeedbackInfo> {
+        val query = sql.select(feedbackTable.id, feedbackTable.employeeId,
+                                feedbackTable.companyId, feedbackTable.dateOfFeedback,
+                                feedbackTable.anonymity, feedbackTable.reviewed,
+                                feedbackTable.feedback)
+                        .from(feedbackTable)
+                        .leftJoin(employeeTable)
+                        .on(employeeTable.id.eq(feedbackTable.employeeId))
+                        .where(feedbackTable.companyId.eq(companyId))
+
+        filterRequest.department?.let{
+            query.and(employeeTable.department.eq(filterRequest.department))
+        }
+
+        filterRequest.date?.let{
+            query.and(feedbackTable.dateOfFeedback.eq(filterRequest.date))
+        }
+
+        filterRequest.anonymity?.let{
+            query.and(feedbackTable.anonymity.eq(AnonymityType.convertAnonymityTypeToString(filterRequest.anonymity)))
+        }
+
+        return query.fetch(feedbackMapper)
     }
 }
